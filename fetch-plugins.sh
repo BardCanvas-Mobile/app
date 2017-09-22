@@ -1,0 +1,11 @@
+#!/bin/bash
+phonegap plugin add "cordova-plugin-splashscreen"
+phonegap plugin add "cordova-plugin-network-information"
+phonegap plugin add "cordova-plugin-inappbrowser"
+phonegap plugin add "cordova-plugin-file-transfer"
+phonegap plugin add "cordova-plugin-file"
+phonegap plugin add "cordova-plugin-device"
+phonegap plugin add "cordova-plugin-statusbar"
+phonegap plugin add "cordova-plugin-x-socialsharing"
+phonegap plugin add "phonegap-plugin-barcodescanner"
+phonegap plugin add "cordova-plugin-whitelist"

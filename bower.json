@@ -1,0 +1,14 @@
+{
+  "name": "BardCanvas Mobile",
+  "dependencies": {
+    "font-awesome": "Font-Awesome#v4.7.0",
+    "jQuery": "3.2.1",
+    "CodeMirror": "v3.12",
+    "moment": "momentjs#2.18.1",
+    "tinymce": "4.6.7",
+    "framework7": "v1.6.5"
+  },
+  "resolutions": {
+    "CodeMirror": "v3.12"
+  }
+}

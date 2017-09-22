@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+/plugins/*
+!/plugins/fetch.json
+/platforms
+/hooks
+/bower_components
+/.idea
