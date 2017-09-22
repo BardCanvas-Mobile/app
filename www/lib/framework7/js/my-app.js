@@ -44,5 +44,4 @@ function createContentPage() {
         '  </div>' +
         '</div>'
     );
-	return;
 }
