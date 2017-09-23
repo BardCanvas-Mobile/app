@@ -22,14 +22,11 @@
         * Enable eval(): add 'unsafe-eval' to default-src
     * Create your own at http://cspisawesome.com
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: ws: 'unsafe-inline' https://ssl.gstatic.com http://*.openstreetmap.org; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: gap: ws: https://ssl.gstatic.com http://*.openstreetmap.org; style-src 'self' 'unsafe-inline'; media-src *" />
     
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-    
-    <!-- Path to your custom app styles-->
-    <script src="js/index.js"></script>
 </head>
 
 <body>
@@ -64,7 +61,7 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <!-- We have home navbar without left link-->
-                <div class="center sliding">BardCanvas Mobile</div>
+                <div class="center sliding">BardCanvas</div>
                 <div class="right">
                     <!-- Right link contains only icon - additional "icon-only" class--><a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
                 </div>
@@ -144,13 +141,8 @@
 </div>
 
 <script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-
-<!-- Path to Framework7 Library JS-->
 <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
-
-<!-- Path to your app js-->
-<script type="text/javascript" src="js/my-app.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 
 </body>
 
