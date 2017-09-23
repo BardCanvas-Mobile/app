@@ -31,15 +31,31 @@ var app = {
      */
     _onDeviceReady: function() {
         
-        this.framework = new Framework7();
+        app.framework = new Framework7();
         
-        this.mainView = this.framework.addView('.view-main', {
-            // Because we use fixed-through navbar we can enable dynamic navbar
-            dynamicNavbar: true
+        var os     = app.framework.device.os;
+        var file   = sprintf('templates/%s/main-view.html', os);
+        
+        app._loadPlatformCSS();
+        $$.get(file, function(html) {
+            console.log(file, ' loaded');
+            $$('.view-main').html(html);
+            app.mainView = app.framework.addView('.view-main');
         });
+    },
+    
+    _loadPlatformCSS: function() {
+        
+        var os = app.framework.device.os;
+        console.log( os );
+        
+        if( os === 'ios' ) return;
+        
+        $$('head')
+            .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">')
+            .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">');
     }
 };
-
 
 // Let's go!
 app.initialize();
