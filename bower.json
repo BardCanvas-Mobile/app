@@ -9,7 +9,8 @@
     "framework7": "v1.6.5",
     "framework7-icons": "^0.9.0",
     "Framework7-Upscroller-Plugin": "framework7-upscroller#*",
-    "material-design-icons-dist": "^1.1.0"
+    "material-design-icons-dist": "^1.1.0",
+    "sprintf": "^1.1.1"
   },
   "resolutions": {
     "CodeMirror": "v3.12"

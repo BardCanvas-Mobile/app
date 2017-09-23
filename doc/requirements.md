@@ -31,3 +31,4 @@ and present in the bower.json file.
 * Moment JS
 * TinyMCE
 * Google's Material Design Icons Distributable package
+* sprintf
