@@ -32,16 +32,27 @@ var app = {
     _onDeviceReady: function() {
         
         app.framework = new Framework7();
+        app._loadPlatformCSS();
         
         var os     = app.framework.device.os;
         var file   = sprintf('templates/%s/main-view.html', os);
+        var params = {};
+        switch( os ) {
+            case 'ios':
+                params = {
+                    swipeBackPage: true
+                };
+                break;
+            case 'android':
+                params = {
+                    material:       true,
+                    materialRipple: true
+                };
+                break;
+        }
         
-        app._loadPlatformCSS();
-        $$.get(file, function(html) {
-            console.log(file, ' loaded');
-            $$('.view-main').html(html);
-            app.mainView = app.framework.addView('.view-main');
-        });
+        app.mainView = app.framework.addView('.view-main', params);
+        app.mainView.router.loadPage(file);
     },
     
     _loadPlatformCSS: function() {
