@@ -71,9 +71,9 @@ It is a JSON file containing all website underlying data, E.G.:
 	* **Single document:**  
       E.G. a post with all its controls.
 
-	* **Single document helper:**  
-      Helper page to show extra contents like polls, comments, clicked images,
-      author/user profiles, etc.
+	* **Single document helpers:**  
+      Helper pages to show extra contents like polls, comments, clicked images,
+      author/user profiles, etc. Created automatically.
 
 * **The wall**  
   This is a compound view of the latest posts on all added websites.  
