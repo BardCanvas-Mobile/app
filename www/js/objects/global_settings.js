@@ -1,0 +1,6 @@
+
+var GlobalSettings = {
+    
+    firstRunCompleted : false
+    
+};

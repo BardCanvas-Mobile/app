@@ -3,39 +3,41 @@
 var f7 = new Framework7();
 var $$ = Dom7;
 
-var app = {
+window.bcapp = {
+    
+    framework: f7,
+    
+    settings: GlobalSettings,
+    
+    toolbox: Toolbox,
+    
+    eventHandlers: EventHandlers,
+    
+    networkType:      navigator.connection.type,
+    networkConnected: true,
+    
+    batteryIsLow: false,
     
     /**
-     * @var {Window.Framework7}
-     */
-    framework: null,
-    
-    /**
-     * @var {object}
+     * @var {View}
      */
     mainView: null,
     
-    /**
-     * Application Constructor
-     */
-    initialize: function() {
-        // Common events: 'load', 'deviceready', 'offline', and 'online'
-        document.addEventListener('deviceready', this._onDeviceReady, false);
+    init: function() {
+        bcapp.__adjustOrientation();
+        $(window).resize(function() { bcapp.__adjustOrientation(); });
+        
+        bcapp.eventHandlers.init();
+        bcapp.__initMainView();
     },
     
-    /**
-     * deviceready Event Handler - private
-     * 
-     * The scope of 'this' is the event. In order to call the 'receivedEvent'
-     * function, we must explicitly call 'app.receivedEvent(...);'
-     */
-    _onDeviceReady: function() {
-        
-        app.framework = new Framework7();
-        app._loadPlatformCSS();
-        
-        var os     = app.framework.device.os;
-        var file   = sprintf('templates/%s/main-view.html', os);
+    __adjustOrientation: function() {
+        var orientation = $(window).width() <= $(window).height() ? 'portrait' : 'landscape';
+        $('body').attr('data-orientation', orientation);
+    },
+    
+    __initMainView: function() {
+        var os     = bcapp.framework.device.os;
         var params = {};
         switch( os ) {
             case 'ios':
@@ -51,22 +53,14 @@ var app = {
                 break;
         }
         
-        app.mainView = app.framework.addView('.view-main', params);
-        app.mainView.router.loadPage(file);
-    },
-    
-    _loadPlatformCSS: function() {
+        bcapp.mainView = bcapp.framework.addView('.view-main', params);
         
-        var os = app.framework.device.os;
-        console.log( os );
-        
-        if( os === 'ios' ) return;
-        
-        $$('head')
-            .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">')
-            .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">');
+        var file = sprintf('templates/%s/main-view.html', os);
+        bcapp.mainView.router.load({
+            url:    file,
+            reload: true
+        });
     }
 };
 
-// Let's go!
-app.initialize();
+bcapp.init();

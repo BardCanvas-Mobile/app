@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
     <link rel="stylesheet" href="lib/framework7-upscroller/framework7.upscroller.css">
+    
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
@@ -47,12 +49,14 @@
     <!-- Your main view, should have "view-main" class-->
     <div class="view view-main">
         
-        <div class="pages navbar-fixed toolbar-fixed">
+        <div class="pages">
             
-            <div data-page="index" class="page">
+            <div data-page="main" class="page">
                 <div class="page-content">
                     
-                    <i class="fa fa-spinner fa-pulse fa-2x"></i>
+                    <div class="content-block aligncenter">
+                        <img src="img/bardcanvas_icon_256x256.png">
+                    </div>
                     
                 </div>
             </div>
@@ -64,12 +68,19 @@
 
 <!-- JS stuff -->
 <script type="text/javascript" src="cordova.js"></script>
-<!--<script type="text/javascript" src="lib/jquery.min.js"></script>-->
+<script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="lib/sprintf.min.js"></script>
 
 <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
 <script type="text/javascript" src="lib/framework7-upscroller/framework7.upscroller.js"></script>
 
+<!-- Classes -->
+<script type="text/javascript" src="js/objects/global_settings.js"></script>
+<script type="text/javascript" src="js/objects/toolbox.js"></script>
+<script type="text/javascript" src="js/objects/event_handlers.js"></script>
+<script type="text/javascript" src="js/classes/domain.js"></script>
+
+<!-- Bootstrap -->
 <script type="text/javascript" src="js/index.js"></script>
 
 </body>

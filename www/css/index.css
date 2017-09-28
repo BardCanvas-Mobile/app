@@ -1,0 +1,16 @@
+
+body[data-orientation="portrait"] .hide-on-portrait {
+    display: none;
+}
+
+body[data-orientation="landscape"] .hide-on-landscape {
+    display: none;
+}
+
+.page-content img.max-to-100 {
+    max-width: 100%;
+}
+
+.aligncenter {
+    text-align: center;
+}
