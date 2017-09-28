@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: gap: ws: https://ssl.gstatic.com http://*.openstreetmap.org; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: ws: https://ssl.gstatic.com http://*.openstreetmap.org; style-src 'self' 'unsafe-inline'; media-src *" />
     
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
     
@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="lib/framework7-upscroller/framework7.upscroller.css">
     
     <link rel="stylesheet" href="css/index.css">
+    
+    <title></title>
 </head>
 
 <body>
@@ -29,24 +31,16 @@
 <!-- Panels overlay-->
 <div class="panel-overlay"></div>
 
-<!-- Left panel with cover effect-->
-<div class="panel panel-left panel-cover">
-    <div class="content-block">
-        <p>Left panel content goes here</p>
-    </div>
+<div id="left-panel" class="panel panel-left panel-cover">
+    <div class="content-block"></div>
 </div>
 
-<!-- Right panel with reveal effect-->
-<div class="panel panel-right panel-reveal">
-    <div class="content-block">
-        <p>Right panel content goes here</p>
-    </div>
+<div id="right-panel" class="panel panel-right panel-reveal">
+    <div class="content-block"></div>
 </div>
 
-<!-- Views-->
 <div class="views">
     
-    <!-- Your main view, should have "view-main" class-->
     <div class="view view-main">
         
         <div class="pages">
@@ -54,8 +48,20 @@
             <div data-page="main" class="page">
                 <div class="page-content">
                     
-                    <div class="content-block aligncenter">
-                        <img src="img/bardcanvas_icon_256x256.png">
+                    <div class="content-block">
+                        
+                        <div class="loader-container">
+                            <div class="loader-content">
+                                <div class="loader-progress-group">
+                                    <div class="bc-progress-bar" data-size="256" data-value="0" data-thickness="6"
+                                         data-start-angle="0" data-fill='{"color": "#00C1F1"}'></div>
+                                    <div class="bc-progress-icon">
+                                        <img class="bc-icon" src="img/bardcanvas_icon_256x256.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                     
                 </div>
@@ -66,21 +72,19 @@
     
 </div>
 
-<!-- JS stuff -->
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="lib/sprintf.min.js"></script>
+<script type="text/javascript" src="lib/circle-progress.min.js"></script>
 
 <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
 <script type="text/javascript" src="lib/framework7-upscroller/framework7.upscroller.js"></script>
 
-<!-- Classes -->
 <script type="text/javascript" src="js/objects/global_settings.js"></script>
 <script type="text/javascript" src="js/objects/toolbox.js"></script>
 <script type="text/javascript" src="js/objects/event_handlers.js"></script>
 <script type="text/javascript" src="js/classes/domain.js"></script>
 
-<!-- Bootstrap -->
 <script type="text/javascript" src="js/index.js"></script>
 
 </body>

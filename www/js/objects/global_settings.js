@@ -1,6 +1,8 @@
 
 var GlobalSettings = {
     
-    firstRunCompleted : false
+    firstRunCompleted : false,
+    
+    language: 'en_US'
     
 };

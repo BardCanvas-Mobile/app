@@ -1,22 +1,12 @@
-
 var EventHandlers = {
     
     init: function() {
-        document.addEventListener('deviceready',      EventHandlers.__deviceReady,         false);
-        document.addEventListener('backbutton',       EventHandlers.__backButtonPressed,   false);
-        document.addEventListener('batterystatus',    EventHandlers.__batteryStatusChange, false);
-        document.addEventListener('offline',          EventHandlers.__networkDisconnected, false);
-        document.addEventListener('online',           EventHandlers.__networkConnected,    false);
-    },
-    
-    __deviceReady: function() {
-        var os = bcapp.framework.device.os;
-        if( os !== 'ios' )
-        {
-            $$('head')
-                .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">')
-                .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">');
-        }
+        document.addEventListener('batterystatus', EventHandlers.__batteryStatusChange, false);
+        document.addEventListener('offline', EventHandlers.__networkDisconnected, false);
+        document.addEventListener('online', EventHandlers.__networkConnected, false);
+        
+        document.addEventListener('backbutton', EventHandlers.__backButtonPressed, false);
+        
     },
     
     __backButtonPressed: function(e) {
