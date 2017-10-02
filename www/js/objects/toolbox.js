@@ -1,9 +1,8 @@
 
 var Toolbox = {
     
-    renderPage: function(templateFileName, view, params, callback) {
-        var os   = bcapp.framework.device.os;
-        var file = sprintf('templates/%s/%s', os, templateFileName);
+    loadPage: function(templateFileName, view, params, callback) {
+        var file = sprintf('templates/%s/%s', bcapp.os, templateFileName);
         
         $.get(file, function(sourceHTML) {
             params.template = Template7.compile(sourceHTML);

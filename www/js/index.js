@@ -33,7 +33,19 @@ window.bcapp = {
      */
     mainView: null,
     
+    /**
+     * @var {View}
+     */
+    addSiteView: null,
+    
+    /**
+     * @var {View}
+     */
+    currentView: null,
+    
     init: function() {
+        bcapp.os = bcapp.framework.device.os;
+        
         bcapp.__adjustOrientation();
         $(window).resize(function() { bcapp.__adjustOrientation(); });
         
@@ -49,7 +61,7 @@ window.bcapp = {
         bcapp.eventHandlers.init();
         $progress.circleProgress('value', 0.75);
         
-        bcapp.__initMainView(function() { $progress.circleProgress('value', 1); });
+        bcapp.__initViews(function() { $progress.circleProgress('value', 1); });
     },
     
     __adjustOrientation: function() {
@@ -60,6 +72,8 @@ window.bcapp = {
     __setLanguage: function() {
         
         var browserLanguage = navigator.language;
+        if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
+        
         if( browserLanguage === 'es' ) bcapp.settings.language = 'es_LA';
         if( browserLanguage === 'en' ) bcapp.settings.language = 'en_US';
         
@@ -68,18 +82,20 @@ window.bcapp = {
         ));
         bcapp.language = Language;
         
-        $('head title').text(bcapp.language.appName.replace('{{platform}}', bcapp.framework.device.os));
+        for(var i in bcapp.language.frameworkCaptions)
+            bcapp.framework.params[i] = bcapp.language.frameworkCaptions[i];
+        
+        $('head title').text(bcapp.language.appName.replace('{{platform}}', bcapp.os));
     },
     
     __loadRequirements: function() {
-        var os = bcapp.framework.device.os;
-        if( os === 'ios' ) {
-            $$('head')
+        if( bcapp.os === 'ios' ) {
+            $('head')
                 .append('<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">')
             ;
         }
         else {
-            $$('head')
+            $('head')
                 .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">')
                 .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">')
                 .append('<link rel="stylesheet" href="lib/material-design-icons/material-icons.css">')
@@ -87,33 +103,37 @@ window.bcapp = {
         }
     },
     
-    __initMainView: function(preRenderingAction) {
-        var os     = bcapp.framework.device.os;
-        var params = {};
-        switch( os ) {
+    __initViews: function(preRenderingAction) {
+        var params = { main: true };
+        switch( bcapp.os ) {
             case 'ios':
-                params = {
-                    swipeBackPage: true
-                };
+                params.swipeBackPage = true;
                 break;
             case 'android':
-                params = {
-                    material:       true,
-                    materialRipple: true
-                };
+                params.material       = true;
+                params.materialRipple = true;
                 break;
         }
         
-        bcapp.mainView = bcapp.framework.addView('.view-main', params);
+        params.name         = 'main';
+        bcapp.mainView      = bcapp.framework.addView('.view-main',     params);
+        
+        params.name         = 'addSite';
+        bcapp.addSiteView   = bcapp.framework.addView('.view-add-site', params);
+        
         preRenderingAction();
         
-        bcapp.toolbox.renderPage('main-view.html', bcapp.mainView, {
+        bcapp.toolbox.loadPage('main-view.html', bcapp.addSiteView, {
             reload:  true,
             context: {
-                os:      os,
+                os:      bcapp.os,
                 welcome: bcapp.language.welcome,
                 about:   bcapp.language.about
             }
+        }, function() {
+            $('.views').fadeOut('fast');
+            $('.view-add-site').show('fast');
+            bcapp.currentView = bcapp.addSiteView;
         });
     }
 };

@@ -11,21 +11,31 @@ var EventHandlers = {
     
     __backButtonPressed: function(e) {
         e.preventDefault();
-        var page = bcapp.mainView.activePage;
-        bcapp.framework.hidePreloader();
         
-        if( page.name !== "main" )
-        {
-            bcapp.mainView.router.back();
+        if( $('#left-panel').is(':visible') ||  $('#right-panel').is(':visible') ) {
+            bcapp.framework.closePanel();
             
             return;
         }
         
-        if( confirm("Do you want to exit?") )
-        {
-            navigator.app.clearHistory();
-            navigator.app.exitApp();
+        var view = bcapp.currentView;
+        var page = view.activePage;
+        bcapp.framework.hidePreloader();
+        
+        if( page.name !== "main" ) {
+            view.router.back();
+            
+            return;
         }
+        
+        bcapp.framework.confirm(
+            bcapp.language.exit.message,
+            bcapp.language.exit.title,
+            function () {
+                navigator.app.clearHistory();
+                navigator.app.exitApp();
+            }
+        );
     },
     
     __batteryStatusChange: function(status) {
