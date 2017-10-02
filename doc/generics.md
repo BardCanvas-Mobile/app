@@ -52,15 +52,15 @@ It is a JSON file containing all website underlying data, E.G.:
 
 ## Views
 
-* **Main (preloading) view**  
+* **Main view**  
   This view contains the BardCanvas logo and a progress indicator of
   app initializing.
 
 * **Add site view:**  
   This view allows addition of a website. The user shouldn't be able to
-  come back to this page after adding a site. 
+  come back to this page after adding a site.
 
-* **Site view**  
+* **Site views**  
   A view for every website. Includes the next pages:
 
 	* **Index:**  
