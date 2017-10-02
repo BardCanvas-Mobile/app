@@ -6,7 +6,6 @@ var EventHandlers = {
         document.addEventListener('online', EventHandlers.__networkConnected, false);
         
         document.addEventListener('backbutton', EventHandlers.__backButtonPressed, false);
-        
     },
     
     __backButtonPressed: function(e) {

@@ -14,11 +14,10 @@
     
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
-    <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-    <link rel="stylesheet" href="lib/framework7-upscroller/framework7.upscroller.css">
+    <link rel="stylesheet" id="f7_ui_styles" href="lib/framework7/css/framework7.ios.min.css">
+    <link rel="stylesheet" id="f7_ui_colors" href="lib/framework7/css/framework7.ios.colors.min.css">
     
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="media/main.css">
     
     <title></title>
 </head>
@@ -45,18 +44,18 @@
         
         <div class="pages">
             
-            <div data-page="main" class="page">
+            <div data-page="main" class="page layout-white">
                 <div class="page-content">
                     
                     <div class="content-block">
                         
-                        <div class="loader-container">
-                            <div class="loader-content">
-                                <div class="loader-progress-group">
+                        <div class="bc-loader-container">
+                            <div class="bc-loader-content">
+                                <div class="bc-loader-progress-group">
                                     <div class="bc-progress-bar" data-size="256" data-value="0" data-thickness="6"
                                          data-start-angle="0" data-fill='{"color": "#00C1F1"}' data-animation="false"></div>
                                     <div class="bc-progress-icon">
-                                        <img class="bc-icon" src="img/bardcanvas_icon_256x256.png">
+                                        <img class="bc-icon" src="media/bardcanvas_icon_256x256.png">
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +81,7 @@
 <script type="text/javascript" src="lib/circle-progress.min.js"></script>
 
 <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
-<script type="text/javascript" src="lib/framework7-upscroller/framework7.upscroller.js"></script>
+<!--<script type="text/javascript" src="lib/framework7-upscroller/framework7.upscroller.js"></script>-->
 
 <script type="text/javascript" src="js/objects/global_settings.js"></script>
 <script type="text/javascript" src="js/objects/toolbox.js"></script>

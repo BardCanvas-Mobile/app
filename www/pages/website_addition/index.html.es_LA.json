@@ -1,0 +1,12 @@
+{
+  "welcome":     "Cliente Móvil",
+  
+  "add_website": "Añadir sitio web",
+  "website_url_placeholder": "Introducir dominio",
+  "user_name_optional": "Usuario o alias (opcional)",
+  "password_optional": "Contraseña (opcional)",
+  "add_website_button_caption": "Añadir ahora",
+  
+  "featured_websites_title": "Sitios destacados",
+  "featured_websites_legend": "Hojea el catálogo de sitios miembros de BardCanvas Club y otros blogs y sistemas en el catálogo del sitio web oficial de BardCanvas"
+}

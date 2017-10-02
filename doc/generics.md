@@ -47,8 +47,8 @@ It is a JSON file containing all website underlying data, E.G.:
 
 1. User taps the app's icon.
 2. Is first run?  
-	Yes: show the addition selector.  
-	No: open the wall.
+   Yes: show the addition selector.  
+   No: open the wall.
 
 ## Views
 
@@ -63,15 +63,15 @@ It is a JSON file containing all website underlying data, E.G.:
 * **Site views**  
   A view for every website. Includes the next pages:
 
-	* **Index:**  
-	  An added website index. In case of blogs, downloaded entries will be shown here.  
-    *Note: this and the "wall" (see below) are actually the "main" views, where
-    the user will spend most of the time.*
+    * **Index:**  
+      An added website index. In case of blogs, downloaded entries will be shown here.  
+      *Note: this and the "wall" (see below) are actually the "main" views, where
+      the user will spend most of the time.*
 
-	* **Single document:**  
+    * **Single document:**  
       E.G. a post with all its controls.
 
-	* **Single document helpers:**  
+    * **Single document helpers:**  
       Helper pages to show extra contents like polls, comments, clicked images,
       author/user profiles, etc. Created automatically.
 
@@ -88,16 +88,16 @@ It is a JSON file containing all website underlying data, E.G.:
 
 ### First run
 
->	Main (preloading) view  
->	'--> Welcome page with site addition  
->	'--> Site index
+> Main (preloading) view  
+> '--> Welcome page with site addition  
+> '--> Site index
 
 ### App run with one site added
 
->	Main (preloading) view  
->	'--> Site index
+> Main (preloading) view  
+> '--> Site index
 
 ### App run with multiple sites added
 
->	Main (preloading) view  
->	'--> Compound site index
+> Main (preloading) view  
+> '--> Compound site index

@@ -1,0 +1,12 @@
+{
+  "welcome":     "Mobile Client",
+  
+  "add_website": "Add a website",
+  "website_url_placeholder": "Enter domain name",
+  "user_name_optional": "User name (optional)",
+  "password_optional": "Password (optional)",
+  "add_website_button_caption": "Add now",
+  
+  "featured_websites_title": "Featured websites",
+  "featured_websites_legend": "Browse the BardCanvas Club member sites and other blogs and systems on the BardCanvas Official Website Catalog",
+}

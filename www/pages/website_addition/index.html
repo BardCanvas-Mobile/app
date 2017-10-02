@@ -1,0 +1,78 @@
+
+<div data-page="main" class="page">
+    
+    <div class="page-content aligncenter">
+        
+        <!-- Logo -->
+        <div class="content-block">
+            <img onclick="location.reload()" class="bc-full-width bc-landscape-max-50" src="media/bardcanvas_logo_850x200.png"><br>
+            {{welcome}} {{@global.appVersion}}
+        </div>
+        
+        <!-- Add website -->
+        <div class="content-block">
+            <div class="content-block-title">{{add_website}}</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="bc-ios-icon icon f7-icons">world</i>
+                                <i class="bc-android-icon bc-input-icon fa fa-globe fa-fw"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input type="text" id="website_url_textbox" placeholder="{{website_url_placeholder}}">
+                                </div>
+                                <div class="item-after">
+                                    <i class="bc-pseudolink fa fa-qrcode fa-fw fa-lg"
+                                       onclick="bcapp.toolbox.scanQRcode('#website_url_textbox', 'url')"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="bc-ios-icon icon f7-icons">person</i>
+                                <i class="bc-android-icon bc-input-icon fa fa-user-circle-o fa-fw"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input type="text" placeholder="{{user_name_optional}}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="bc-ios-icon icon f7-icons">lock</i>
+                                <i class="bc-android-icon bc-input-icon fa fa-lock fa-fw"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input type="password" placeholder="{{password_optional}}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                
+                <p class="buttons-row">
+                    <button class="button" disabled>{{add_website_button_caption}}</button>
+                </p>
+            </div>
+            
+            <!-- Featured sites -->
+            <div class="content-block-title">{{featured_websites_title}}</div>
+            <div class="content-block-inner">
+                {{featured_websites_legend}}
+            </div>
+        </div>
+        
+    </div>
+    
+</div>

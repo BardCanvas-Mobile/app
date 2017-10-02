@@ -5,22 +5,19 @@
 
 var Language = {
     
+    iso: 'en_US',
     __info: {
         name: 'English/United States'
-    }
+    },
     
-    , appName: 'BardCanvas for {{platform}}'
+    appName: 'BardCanvas for {{platform}}',
     
-    , welcome: 'Welcome to BardCanvas Mobile!'
-    
-    , exit: {
+    exit: {
         title:   'Exit now?',
-        message: 'All background processes will be stopped until the next time you open the app.'
-                 + '\n\n'
-                 + 'Do you want to continue?'
-    }
+        message: 'Note: any background process will be stopped until the next time you open the app.'
+    },
     
-    , frameworkCaptions: {
+    frameworkCaptions: {
         modalTitle:                    'BardCanvas'
         , modalButtonOk:               'OK'
         , modalButtonCancel:           'Cancel'
@@ -31,5 +28,14 @@ var Language = {
         , smartSelectPopupCloseText:   'Close'
         , smartSelectPickerCloseText:  'Done'
         , notificationCloseButtonText: 'Close'
+    },
+    
+    qrScanner: {
+        prompt:        'Place a QR code inside the scan area',
+        scanFailed:    {
+            title:   'Scanning failed!',
+            message: 'There was a problem accessing the QR Scanner.<br><br>Error obtained:<br>%s<br><br>Please try again. If the problem persists, try again after restarting your device.'
+        },
+        invalidResult: 'The QR code has an invalid value'
     }
 };

@@ -1,9 +1,20 @@
 
 // Global helpers
 var f7 = new Framework7();
+
+// noinspection JSUnusedGlobalSymbols
 var $$ = Dom7;
 
+Template7.global = {
+    appVersion: '0.0.1',
+    isIOS:      f7.device.os === 'ios',
+    isAndroid:  f7.device.os !== 'ios',
+    os:         f7.device.os
+};
+
 window.bcapp = {
+    
+    version: Template7.global.appVersion,
     
     framework: f7,
     
@@ -44,12 +55,15 @@ window.bcapp = {
     currentView: null,
     
     init: function() {
+        
         bcapp.os = bcapp.framework.device.os;
+        
+        $('body').attr('data-os', bcapp.os);
         
         bcapp.__adjustOrientation();
         $(window).resize(function() { bcapp.__adjustOrientation(); });
         
-        var $progress = $('.loader-container .bc-progress-bar');
+        var $progress = $('.bc-loader-container .bc-progress-bar');
         $progress.circleProgress();
         
         bcapp.__setLanguage();
@@ -90,16 +104,11 @@ window.bcapp = {
     
     __loadRequirements: function() {
         if( bcapp.os === 'ios' ) {
-            $('head')
-                .append('<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">')
-            ;
+            $('head').append('<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">');
         }
         else {
-            $('head')
-                .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.min.css">')
-                .append('<link rel="stylesheet" href="lib/framework7/css/framework7.material.colors.min.css">')
-                .append('<link rel="stylesheet" href="lib/material-design-icons/material-icons.css">')
-            ;
+            $('#f7_ui_styles').attr('href', 'lib/framework7/css/framework7.material.min.css');
+            $('#f7_ui_colors').attr('href', 'lib/framework7/css/framework7.material.colors.min.css');
         }
     },
     
@@ -123,18 +132,15 @@ window.bcapp = {
         
         preRenderingAction();
         
-        bcapp.toolbox.loadPage('main-view.html', bcapp.addSiteView, {
-            reload:  true,
-            context: {
-                os:      bcapp.os,
-                welcome: bcapp.language.welcome,
-                about:   bcapp.language.about
-            }
-        }, function() {
-            $('.views').fadeOut('fast');
-            $('.view-add-site').show('fast');
-            bcapp.currentView = bcapp.addSiteView;
-        });
+        bcapp.toolbox.loadPage(
+            'pages/website_addition/index.html',
+            bcapp.addSiteView,
+            { reload: true },
+            function() {
+                $('.views').fadeOut('fast');
+                $('.view-add-site').show('fast');
+                bcapp.currentView = bcapp.addSiteView;
+            });
     }
 };
 

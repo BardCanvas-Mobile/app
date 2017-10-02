@@ -1,0 +1,37 @@
+
+* { box-sizing: border-box; }
+
+.aligncenter { text-align: center; }
+.alignleft   { text-align: left; }
+.alignright  { text-align: right; }
+
+.bc-loader-container {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; line-height: 100vh; text-align: center;
+}
+
+.bc-loader-content {
+    display: inline-block; line-height: normal; vertical-align: middle;
+}
+
+.bc-loader-progress-group .bc-progress-icon     { width: 256px; height: 256px; padding: 25px; border: 6px solid silver;
+                                               border-radius: 100%; background-color: white; }
+.bc-loader-progress-group .bc-progress-icon img { width: 200px; height: 200px; margin-top: 5px; }
+.bc-loader-progress-group .bc-progress-bar      { position: absolute; z-index: 1; }
+
+.bc-full-width { width: 100%; }
+body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
+
+.bc-pseudolink { cursor: pointer; }
+
+/* F7 overrides */
+
+.content-block-inner { margin-left: 0 !important; }
+.material-icons      { font-size: 33px !important; }
+
+/*body[data-os="android"] .page { background-color: #efeff4; }*/
+
+/* Icon fixes */
+
+body[data-os="android"] .bc-ios-icon     { display: none; }
+body[data-os="ios"]     .bc-android-icon { display: none; }
+.bc-input-icon { font-size: 29px; }
