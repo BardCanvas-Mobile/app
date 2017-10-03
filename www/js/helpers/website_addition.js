@@ -1,10 +1,10 @@
 
-var bcWebsiteAddition = {
+var BCwebsiteAddition = {
     
     renderWebsiteAdditionPage: function() {
-        bcapp.toolbox.loadPage(
+        BCapp.renderPage(
             'pages/website_addition/index.html',
-            bcapp.addSiteView,
+            BCapp.addSiteView,
             { reload: true },
             function() {
                 var $form = $('#add_website_form');
@@ -12,14 +12,14 @@ var bcWebsiteAddition = {
                 $form.ajaxForm({
                     target:       '#ajax_form_target',
                     beforeSubmit: function(data) {
-                        bcWebsiteAddition.addWebsite(data[0].value, data[1].value, data[2].value);
+                        BCwebsiteAddition.addWebsite(data[0].value, data[1].value, data[2].value);
                         return false;
                     }
                 });
                 
                 $('.views').fadeOut('fast');
                 $('.view-add-site').show('fast');
-                bcapp.currentView = bcapp.addSiteView;
+                BCapp.currentView = BCapp.addSiteView;
             });
     },
     
@@ -35,25 +35,25 @@ var bcWebsiteAddition = {
                     label: true
                 },
                 {
-                    text:    bcapp.language.actions.select,
+                    text:    BCapp.language.actions.select,
                     onClick: function() {
                         $('#website_addition_url_textbox').val(url);
                         $('#submit_website_addition').click();
-                        bcapp.framework.closeModal();
+                        BCapp.framework.closeModal();
                     }
                 }
             ],
             [
                 {
-                    text:    bcapp.language.actions.cancel,
+                    text:    BCapp.language.actions.cancel,
                     color:   'red',
                     onClick: function() {
-                        bcapp.framework.closeModal();
+                        BCapp.framework.closeModal();
                     }
                 }
             ]
         ];
-        bcapp.framework.actions(buttons);
+        BCapp.framework.actions(buttons);
     },
     
     addWebsite: function(url, userName, password) {

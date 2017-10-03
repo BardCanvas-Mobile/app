@@ -1,18 +1,5 @@
 
-var Toolbox = {
-    
-    loadPage: function(templateFileName, view, params, callback) {
-        var languageFileName = sprintf('%s.%s.json', templateFileName, bcapp.language.iso);
-        $.getJSON(languageFileName, function(pageLanguage) {
-            params.context = pageLanguage;
-            $.get(templateFileName, function(sourceHTML) {
-                params.template = Template7.compile(sourceHTML);
-                view.router.load(params);
-                
-                if( typeof callback === 'function' ) callback();
-            });
-        });
-    },
+var BCtoolbox = {
     
     scanQRcode: function( targetSelector, type ) {
         
@@ -23,7 +10,7 @@ var Toolbox = {
             showTorchButton:       true,                            // iOS and Android
             torchOn:               true,                            // Android, launch with the torch switched on (if available)
             saveHistory:           true,                            // Android, save scan history (default false)
-            prompt:                bcapp.language.qrScanner.prompt, // Android
+            prompt:                BCapp.language.qrScanner.prompt, // Android
             resultDisplayDuration: 500,                             // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
             formats:               "QR_CODE",                       // default: all but PDF_417 and RSS_EXPANDED
             orientation:           "portrait",                      // Android only (portrait|landscape), default unset so it rotates with the device
@@ -35,9 +22,9 @@ var Toolbox = {
             function (result) {
                 if( result.cancelled ) return;
                 
-                if( ! bcapp.toolbox.__validateQRcode(result.text, type) ) {
-                    bcapp.framework.alert(
-                        bcapp.language.qrScanner.invalidResult
+                if( ! BCtoolbox.__validateQRcode(result.text, type) ) {
+                    BCapp.framework.alert(
+                        BCapp.language.qrScanner.invalidResult
                     );
                     
                     return;
@@ -46,9 +33,9 @@ var Toolbox = {
                 $target.focus().val( result.text );
             },
             function (error) {
-                bcapp.framework.alert(
-                    sprintf(bcapp.language.qrScanner.scanFailed.message, error),
-                    bcapp.language.qrScanner.scanFailed.title
+                BCapp.framework.alert(
+                    sprintf(BCapp.language.qrScanner.scanFailed.message, error),
+                    BCapp.language.qrScanner.scanFailed.title
                 );
             },
             params

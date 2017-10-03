@@ -13,17 +13,13 @@ Template7.global = {
     langauge:   {}
 };
 
-window.bcapp = {
+var BCapp = {
     
     version: Template7.global.appVersion,
     
     framework: f7,
     
-    settings: GlobalSettings,
-    
-    toolbox: Toolbox,
-    
-    eventHandlers: EventHandlers,
+    settings: new BCglobalSettingsClass(),
     
     networkType:      null,
     networkConnected: false,
@@ -57,26 +53,26 @@ window.bcapp = {
     
     init: function() {
         
-        bcapp.os = bcapp.framework.device.os;
+        BCapp.os = BCapp.framework.device.os;
         
-        $('body').attr('data-os', bcapp.os);
+        $('body').attr('data-os', BCapp.os);
         
-        bcapp.__adjustOrientation();
-        $(window).resize(function() { bcapp.__adjustOrientation(); });
+        BCapp.__adjustOrientation();
+        $(window).resize(function() { BCapp.__adjustOrientation(); });
         
         var $progress = $('.bc-loader-container .bc-progress-bar');
         $progress.circleProgress();
         
-        bcapp.__setLanguage();
+        BCapp.__setLanguage();
         $progress.circleProgress('value', 0.25);
         
-        bcapp.__loadRequirements();
+        BCapp.__loadRequirements();
         $progress.circleProgress('value', 0.50);
         
-        bcapp.eventHandlers.init();
+        BCeventHandlers.init();
         $progress.circleProgress('value', 0.75);
         
-        bcapp.__initViews(function() { $progress.circleProgress('value', 1); });
+        BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
     },
     
     __adjustOrientation: function() {
@@ -89,23 +85,23 @@ window.bcapp = {
         var browserLanguage = navigator.language;
         if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
         
-        if( browserLanguage === 'es' ) bcapp.settings.language = 'es_LA';
-        if( browserLanguage === 'en' ) bcapp.settings.language = 'en_US';
+        if( browserLanguage === 'es' ) BCapp.settings.language = 'es_LA';
+        if( browserLanguage === 'en' ) BCapp.settings.language = 'en_US';
         
         $('head').append(sprintf(
-            '<script type="text/javascript" src="js/language/%s.js"></script>', bcapp.settings.language
+            '<script type="text/javascript" src="js/language/%s.js"></script>', BCapp.settings.language
         ));
-        bcapp.language = Language;
+        BCapp.language            = Language;
         Template7.global.language = Language;
         
-        for(var i in bcapp.language.frameworkCaptions)
-            bcapp.framework.params[i] = bcapp.language.frameworkCaptions[i];
+        for(var i in BCapp.language.frameworkCaptions)
+            BCapp.framework.params[i] = BCapp.language.frameworkCaptions[i];
         
-        $('head title').text(bcapp.language.appName.replace('{{platform}}', bcapp.os));
+        $('head title').text(BCapp.language.appName.replace('{{platform}}', BCapp.os));
     },
     
     __loadRequirements: function() {
-        if( bcapp.os === 'ios' ) {
+        if( BCapp.os === 'ios' ) {
             $('head').append('<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">');
         }
         else {
@@ -116,7 +112,7 @@ window.bcapp = {
     
     __initViews: function(preRenderingAction) {
         var params = { main: true };
-        switch( bcapp.os ) {
+        switch( BCapp.os ) {
             case 'ios':
                 params.swipeBackPage = true;
                 break;
@@ -126,16 +122,29 @@ window.bcapp = {
                 break;
         }
         
-        params.name         = 'main';
-        bcapp.mainView      = bcapp.framework.addView('.view-main',     params);
+        params.name    = 'main';
+        BCapp.mainView = BCapp.framework.addView('.view-main',     params);
         
-        params.name         = 'addSite';
-        bcapp.addSiteView   = bcapp.framework.addView('.view-add-site', params);
+        params.name       = 'addSite';
+        BCapp.addSiteView = BCapp.framework.addView('.view-add-site', params);
         
         preRenderingAction();
         
-        bcWebsiteAddition.renderWebsiteAdditionPage();
+        BCwebsiteAddition.renderWebsiteAdditionPage();
+    },
+    
+    renderPage: function(templateFileName, view, params, callback) {
+        var languageFileName = sprintf('%s.%s.json', templateFileName, BCapp.language.iso);
+        $.getJSON(languageFileName, function(pageLanguage) {
+            params.context = pageLanguage;
+            $.get(templateFileName, function(sourceHTML) {
+                params.template = Template7.compile(sourceHTML);
+                view.router.load(params);
+                
+                if( typeof callback === 'function' ) callback();
+            });
+        });
     }
 };
 
-document.addEventListener('deviceready', bcapp.init, false);
+document.addEventListener('deviceready', BCapp.init, false);
