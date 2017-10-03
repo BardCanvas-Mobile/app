@@ -21,7 +21,7 @@ var BCeventHandlers = {
         var page = view.activePage;
         BCapp.framework.hidePreloader();
         
-        if( page.name !== "main" ) {
+        if( page.name.indexOf("-index") < 0 ) {
             view.router.back();
             
             return;
