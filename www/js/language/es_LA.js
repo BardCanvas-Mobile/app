@@ -37,5 +37,10 @@ var Language = {
             message: 'Ha habido un error al comunicarse con el lector de QR.<br><br>Error obtenido:<br>%s<br><br>Por favor intenta de nuevo. Si el error persiste, trata otra vez tras reiniciar tu dispositivo.'
         },
         invalidResult: 'El código QR no tiene un valor válido'
+    },
+    
+    actions: {
+        select: "Seleccionar",
+        cancel: "Cancelar"
     }
 };

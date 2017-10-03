@@ -9,7 +9,8 @@ Template7.global = {
     appVersion: '0.0.1',
     isIOS:      f7.device.os === 'ios',
     isAndroid:  f7.device.os !== 'ios',
-    os:         f7.device.os
+    os:         f7.device.os,
+    langauge:   {}
 };
 
 window.bcapp = {
@@ -95,6 +96,7 @@ window.bcapp = {
             '<script type="text/javascript" src="js/language/%s.js"></script>', bcapp.settings.language
         ));
         bcapp.language = Language;
+        Template7.global.language = Language;
         
         for(var i in bcapp.language.frameworkCaptions)
             bcapp.framework.params[i] = bcapp.language.frameworkCaptions[i];
@@ -137,10 +139,59 @@ window.bcapp = {
             bcapp.addSiteView,
             { reload: true },
             function() {
+                var $form = $('#add_website_form');
+                $form[0].reset();
+                $form.ajaxForm({
+                    target:       '#ajax_form_target',
+                    beforeSubmit: function(data, $form) {
+                        bcapp.addWebsite(data[0].value, data[1].value, data[2].value);
+                        return false;
+                    }
+                });
+                
                 $('.views').fadeOut('fast');
                 $('.view-add-site').show('fast');
                 bcapp.currentView = bcapp.addSiteView;
             });
+    },
+    
+    showFeaturedSiteDetails: function(title, screenShot, url) {
+        var buttons = [
+            [
+                {
+                    text:  title,
+                    label: true
+                },
+                {
+                    text:  sprintf('<img class="bc-full-width" src="%s">', screenShot),
+                    label: true
+                },
+                {
+                    text:    bcapp.language.actions.select,
+                    onClick: function() {
+                        $('#website_addition_url_textbox').val(url);
+                        $('#submit_website_addition').click();
+                        bcapp.framework.closeModal();
+                    }
+                }
+            ],
+            [
+                {
+                    text:    bcapp.language.actions.cancel,
+                    color:   'red',
+                    onClick: function() {
+                        alert( url );
+                    }
+                }
+            ]
+        ];
+        bcapp.framework.actions(buttons);
+    },
+    
+    addWebsite: function(url, userName, password) {
+        console.log('> URL:      ' + url);
+        console.log('> User:     ' + userName);
+        console.log('> Password: ' + password);
     }
 };
 

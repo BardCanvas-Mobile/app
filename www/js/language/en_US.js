@@ -37,5 +37,10 @@ var Language = {
             message: 'There was a problem accessing the QR Scanner.<br><br>Error obtained:<br>%s<br><br>Please try again. If the problem persists, try again after restarting your device.'
         },
         invalidResult: 'The QR code has an invalid value'
+    },
+    
+    actions: {
+        select: "Select",
+        cancel: "Cancel"
     }
 };

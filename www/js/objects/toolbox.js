@@ -35,7 +35,7 @@ var Toolbox = {
             function (result) {
                 if( result.cancelled ) return;
                 
-                if( ! bcapp.toolbox.validateQRcode(result.text, type) ) {
+                if( ! bcapp.toolbox.__validateQRcode(result.text, type) ) {
                     bcapp.framework.alert(
                         bcapp.language.qrScanner.invalidResult
                     );
@@ -55,7 +55,7 @@ var Toolbox = {
         );
     },
     
-    validateQRcode: function(value, type) {
+    __validateQRcode: function(value, type) {
         if( type !== 'url' ) return false;
         
         res = value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z‌​]{2,6}\b([-a-zA-Z0-9‌​@:%_\+.~#?&=]*)/);
