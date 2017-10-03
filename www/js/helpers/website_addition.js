@@ -16,8 +16,10 @@ var BCwebsiteAddition = {
                     text:    BCapp.language.actions.select,
                     onClick: function() {
                         $('#website_addition_url_textbox').val(url);
-                        $('#submit_website_addition').click();
+                        var $page = BCtoolbox.getCurrentPageContentArea();
                         BCapp.framework.closeModal();
+                        $page.scrollTo(0, 'fast');
+                        $('#add_website_form').submit();
                     }
                 }
             ],

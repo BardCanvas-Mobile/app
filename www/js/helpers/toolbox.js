@@ -47,5 +47,15 @@ var BCtoolbox = {
         
         res = value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z‌​]{2,6}\b([-a-zA-Z0-9‌​@:%_\+.~#?&=]*)/);
         return res !== null;
+    },
+    
+    /**
+     * @returns {jQuery}
+     */
+    getCurrentPageContentArea: function() {
+        var view = BCapp.currentView;
+        var page = view.activePage;
+        
+        return $(page.container).find('.page-content');
     }
 };
