@@ -5,6 +5,11 @@ var f7 = new Framework7();
 // noinspection JSUnusedGlobalSymbols
 var $$ = Dom7;
 
+// BlockUI defaults
+$.blockUI.defaults.css.border = '';
+$.blockUI.defaults.css.backgroundColor = 'transparent';
+$.blockUI.defaults.message = '<span class="preloader preloader-white bc-preloader-biggest"></span>';
+
 Template7.global = {
     appVersion: '0.0.1',
     isIOS:      f7.device.os === 'ios',
@@ -148,7 +153,7 @@ var BCapp = {
                         return false;
                     }
                 });
-            
+                
                 $('.views').fadeOut('fast');
                 $('.view-add-site').show('fast');
                 BCapp.currentView = BCapp.addSiteView;
