@@ -1,28 +1,6 @@
 
 var BCwebsiteAddition = {
     
-    renderWebsiteAdditionPage: function() {
-        BCapp.renderPage(
-            'pages/website_addition/index.html',
-            BCapp.addSiteView,
-            { reload: true },
-            function() {
-                var $form = $('#add_website_form');
-                $form[0].reset();
-                $form.ajaxForm({
-                    target:       '#ajax_form_target',
-                    beforeSubmit: function(data) {
-                        BCwebsiteAddition.addWebsite(data[0].value, data[1].value, data[2].value);
-                        return false;
-                    }
-                });
-                
-                $('.views').fadeOut('fast');
-                $('.view-add-site').show('fast');
-                BCapp.currentView = BCapp.addSiteView;
-            });
-    },
-    
     showFeaturedSiteDetails: function(title, screenShot, url) {
         var buttons = [
             [
