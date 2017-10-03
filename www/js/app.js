@@ -86,7 +86,7 @@ var BCapp = {
         if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
         
         if( browserLanguage === 'es' ) BCapp.settings.language = 'es_LA';
-        if( browserLanguage === 'en' ) BCapp.settings.language = 'en_US';
+        else                           BCapp.settings.language = 'en_US';
         
         $('head').append(sprintf(
             '<script type="text/javascript" src="js/language/%s.js"></script>', BCapp.settings.language

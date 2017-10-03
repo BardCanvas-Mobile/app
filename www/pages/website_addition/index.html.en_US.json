@@ -1,10 +1,10 @@
 {
   "welcome": "Mobile Client",
   
-  "addWebsite":                "Add a website",
-  "websiteURLplaceholder":    "Enter domain name",
-  "usernameOptional":         "User name (optional)",
-  "passwordOptional":          "Password (optional)",
+  "addWebsite":              "Add a website",
+  "websiteURLplaceholder":   "Enter domain name",
+  "usernameOptional":        "User name (optional)",
+  "passwordOptional":        "Password (optional)",
   "addWebsiteButtonCaption": "Add now",
   
   "featuredWebsitesTitle": "Featured websites",

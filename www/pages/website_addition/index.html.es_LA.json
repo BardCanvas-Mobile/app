@@ -1,10 +1,10 @@
 {
   "welcome": "Cliente Móvil",
   
-  "addWebsite":                "Añadir sitio web",
-  "websiteURLplaceholder":    "Introducir dominio",
-  "usernameOptional":         "Usuario o alias (opcional)",
-  "passwordOptional":          "Contraseña (opcional)",
+  "addWebsite":              "Añadir sitio web",
+  "websiteURLplaceholder":   "Introducir dominio",
+  "usernameOptional":        "Usuario o alias (opcional)",
+  "passwordOptional":        "Contraseña (opcional)",
   "addWebsiteButtonCaption": "Añadir ahora",
   
   "featuredWebsitesTitle": "Sitios destacados",
