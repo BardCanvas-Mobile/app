@@ -1,12 +1,77 @@
 {
-  "welcome":     "Mobile Client",
+  "welcome": "Mobile Client",
   
-  "add_website": "Add a website",
-  "website_url_placeholder": "Enter domain name",
-  "user_name_optional": "User name (optional)",
-  "password_optional": "Password (optional)",
-  "add_website_button_caption": "Add now",
+  "addWebsite":                "Add a website",
+  "websiteURLplaceholder":    "Enter domain name",
+  "usernameOptional":         "User name (optional)",
+  "passwordOptional":          "Password (optional)",
+  "addWebsiteButtonCaption": "Add now",
   
-  "featured_websites_title": "Featured websites",
-  "featured_websites_legend": "Browse the BardCanvas Club member sites and other blogs and systems on the BardCanvas Official Website Catalog",
+  "featuredWebsitesTitle": "Featured websites",
+  "featuredSites": [
+    {
+      "title":       "BardCanvas Official Website",
+      "language":    "English (US)",
+      "url":         "https://bardcanvas.com",
+      "icon":        "pages/website_addition/featured_site_icons/bardcanvas.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/bardcanvas.jpg",
+      "description": "BardCanvas official news stream"
+    },
+    {
+      "title":       "Aeris Club",
+      "language":    "Spanish (Latin America)",
+      "url":         "https://aeris.club",
+      "icon":        "pages/website_addition/featured_site_icons/aeris_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/aeris_club.jpg",
+      "description": "A blog dedicated to Vocaloid Music Videos made with the \"Miku Miku Dance\" software ands its resources."
+    },
+    {
+      "title":       "El Quisquilloso Club",
+      "language":    "Spanish (Latin America)",
+      "url":         "https://elquisquilloso.club",
+      "icon":        "pages/website_addition/featured_site_icons/el_quisquilloso_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/el_quisquilloso_club.jpg",
+      "description": "A central point of criticism about the modern life with all its ups and downs."
+    },
+    {
+      "title":       "Frugal Travel Chick Club",
+      "language":    "English (US)",
+      "url":         "https://frugaltravelchick.club",
+      "icon":        "pages/website_addition/featured_site_icons/frugal_travel_chick_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/frugal_travel_chick_club.jpg",
+      "description": "A place dedicated to show you how to get the best of your resources when planning to travel or actually travelling. And in your normal life too."
+    },
+    {
+      "title":       "Minimus Club",
+      "language":    "Spanish (Latin America)",
+      "url":         "https://minimus.club",
+      "icon":        "pages/website_addition/featured_site_icons/minimus_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/minimus_club.jpg",
+      "description": "A blog that takes the best of the minimalist lifestyle from a point of view that steps above fashion."
+    },
+    {
+      "title":       "Space Escalator Club",
+      "language":    "English (US)",
+      "url":         "https://spaceescalator.club",
+      "icon":        "pages/website_addition/featured_site_icons/space_escalator_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/space_escalator_club.jpg",
+      "description": "This club will give you the most unusual, strange, weird, unbelievable topics you'll find on the 'net."
+    },
+    {
+      "title":       "Subspace Club",
+      "language":    "French / English",
+      "url":         "https://subspace.club",
+      "icon":        "pages/website_addition/featured_site_icons/subspace_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/subspace_club.jpg",
+      "description": "A place dedicated to the Cryptocurrencies ecosystems, with information about coins, mining, etc. And other technology related topics."
+    },
+    {
+      "title":       "Tintereando Club",
+      "language":    "Spanish (Latin America)",
+      "url":         "https://tintereando.club",
+      "icon":        "pages/website_addition/featured_site_icons/tintereando_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/tintereando_club.jpg",
+      "description": "A club that features tales and stories from hobbyist writers."
+    }
+  ]
 }
