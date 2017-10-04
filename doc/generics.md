@@ -26,20 +26,58 @@
 It is a JSON file containing all website underlying data, E.G.:
 
     {
-        website_name: "Whatever",
-        data_delivery_url: "http://some-domain.com/bc_mobile/data.php",
-        user_data: {
-            level: 10,
-            allow_posting_items: true,
-            base_item_type: "post",
+      "name":           "Website name",
+      "rootURL":        "http://some-domain.com",
+      "language":       "en_US",
+      "company":        "Company name",
+      "companyPageURL": "http://some-domain.com",
+      "description":    "Website description",
+      "disclaimer":     "Disclaimer to show",
+      "icon":           "data:image/png;base64,...",
+      
+      "loginRequired":      true,
+      "loginAuthenticator": "http://some-domain.com/authenticator.php",
+      
+      "services": {
+        "handler": {
+          "caption":  "Caption",
+          "isOnline": true,
+          "url":      "http://some-domain.com/some-page.php",
+          "icon":     "fa-address-card-o"
         }
+      }
     }
+
+Services are the pages that will be rendered on the website's view on BardCanvas. A website can offer more than one service, and they're treated as tabs on the interface.
+
+* If only one service is specified, then no tabs bar will be rendered.
+* Between one and five services specified, a tabs bar will be rendered.
+* If more than five services are specified, the first four will be shown on the
+  tabs bar and a "more" tab will be shown. This tab will show a popover with
+  the rest of the services to be selected. 
+
+**Note about service icons:** there are four variants on this property:
+  
+* `fa-something` To show an icon from a Font Awesome icon class,  
+  E.G. `fa-info-circle` to render `<i class="fa fa-info-circle"></i>`
+* `something` To show a Framework7 icon (used for iOS), E.G.  
+  `world` to render `<i class="icon f7-icons">world</i>`
+* `{"ios": "something", "android": "fa-something"}` To show the corresponding
+  icons from Framework7 for iOS and Font Awesome for Android using the
+  directives described above. This is the preferred method to increase the
+  odds on Apple iTunes submissions.
+* `data:image/type;base64,...` To show an inlined 256x256 JPEG/PNG/GIF icon
+  instead of a font based icon.
 
 ## Data Packages
 
-* It is a fully featured feed in JSON format, zipped, containing media.
+* It is a fully featured feed in JSON format, gzipped, containing media files
+  as inlined data.
 
 * Every package must be saved in the app’s cache directory.
+
+* Every post in the package must be saved into a single file, having the
+  timestamp as file name. 
 
 * There should be options to set how often the site should be polled for updates.
 
