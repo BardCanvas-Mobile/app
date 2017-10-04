@@ -57,5 +57,27 @@ var BCtoolbox = {
         var page = view.activePage;
         
         return $(page.container).find('.page-content');
+    },
+    
+    getFileStorageDirectory: function(targetDirectory) {
+        var dir = '';
+        
+        if( BCapp.settings.os === 'ios' )
+            dir = cordova.file.dataDirectory;
+        else if( BCapp.settings.storage === 'local' )
+            dir = cordova.file.dataDirectory;
+        else
+            dir = cordova.file.externalDataDirectory;
+        
+        dir = dir + targetDirectory;
+        
+        return dir;
+    },
+    
+    isValidURL: function(url) {
+        var regexQuery = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
+        var reg        = new RegExp(regexQuery, "i");
+        
+        return reg.test(url);
     }
 };

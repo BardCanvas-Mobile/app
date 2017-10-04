@@ -42,5 +42,10 @@ var Language = {
     actions: {
         select: "Select",
         cancel: "Cancel"
-    }
+    },
+    
+    ownedAndOperatedBy: "Owned and operated by %s",
+    
+    pleaseProvideAURL:   "Please provide a URL to a website to add (starting with \"http://\" or \"https://\") or select one from the featured websites list.",
+    websiteURLisInvalid: "The URL to the website is invalid. Please check it and try again."
 };

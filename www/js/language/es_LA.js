@@ -42,5 +42,10 @@ var Language = {
     actions: {
         select: "Seleccionar",
         cancel: "Cancelar"
-    }
+    },
+    
+    ownedAndOperatedBy: "Propiedad y operación por %s",
+    
+    pleaseProvideAURL:   "Provee la dirección de un sitio web a añadir (iniciando con \"http://\" o \"https://\") o selecciona uno de la lista de sitios destacados.",
+    websiteURLisInvalid: "La URL del sitio web es inválida. Chécala e intenta de nuevo."
 };

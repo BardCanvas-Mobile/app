@@ -149,6 +149,20 @@ var BCapp = {
                 $form.ajaxForm({
                     target:       '#ajax_form_target',
                     beforeSubmit: function(data) {
+                        
+                        if( data[0].value.length === 0 ) {
+                            BCapp.throwError(BCapp.language.pleaseProvideAURL);
+                            
+                            return false;
+                        }
+                        
+                        if( ! BCtoolbox.isValidURL(data[0].value) )
+                        {
+                            BCapp.throwError(BCapp.language.websiteURLisInvalid);
+                            
+                            return false;
+                        }
+                        
                         BCwebsiteAddition.addWebsite(data[0].value, data[1].value, data[2].value);
                         return false;
                     }
@@ -171,6 +185,10 @@ var BCapp = {
                 if( typeof callback === 'function' ) callback();
             });
         });
+    },
+    
+    throwError: function(message) {
+        BCapp.framework.alert(message);
     }
 };
 

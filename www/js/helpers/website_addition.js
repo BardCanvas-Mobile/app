@@ -37,8 +37,16 @@ var BCwebsiteAddition = {
     },
     
     addWebsite: function(url, userName, password) {
-        console.log('> URL:      ' + url);
-        console.log('> User:     ' + userName);
-        console.log('> Password: ' + password);
+        console.info('> URL:      ' + url);
+        console.info('> User:     ' + userName);
+        console.info('> Password: ' + password);
+        
+        if( BCapp.os === 'ios' ) NetworkActivityIndicator.show();
+        
+        var handler   = url.replace(/http:\/\/|https:\/\//i, '').toLowerCase();
+        var dir       = BCtoolbox.getFileStorageDirectory(handler);
+        alert(dir);
+        
+        if( BCapp.os === 'ios' ) NetworkActivityIndicator.hide();
     }
 };
