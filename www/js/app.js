@@ -15,7 +15,7 @@ Template7.global = {
     isIOS:      f7.device.os === 'ios',
     isAndroid:  f7.device.os !== 'ios',
     os:         f7.device.os,
-    langauge:   {}
+    language:   null
 };
 
 var BCapp = {
@@ -33,11 +33,6 @@ var BCapp = {
      * @var {BCglobalSettingsClass}
      */
     settings: null,
-    
-    /**
-     * @var {Language}
-     */
-    language: null,
     
     /**
      * @var {string} ios, android
@@ -100,13 +95,13 @@ var BCapp = {
         $('head').append(sprintf(
             '<script type="text/javascript" src="js/language/%s.js"></script>', BCapp.settings.language
         ));
-        BCapp.language            = Language;
-        Template7.global.language = Language;
         
-        for(var i in BCapp.language.frameworkCaptions)
-            BCapp.framework.params[i] = BCapp.language.frameworkCaptions[i];
+        Template7.global.language = BClanguage;
         
-        $('head title').text(BCapp.language.appName.replace('{{platform}}', BCapp.os));
+        for(var i in BClanguage.frameworkCaptions)
+            BCapp.framework.params[i] = BClanguage.frameworkCaptions[i];
+        
+        $('head title').text(BClanguage.appName.replace('{{platform}}', BCapp.os));
     },
     
     __loadRequirements: function() {
@@ -151,14 +146,14 @@ var BCapp = {
                     beforeSubmit: function(data) {
                         
                         if( data[0].value.length === 0 ) {
-                            BCapp.throwError(BCapp.language.pleaseProvideAURL);
+                            BCapp.throwError(BClanguage.pleaseProvideAURL);
                             
                             return false;
                         }
                         
                         if( ! BCtoolbox.isValidURL(data[0].value) )
                         {
-                            BCapp.throwError(BCapp.language.websiteURLisInvalid);
+                            BCapp.throwError(BClanguage.websiteURLisInvalid);
                             
                             return false;
                         }
@@ -175,7 +170,7 @@ var BCapp = {
     },
     
     renderPage: function(templateFileName, view, params, callback) {
-        var languageFileName = sprintf('%s.%s.json', templateFileName, BCapp.language.iso);
+        var languageFileName = sprintf('%s.%s.json', templateFileName, BClanguage.iso);
         $.getJSON(languageFileName, function(pageLanguage) {
             params.context = pageLanguage;
             $.get(templateFileName, function(sourceHTML) {

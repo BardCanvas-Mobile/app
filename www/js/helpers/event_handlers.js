@@ -28,8 +28,8 @@ var BCeventHandlers = {
         }
         
         BCapp.framework.confirm(
-            BCapp.language.exit.message,
-            BCapp.language.exit.title,
+            BClanguage.exit.message,
+            BClanguage.exit.title,
             function () {
                 navigator.app.clearHistory();
                 navigator.app.exitApp();

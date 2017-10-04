@@ -13,7 +13,7 @@ var BCwebsiteAddition = {
                     label: true
                 },
                 {
-                    text:    BCapp.language.actions.select,
+                    text:    BClanguage.actions.select,
                     onClick: function() {
                         $('#website_addition_url_textbox').val(url);
                         var $page = BCtoolbox.getCurrentPageContentArea();
@@ -25,7 +25,7 @@ var BCwebsiteAddition = {
             ],
             [
                 {
-                    text:    BCapp.language.actions.cancel,
+                    text:    BClanguage.actions.cancel,
                     color:   'red',
                     onClick: function() {
                         BCapp.framework.closeModal();

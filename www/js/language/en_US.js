@@ -3,7 +3,7 @@
 // English/United States
 //
 
-var Language = {
+var BClanguage = {
     
     iso: 'en_US',
     __info: {

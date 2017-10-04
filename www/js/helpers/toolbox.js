@@ -5,17 +5,17 @@ var BCtoolbox = {
         
         var $target = $(targetSelector);
         var params  = {
-            preferFrontCamera:     false,                           // iOS and Android
-            showFlipCameraButton:  true,                            // iOS and Android
-            showTorchButton:       true,                            // iOS and Android
-            torchOn:               true,                            // Android, launch with the torch switched on (if available)
-            saveHistory:           true,                            // Android, save scan history (default false)
-            prompt:                BCapp.language.qrScanner.prompt, // Android
-            resultDisplayDuration: 500,                             // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-            formats:               "QR_CODE",                       // default: all but PDF_417 and RSS_EXPANDED
-            orientation:           "portrait",                      // Android only (portrait|landscape), default unset so it rotates with the device
-            disableAnimations:     false,                           // iOS
-            disableSuccessBeep:    false                            // iOS and Android
+            preferFrontCamera:     false,                       // iOS and Android
+            showFlipCameraButton:  true,                        // iOS and Android
+            showTorchButton:       true,                        // iOS and Android
+            torchOn:               true,                        // Android, launch with the torch switched on (if available)
+            saveHistory:           true,                        // Android, save scan history (default false)
+            prompt:                BClanguage.qrScanner.prompt, // Android
+            resultDisplayDuration: 500,                         // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+            formats:               "QR_CODE",                   // default: all but PDF_417 and RSS_EXPANDED
+            orientation:           "portrait",                  // Android only (portrait|landscape), default unset so it rotates with the device
+            disableAnimations:     false,                       // iOS
+            disableSuccessBeep:    false                        // iOS and Android
         };
         
         cordova.plugins.barcodeScanner.scan(
@@ -24,7 +24,7 @@ var BCtoolbox = {
                 
                 if( ! BCtoolbox.__validateQRcode(result.text, type) ) {
                     BCapp.framework.alert(
-                        BCapp.language.qrScanner.invalidResult
+                        BClanguage.qrScanner.invalidResult
                     );
                     
                     return;
@@ -34,8 +34,8 @@ var BCtoolbox = {
             },
             function (error) {
                 BCapp.framework.alert(
-                    sprintf(BCapp.language.qrScanner.scanFailed.message, error),
-                    BCapp.language.qrScanner.scanFailed.title
+                    sprintf(BClanguage.qrScanner.scanFailed.message, error),
+                    BClanguage.qrScanner.scanFailed.title
                 );
             },
             params

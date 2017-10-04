@@ -3,7 +3,7 @@
 // Spanish/Latin America
 //
 
-var Language = {
+var BClanguage = {
     
     iso: 'es_LA',
     __info: {
