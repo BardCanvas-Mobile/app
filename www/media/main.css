@@ -14,7 +14,7 @@
 }
 
 .bc-loader-progress-group .bc-progress-icon     { width: 256px; height: 256px; padding: 25px; border: 6px solid silver;
-                                               border-radius: 100%; background-color: white; }
+                                                  border-radius: 100%; background-color: white; }
 .bc-loader-progress-group .bc-progress-icon img { width: 200px; height: 200px; margin-top: 5px; }
 .bc-loader-progress-group .bc-progress-bar      { position: absolute; z-index: 1; }
 
