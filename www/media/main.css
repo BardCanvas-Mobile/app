@@ -37,6 +37,12 @@ body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
 
 /*body[data-os="android"] .page { background-color: #efeff4; }*/
 
+/* F7 extensions */
+
+body[data-orientation="landscape"] .row .landscape-50 {
+    width: 50%;
+}
+
 /* Icon fixes */
 
 body[data-os="android"] .bc-ios-icon     { display: none; }

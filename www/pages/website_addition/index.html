@@ -3,98 +3,105 @@
     
     <div class="page-content aligncenter">
         
-        <!-- Logo -->
-        <div class="content-block">
-            <img onclick="location.reload()" style="max-width: 75%"
-                 src="media/bardcanvas_logo_850x200.png"><br>
-            {{welcome}} {{@global.appVersion}}
-        </div>
-        
-        <!-- Add website -->
-        <div class="content-block-title">{{addWebsite}}</div>
-        <div class="list-block inset">
-            <form method="post" id="add_website_form" action="none">
-                <ul>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-media">
-                                <i class="bc-ios-icon icon f7-icons">world</i>
-                                <i class="bc-android-icon bc-input-icon fa fa-globe fa-fw"></i>
-                            </div>
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="text" name="url" id="website_addition_url_textbox" placeholder="{{websiteURLplaceholder}}">
-                                </div>
-                                <div class="item-after">
-                                    <i class="bc-pseudolink fa fa-qrcode fa-fw fa-lg"
-                                       onclick="BCtoolbox.scanQRcode('#website_addition_url_textbox', 'url')"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li>
-                        <div class="item-content">
-                            <div class="item-media">
-                                <i class="bc-ios-icon icon f7-icons">person</i>
-                                <i class="bc-android-icon bc-input-icon fa fa-user-circle-o fa-fw"></i>
-                            </div>
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="text" name="user_name" placeholder="{{usernameOptional}}">
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li>
-                        <div class="item-content">
-                            <div class="item-media">
-                                <i class="bc-ios-icon icon f7-icons">lock</i>
-                                <i class="bc-android-icon bc-input-icon fa fa-lock fa-fw"></i>
-                            </div>
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="password" name="password" placeholder="{{passwordOptional}}">
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+        <div class="row">
+            
+            <div class="col-100 landscape-50">
+                <!-- Logo -->
+                <div class="content-block">
+                    <img onclick="location.reload()" style="max-width: 75%"
+                         src="media/bardcanvas_logo_850x200.png"><br>
+                    {{welcome}} {{@global.appVersion}}
+                </div>
                 
-                <p class="buttons-row">
-                    <button class="button" id="submit_website_addition">{{addWebsiteButtonCaption}}</button>
-                </p>
-            </form>
-        </div>
-        
-        <!-- Featured sites -->
-        <div class="content-block-title">{{featuredWebsitesTitle}}</div>
-        <div class="list-block media-list inset alignleft" id="bc-featured-sites-list">
-            <ul>
-                {{#featuredSites}}
-                <li>
-                    <div class="item-content bc-pseudolink"
-                         onclick="BCwebsiteAddition.showFeaturedSiteDetails('{{title}}', '{{screenshot}}', '{{url}}')">
-                        <div class="item-media"><img width="64" src="{{icon}}"></div>
-                        <div class="item-inner">
-                            <div class="item-title-row">
-                                <div class="item-title">{{title}}</div>
-                                <div class="item-after"><i class="fa fa-search fa-lg"></i></div>
-                            </div>
-                            <div class="item-subtitle">
-                                <div class="chip">
-                                    <div class="chip-label">{{language}}</div>
+                <!-- Add website -->
+                <div class="content-block-title">{{addWebsite}}</div>
+                <div class="list-block inset">
+                    <form method="post" id="add_website_form" action="none">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="bc-ios-icon icon f7-icons">world</i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-globe fa-fw"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-input">
+                                            <input type="text" name="url" id="website_addition_url_textbox" placeholder="{{websiteURLplaceholder}}">
+                                        </div>
+                                        <div class="item-after">
+                                            <i class="bc-pseudolink fa fa-qrcode fa-fw fa-lg"
+                                               onclick="BCtoolbox.scanQRcode('#website_addition_url_textbox', 'url')"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="bc-ios-icon icon f7-icons">person</i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-user-circle-o fa-fw"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-input">
+                                            <input type="text" name="user_name" placeholder="{{usernameOptional}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="bc-ios-icon icon f7-icons">lock</i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-lock fa-fw"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-input">
+                                            <input type="password" name="password" placeholder="{{passwordOptional}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <p class="buttons-row">
+                            <button class="button" id="submit_website_addition">{{addWebsiteButtonCaption}}</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-100 landscape-50">
+                <!-- Featured sites -->
+                <div class="content-block-title">{{featuredWebsitesTitle}}</div>
+                <div class="list-block media-list inset alignleft" id="bc-featured-sites-list">
+                    <ul>
+                        {{#featuredSites}}
+                        <li>
+                            <div class="item-content bc-pseudolink"
+                                 onclick="BCwebsiteAddition.showFeaturedSiteDetails('{{title}}', '{{screenshot}}', '{{url}}')">
+                                <div class="item-media"><img width="64" src="{{icon}}"></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{title}}</div>
+                                        <div class="item-after"><i class="fa fa-search fa-lg"></i></div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <div class="chip">
+                                            <div class="chip-label">{{language}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="item-text">{{description}}</div>
                                 </div>
                             </div>
-                            <div class="item-text">{{description}}</div>
-                        </div>
-                    </div>
-                </li>
-                {{/featuredSites}}
-            </ul>
+                        </li>
+                        {{/featuredSites}}
+                    </ul>
+                </div>
+            </div>
+            
         </div>
-        
     </div>
     
 </div>
