@@ -143,24 +143,7 @@ var BCapp = {
                 $form[0].reset();
                 $form.ajaxForm({
                     target:       '#ajax_form_target',
-                    beforeSubmit: function(data) {
-                        
-                        if( data[0].value.length === 0 ) {
-                            BCapp.throwError(BClanguage.pleaseProvideAURL);
-                            
-                            return false;
-                        }
-                        
-                        if( ! BCtoolbox.isValidURL(data[0].value) )
-                        {
-                            BCapp.throwError(BClanguage.websiteURLisInvalid);
-                            
-                            return false;
-                        }
-                        
-                        BCwebsiteAddition.addWebsite(data[0].value, data[1].value, data[2].value);
-                        return false;
-                    }
+                    beforeSubmit: BCwebsiteAddition.websiteAdditionSubmission
                 });
                 
                 $('.views').fadeOut('fast');

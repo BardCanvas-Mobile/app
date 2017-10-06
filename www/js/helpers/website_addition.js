@@ -36,6 +36,31 @@ var BCwebsiteAddition = {
         BCapp.framework.actions(buttons);
     },
     
+    websiteAdditionSubmission: function(data) {
+        
+        if( data[0].value.length === 0 ) {
+            BCapp.throwError(BClanguage.pleaseProvideAURL);
+            
+            return false;
+        }
+        
+        var url      = data[0].value;
+        var userName = data[1].value;
+        var password = data[2].value;
+        
+        if( url.indexOf(/http/i) < 0 ) url = 'http://' + url;
+        
+        if( ! BCtoolbox.isValidURL(url) )
+        {
+            BCapp.throwError(BClanguage.websiteURLisInvalid);
+            
+            return false;
+        }
+        
+        BCwebsiteAddition.addWebsite(url, userName, password);
+        return false;
+    },
+    
     addWebsite: function(url, userName, password) {
         console.info('> URL:      ' + url);
         console.info('> User:     ' + userName);
