@@ -6,8 +6,6 @@ var BCglobalSettingsClass = function() {
     
     this.language = 'en_US';
     
-    this.storage = 'local';
-    
     // noinspection JSUnusedGlobalSymbols
     this.defaultMediaPrefs = {
         downsampleImages:  true,
