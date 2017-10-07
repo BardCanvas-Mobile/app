@@ -42,6 +42,12 @@ var BCtoolbox = {
         );
     },
     
+    /**
+     * @param value
+     * @param type
+     * @returns {boolean}
+     * @private
+     */
     __validateQRcode: function(value, type) {
         if( type !== 'url' ) return false;
         

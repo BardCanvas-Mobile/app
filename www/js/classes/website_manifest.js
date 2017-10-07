@@ -20,6 +20,9 @@ var BCwebsiteManifest = function(source) {
     
     this.description = '';
     
+    /**
+     * @type {string|array}
+     */
     this.disclaimer = '';
     
     this.icon = '';

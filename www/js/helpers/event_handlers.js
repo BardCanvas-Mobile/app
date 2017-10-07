@@ -8,6 +8,10 @@ var BCeventHandlers = {
         document.addEventListener('backbutton',    BCeventHandlers.__backButtonPressed,   false);
     },
     
+    /**
+     * @param e
+     * @private
+     */
     __backButtonPressed: function(e) {
         e.preventDefault();
         
@@ -37,15 +41,25 @@ var BCeventHandlers = {
         );
     },
     
+    /**
+     * @param status
+     * @private
+     */
     __batteryStatusChange: function(status) {
         BCapp.batteryIsLow = status.level < 10;
     },
     
+    /**
+     * @private
+     */
     __networkDisconnected: function() {
         BCapp.networkType      = navigator.connection.type;
         BCapp.networkConnected = false;
     },
     
+    /**
+     * @private
+     */
     __networkConnected: function() {
         BCapp.networkType      = navigator.connection.type;
         BCapp.networkConnected = (
