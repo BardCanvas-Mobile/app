@@ -40,12 +40,12 @@ var BClanguage = {
     },
     
     actions: {
-        select: "Select",
-        cancel: "Cancel"
+        select: 'Select',
+        cancel: 'Cancel'
     },
     
-    ownedAndOperatedBy: "Owned and operated by %s",
+    ownedAndOperatedBy: 'Owned and operated by %s',
     
-    pleaseProvideAURL:   "Please provide a URL to a website to add (starting with \"http://\" or \"https://\") or select one from the featured websites list.",
-    websiteURLisInvalid: "The URL to the website is invalid. Please check it and try again."
+    pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
+    websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.'
 };
