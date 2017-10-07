@@ -2,7 +2,7 @@
  * @param {object} source
  * @constructor
  */
-var BCwebsiteManifest = function(source) {
+var BCwebsiteManifestClass = function(source) {
     
     this.name = '';
     
@@ -31,25 +31,19 @@ var BCwebsiteManifest = function(source) {
     
     this.loginAuthenticator = '';
     
-    var services = [];
+    /**
+     * @type {BCwebsiteServiceDetailsClass[]}
+     */
+    this.services = [];
     
     if( typeof source === 'undefined' ) return;
     
-    for(var i in source)
-    {
-        if( i === 'services' ) services = source[i];
-        else                   this[i] = source[i];
-    }
+    var i = 0;
     
-    /**
-     * @returns BCwebsiteServiceDetails[]
-     */
-    this.getServices = function() {
-        if( services.length === 0 ) return {};
-        
-        var ret = [];
-        for(var i in services) ret[i] = new BCwebsiteServiceDetails(services[i]);
-        
-        return ret;
-    }
+    for(i in source)
+        if( i !== 'services' ) this[i] = source[i];
+    
+    if(source.services)
+        for(i in source.services)
+            this.services[i] = new BCwebsiteServiceDetailsClass(source.services[i]);
 };

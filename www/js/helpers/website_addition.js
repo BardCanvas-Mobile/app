@@ -58,19 +58,34 @@ var BCwebsiteAddition = {
             return false;
         }
         
-        var handler = BCwebsiteAddition.convertSiteURLtoHandler(url);
+        var handler = BCwebsiteAddition.__convertSiteURLtoHandler(url);
         console.info('> URL:      ' + url);
+        console.info('> Handler:  ' + handler);
         console.info('> User:     ' + userName);
         console.info('> Password: ' + password);
-        console.info('> Handler:  ' + handler);
+        var website = new BCwebsiteClass({
+            URL:      url,
+            handler:  handler,
+            userName: userName,
+            password: password
+        });
         
-        BCwebsiteAddition.fetchManifest(handler, url, userName, password, function(manifest) {
-            BCwebsiteAddition.presetupWebsiteManifest(handler, url, userName, password, manifest);
+        BCwebsiteAddition.__fetchManifest(website, function(manifest) {
+            website.manifest = manifest;
+            BCwebsiteAddition.__presetupWebsiteManifest(website, function(website) {
+                    
+                });
         });
         return false;
     },
     
-    convertSiteURLtoHandler: function(source) {
+    /**
+     * @param {string} source
+     * 
+     * @returns {string}
+     * @private
+     */
+    __convertSiteURLtoHandler: function(source) {
         source = source.toLowerCase();
         source = source.replace(/http:\/\/|https:\/\//i, '');
         source = source.replace(/\/$/, '');
@@ -79,11 +94,18 @@ var BCwebsiteAddition = {
         return source;
     },
     
-    fetchManifest: function(handler, url, userName, password, callback) {
+    /**
+     * 
+     * @param {BCwebsiteClass} website
+     * @param {function}       callback
+     * @private
+     */
+    __fetchManifest: function(website, callback) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
             console.log("Filesystem open: " + fs.name);
             
-            fs.root.getDirectory(handler, {create: true, exclusive: false}, function(dir) {
+            console.log("Creating dir for " + website.handler);
+            fs.root.getDirectory(website.handler, {create: true, exclusive: false}, function(dir) {
                 console.log("Created dir " + dir.name);
                 
                 fs.root.getFile(dir.name + '/manifest.json', { create: true, exclusive: false }, function (fileEntry) {
@@ -97,7 +119,7 @@ var BCwebsiteAddition = {
                             // noinspection JSClosureCompilerSyntax
                             var fileTransfer = new FileTransfer();
                             var target       = fileEntry.toURL();
-                            var source       = url + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+                            var source       = website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
                             console.log(sprintf('Fetching "%s"...', source));
                             fileTransfer.download(
                                 source,
@@ -112,7 +134,7 @@ var BCwebsiteAddition = {
                                     fileEntry.file(function (file) {
                                         var reader = new FileReader();
                                         reader.onloadend = function () {
-                                            var manifest = new BCwebsiteManifest(JSON.parse(this.result));
+                                            var manifest = new BCwebsiteManifestClass(JSON.parse(this.result));
                                             
                                             callback(manifest);
                                         };
@@ -130,7 +152,6 @@ var BCwebsiteAddition = {
                                         BClanguage.cannotDownloadWebsiteManifest,
                                         BClanguage.fileTransferErrors[error.code]
                                     ));
-                                    console.log( error );
                                 },
                                 null
                             );
@@ -159,14 +180,13 @@ var BCwebsiteAddition = {
     },
     
     /**
-     * @param {string} handler
-     * @param {string} url
-     * @param {string} userName
-     * @param {string} password
-     * @param {BCwebsiteManifest} manifest
+     * 
+     * @param {BCwebsiteClass} website
+     * @param {function}       callback
+     * @private
      */
-    presetupWebsiteManifest: function(handler, url, userName, password, manifest) {
-        var services = manifest.getServices();
+    __presetupWebsiteManifest: function(website, callback) {
+        var services = website.manifest.services;
         
         if( services.length === 0 ) {
             BCapp.framework.alert(BClanguage.websiteHasNoServices);
@@ -174,14 +194,44 @@ var BCwebsiteAddition = {
             return;
         }
         
-        // Disclaimer/login requirement display cases:
-        // Case 1: has disclaimer, no login required
-        // Case 2: has disclaimer, login required
-        // Case 3: no disclaimer, login required
-        // Case 4: no disclaimer, no login required
+        console.log("Website record: ", website);
         
-        console.log('> Fetching manifest requirements start');
-        console.log('Services detected: ', services.length);
-        console.log('> Fetching manifest requirements end');
+        //
+        // Case 1: no disclaimer, no login required
+        //         '--> Add the site immmediately
+        //
+        
+        
+        
+        //
+        // Case 1: no disclaimer, login required
+        //         '--> Alert login requirement message and abort if no credentials have been provided
+        //
+        
+        
+        
+        //
+        // Case 1: has disclaimer, login required
+        //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
+        //
+        
+        
+        
+        //
+        // Case 2: has disclaimer, no login required
+        //         '--> Show disclaimer and "proceed" button
+        //
+        
+        
+        
+    },
+    
+    /**
+     * 
+     * @param {BCwebsiteManifestClass} manifest
+     * @private
+     */
+    __fetchWebsiteManifestImages: function(manifest) {
+        
     }
 };

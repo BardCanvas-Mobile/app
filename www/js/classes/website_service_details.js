@@ -2,7 +2,7 @@
  * @param {object} source
  * @constructor
  */
-var BCwebsiteServiceDetails = function(source) {
+var BCwebsiteServiceDetailsClass = function(source) {
     
     this.id = "";
     

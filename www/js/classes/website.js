@@ -1,14 +1,22 @@
 /**
  * @constructor
  */
-var BCwebsiteClass = function() {
+var BCwebsiteClass = function(source) {
+    
+    this.URL = '';
     
     this.handler = '';
     
-    this.domain =   '';
+    this.userName = '';
     
-    this.language = 'en_US';
+    this.password = '';
     
-    this.iconURL = '';
+    /**
+     * @type {BCwebsiteManifestClass}
+     */
+    this.manifest = {};
     
+    if( typeof source === 'undefined' ) return;
+    
+    for(var i in source) this[i] = source[i];
 };
