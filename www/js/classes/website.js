@@ -1,4 +1,6 @@
-
+/**
+ * @constructor
+ */
 var BCwebsiteClass = function() {
     
     this.domain =   '';

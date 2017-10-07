@@ -1,4 +1,7 @@
-
+/**
+ * @param {object} source
+ * @constructor
+ */
 var BCwebsiteManifest = function(source) {
     
     this.name = '';
@@ -25,7 +28,7 @@ var BCwebsiteManifest = function(source) {
     
     this.loginAuthenticator = '';
     
-    var services = {};
+    var services = [];
     
     if( typeof source === 'undefined' ) return;
     
@@ -36,12 +39,12 @@ var BCwebsiteManifest = function(source) {
     }
     
     /**
-     * @returns {{BCwebsiteServiceDetails}[]}
+     * @returns BCwebsiteServiceDetails[]
      */
     this.getServices = function() {
         if( services.length === 0 ) return {};
         
-        var ret = {};
+        var ret = [];
         for(var i in services) ret[i] = new BCwebsiteServiceDetails(services[i]);
         
         return ret;

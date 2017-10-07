@@ -1,5 +1,10 @@
-
+/**
+ * @param {object} source
+ * @constructor
+ */
 var BCwebsiteServiceDetails = function(source) {
+    
+    this.id = "";
     
     this.caption = '';
     

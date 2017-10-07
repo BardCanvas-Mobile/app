@@ -1,4 +1,6 @@
-
+/**
+ * @constructor
+ */
 var BCglobalSettingsClass = function() {
     
     // noinspection JSUnusedGlobalSymbols
