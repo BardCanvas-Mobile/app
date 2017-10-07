@@ -34,7 +34,9 @@ var BClanguage = {
         prompt:        'Place a QR code inside the scan area',
         scanFailed:    {
             title:   'Scanning failed!',
-            message: 'There was a problem accessing the QR Scanner.<br><br>Error obtained:<br>%s<br><br>Please try again. If the problem persists, try again after restarting your device.'
+            message: 'There was a problem accessing the QR Scanner:<br><br>' 
+                     + '<span class="color-red">%s</span><br><br>' 
+                     + 'Please try again. If the problem persists, try again after restarting your device.'
         },
         invalidResult: 'The QR code has an invalid value'
     },
@@ -47,5 +49,48 @@ var BClanguage = {
     ownedAndOperatedBy: 'Owned and operated by %s',
     
     pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
-    websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.'
+    websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.',
+    
+    errorCallingLFSAPI:              'Error opening storage system:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>' 
+                                     + 'Please check if your device storage is OK and try again.',
+    unableToCreateWebsiteStorageDir: 'Unable to create website storage directory:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please check if some security app is messing with BardCanvas and your ' 
+                                     + 'device storage is OK and try again.',
+    cannotDownloadWebsiteManifest:   'Unable to download website manifest:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please check the domain or URL is correct and your device is connected '
+                                     + 'to the internet and try again.',
+    cannotOpenManifest:              'Unable to open the website manifest file for writing:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please try again. If the problem persists, please check your device storage.',
+    cannotReadManifest:              'Unable to read the downloaded manifest file for website:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please try again. If the problem persists, please check your device storage.',
+    websiteHasNoServices:            'Sorry, but the website doesn\'t seem to have any services available.',
+    
+    fileErrors: [
+        'Undefined',
+        'Security error',
+        'Operation aborted',
+        'Unable to read file',
+        'Encoding mismatch',
+        'File cannot be modified',
+        'Invalid state',
+        'Syntax error',
+        'Invalid modification',
+        'Quota exceeded',
+        'Type mismatch',
+        'Path already exists'
+    ],
+    
+    fileTransferErrors: [
+        'Undefined',
+        'File not found',
+        'Invalid URL',
+        'Connection error',
+        'Connection aborted',
+        'File not modified'
+    ]
 };
