@@ -65,7 +65,7 @@ var BCwebsiteAddition = {
         console.info('> Handler:  ' + handler);
         
         BCwebsiteAddition.fetchManifest(handler, url, userName, password, function(manifest) {
-            BCwebsiteAddition.fetchManifestRequirements(handler, url, userName, password, manifest);
+            BCwebsiteAddition.presetupWebsiteManifest(handler, url, userName, password, manifest);
         });
         return false;
     },
@@ -113,51 +113,75 @@ var BCwebsiteAddition = {
                                         var reader = new FileReader();
                                         reader.onloadend = function () {
                                             var manifest = new BCwebsiteManifest(JSON.parse(this.result));
-                                            console.log("Manifest contents: ", manifest);
                                             
                                             callback(manifest);
                                         };
                                         reader.readAsText(file);
                                     }, function(error) {
                                         BCtoolbox.hideNetworkActivityIndicator();
-                                        
-                                        console.log(sprintf('Cannot read manifest %s! Error: %s', fileEntry.name, error.code))
+                                        BCapp.framework.alert(sprintf(
+                                            BClanguage.cannotReadManifest, BClanguage.fileErrors[error.code]
+                                        ));
                                     });
                                 },
                                 function(error) {
                                     BCtoolbox.hideNetworkActivityIndicator();
-                                    
-                                    console.log("> download error source: " + error.source);
-                                    console.log("> download error target: " + error.target);
-                                    console.log("> download error code: " + error.code);
+                                    BCapp.framework.alert(sprintf(
+                                        BClanguage.cannotDownloadWebsiteManifest,
+                                        BClanguage.fileTransferErrors[error.code]
+                                    ));
+                                    console.log( error );
                                 },
                                 null
                             );
                         };
                         writer.truncate(0);
+                    }, function(error) {
+                        BCapp.framework.alert(sprintf(
+                            BClanguage.cannotOpenManifest, BClanguage.fileErrors[error.code]
+                        ));
                     });
                 }, function(error) {
-                    console.log('Can\'t download file ' + error.code);
+                    BCapp.framework.alert(sprintf(
+                        BClanguage.cannotDownloadWebsiteManifest, BClanguage.fileErrors[error.code]
+                    ));
                 });
             }, function(error) {
-                console.log('Error creating directory ' + error.code);
+                BCapp.framework.alert(sprintf(
+                    BClanguage.unableToCreateWebsiteStorageDir, BClanguage.fileErrors[error.code]
+                ));
             });
         }, function(error) {
-            console.log('Error calling the local file system API ' + error.code);
+            BCapp.framework.alert(sprintf(
+                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
+            ));
         });
     },
     
     /**
-     * 
      * @param {string} handler
      * @param {string} url
      * @param {string} userName
      * @param {string} password
      * @param {BCwebsiteManifest} manifest
      */
-    fetchManifestRequirements: function(handler, url, userName, password, manifest) {
-        console.log('Fetching manifest requirements start');
-        console.log('Services: ', manifest.getServices());
-        console.log('Fetching manifest requirements end');
+    presetupWebsiteManifest: function(handler, url, userName, password, manifest) {
+        var services = manifest.getServices();
+        
+        if( services.length === 0 ) {
+            BCapp.framework.alert(BClanguage.websiteHasNoServices);
+            
+            return;
+        }
+        
+        // Disclaimer/login requirement display cases:
+        // Case 1: has disclaimer, no login required
+        // Case 2: has disclaimer, login required
+        // Case 3: no disclaimer, login required
+        // Case 4: no disclaimer, no login required
+        
+        console.log('> Fetching manifest requirements start');
+        console.log('Services detected: ', services.length);
+        console.log('> Fetching manifest requirements end');
     }
 };
