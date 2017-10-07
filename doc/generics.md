@@ -33,7 +33,7 @@ It is a JSON file containing all website underlying data, E.G.:
       "companyPageURL": "http://some-domain.com",
       "description":    "Website description",
       "disclaimer":     "Disclaimer to show",
-      "icon":           "data:image/png;base64,...",
+      "icon":           "http://domain.com/path/to/icon.png",
       
       "loginRequired":      true,
       "loginAuthenticator": "http://some-domain.com/authenticator.php",
@@ -62,7 +62,7 @@ Services are the pages that will be rendered on the website's view on BardCanvas
   E.G. `fa-info-circle` to render `<i class="fa fa-info-circle"></i>`
 * `something` To show a Framework7 icon (used for iOS), E.G.  
   `world` to render `<i class="icon f7-icons">world</i>`
-* `{"ios": "something", "android": "fa-something"}` To show the corresponding
+* `"something,fa-something"` To show the corresponding
   icons from Framework7 for iOS and Font Awesome for Android using the
   directives described above. This is the preferred method to increase the
   odds on Apple iTunes submissions.
