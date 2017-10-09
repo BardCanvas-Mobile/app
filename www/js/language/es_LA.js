@@ -19,7 +19,7 @@ var BClanguage = {
     
     frameworkCaptions: {
         modalTitle:                    'BardCanvas'
-        , modalButtonOk:               'OK'
+        , modalButtonOk:               'Aceptar'
         , modalButtonCancel:           'Cancelar'
         , modalPreloaderTitle:         'Cargando...'
         , modalUsernamePlaceholder:    'Nombre de usuario'
@@ -76,6 +76,11 @@ var BClanguage = {
     websiteRequiresAuthentication:   'Necesitas proporcionar credenciales de acceso para este sitio web.',
     cancelAndEnterCredentials:       'Da click en "Cancelar" y provee un nombre de usuario o alias y una contraseña.',
     checkingWebsite:                 'Buscando sitio web...',
+    validatingCredentials:           'Validando acceso...',
+    validatingError:                 'Error al validar los datos de acceso:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Por favor revisa que tu dispositivo esté conectado a internet '
+                                     + 'e intenta de nuevo. Si el problema persiste, intenta más tarde.',
     
     fileErrors: [
         'No especificado',

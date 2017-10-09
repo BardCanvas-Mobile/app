@@ -7,13 +7,17 @@ var BCwebsiteClass = function(source) {
     
     this.handler = '';
     
+    this.iconURL = '';
+    
+    this.serviceIconURLs = [];
+    
     this.userName = '';
     
     this.password = '';
     
-    this.iconURL = '';
+    this.userDisplayName = '';
     
-    this.serviceIconURLs = [];
+    this.accessToken = '';
     
     if( typeof source === 'undefined' ) return;
     

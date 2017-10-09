@@ -71,7 +71,12 @@ var BClanguage = {
     websiteHasNoServices:            'Sorry, but the website doesn\'t seem to have any services available.',
     websiteRequiresAuthentication:   'You need to provide login credentials for this website.',
     cancelAndEnterCredentials:       'Please hit "Cancel" and provide a user name or alias and a password.',
-    checkingWebsite:                 'Lookin up website...',
+    checkingWebsite:                 'Looking up website...',
+    validatingCredentials:           'Validating access...',
+    validatingError:                 'Error validating login credentials:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please check that your device is connected to the internet and'
+                                     + 'try again. If the problem persists, try after a few minutes.',
     
     fileErrors: [
         'Undefined',

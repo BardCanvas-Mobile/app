@@ -330,17 +330,46 @@ var BCwebsiteAddition = {
     },
     
     /**
-     * @private
-     */
-    __saveWebsite: function() {
-        console.log('Here the website must be registered and the sites selector should be refreshed!');
-    },
-    
-    /**
      * @param {function} callback
      * @private
      */
     __validateWebsiteLogin: function(callback) {
-        alert('Authentication checker runs here.');
+        BCapp.framework.showPreloader(BClanguage.validatingCredentials);
+        BCtoolbox.showNetworkActivityIndicator();
+        
+        var url    = BCwebsiteAddition.manifest.loginAuthenticator;
+        var params = {
+            username: BCwebsiteAddition.website.userName,
+            password: CryptoJS.MD5(BCwebsiteAddition.website.password).toString()
+        };
+        $.getJSON(url, params, function(data) {
+            BCapp.framework.hidePreloader();
+            BCtoolbox.hideNetworkActivityIndicator();
+            
+            if( data.message !== 'OK' ) {
+                BCapp.framework.alert(data.message);
+                
+                return;
+            }
+            
+            BCwebsiteAddition.website.accessToken     = data.data.access_token;
+            BCwebsiteAddition.website.userDisplayName = data.data.display_name;
+            callback();
+        })
+        .fail(function($xhr, status, error) {
+            
+            BCapp.framework.hidePreloader();
+            BCtoolbox.hideNetworkActivityIndicator();
+            
+            BCapp.framework.alert(sprintf( BClanguage.validatingError, error ));
+        });
+    },
+    
+    /**
+     * @private
+     */
+    __saveWebsite: function() {
+        
+        console.log('Here the website must be registered and the sites selector should be refreshed!');
     }
 };
