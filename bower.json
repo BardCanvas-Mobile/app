@@ -12,7 +12,8 @@
     "jquery-circle-progress": "^1.2.2",
     "jquery-form": "^4.2.2",
     "jquery.scrollTo": "^2.1.2",
-    "blockUI": "jquery.blockui#^2.7.0"
+    "blockUI": "jquery.blockui#^2.7.0",
+    "crypto-js": "^3.1.9"
   },
   "resolutions": {
     "CodeMirror": "v3.12"
