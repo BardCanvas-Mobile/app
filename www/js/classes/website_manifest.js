@@ -4,7 +4,9 @@
  */
 var BCwebsiteManifestClass = function(source) {
     
-    this.name = '';
+    this.fullName = '';
+    
+    this.shortName = '';
     
     this.version = '';
     

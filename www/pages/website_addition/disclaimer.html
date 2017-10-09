@@ -1,0 +1,51 @@
+
+<div class="page navbar-fixed toolbar-fixed" data-page="my-page">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="center">{{websiteName}}</div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="content-block">
+            <div class="list-block media-list">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><img src="{{iconURL}}" width="80"></div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{websiteFullName}}</div>
+                                </div>
+                                <div class="item-subtitle">{{companyName}}</div>
+                                <div class="item-text">{{websiteDescription}}</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        {{#if warningText}}
+            <div class="content-block">
+                <div class="framed_content state_highlight">
+                    <i class="fa fa-warning"></i>
+                    {{warningText}}
+                </div>
+            </div>
+        {{/if}}
+        
+        <div class="content-block">
+            {{disclaimerContents}}
+        </div>
+    </div>
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            {{#if cancelButton}}
+                <a href="#" class="back link color-red">{{cancelButton}}</a>
+            {{/if}}
+            {{#if okButton}}
+                <a class="link" onclick="window.__tempWebsiteAdditionCallback()">{{okButton}}</a>
+            {{/if}}
+        </div>
+    </div>
+</div>

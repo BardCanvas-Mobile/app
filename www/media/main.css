@@ -30,12 +30,27 @@ body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
 .bc-preloader-smaller  { width:  16px; height:  16px; }
 .bc-preloader-smallest { width:   8px; height:   8px; }
 
+/* BC imports */
+
+.framed_content          { border: 2px solid silver; background-color: white; color: black; padding: 5px; }
+html.ios .framed_content { border-radius: 5px; }
+
+.framed_content.state_disabled  { background-color: silver;  border-color: gray;    color: #585858; }
+.framed_content.state_warning   { background-color: #fff1a0; border-color: #FF8000; color: black;   }
+.framed_content.state_ko        { background-color: #EDCCC9; border-color: #bc4c40; color: black;   }
+.framed_content.state_ok        { background-color: #C0FFC0; border-color: #008000; color: black;   }
+.framed_content.state_highlight { background-color: #fff1a0; border-color: #FF8000; color: black;   }
+.framed_content.state_active    { background-color: #BBDDFF; border-color: #42A0FF; color: black;   }
+.framed_content.state_hover     { background-color: #42A0FF; border-color: #000080; color: white;   }
+
+.framed_content.state_hover:hover { background-color: #42A0FF; border-color: #000080; color: white;   }
+
 /* F7 overrides */
 
 .content-block-inner { margin-left: 0 !important; }
 .material-icons      { font-size: 33px !important; }
 
-/*body[data-os="android"] .page { background-color: #efeff4; }*/
+/*html.android .page { background-color: #efeff4; }*/
 
 /* F7 extensions */
 
@@ -45,6 +60,6 @@ body[data-orientation="landscape"] .row .landscape-50 {
 
 /* Icon fixes */
 
-body[data-os="android"] .bc-ios-icon     { display: none; }
-body[data-os="ios"]     .bc-android-icon { display: none; }
+html.android .bc-ios-icon     { display: none; }
+html.ios     .bc-android-icon { display: none; }
 .bc-input-icon { font-size: 29px; }

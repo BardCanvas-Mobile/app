@@ -11,10 +11,9 @@ var BCwebsiteClass = function(source) {
     
     this.password = '';
     
-    /**
-     * @type {BCwebsiteManifestClass}
-     */
-    this.manifest = {};
+    this.iconURL = '';
+    
+    this.serviceIconURLs = [];
     
     if( typeof source === 'undefined' ) return;
     

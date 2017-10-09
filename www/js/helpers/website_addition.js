@@ -1,6 +1,10 @@
 
 var BCwebsiteAddition = {
     
+    website: null,
+    
+    manifest: null,
+    
     showFeaturedSiteDetails: function(title, screenShot, url) {
         var buttons = [
             [
@@ -37,7 +41,6 @@ var BCwebsiteAddition = {
     },
     
     websiteAdditionSubmission: function(data) {
-        
         if( data[0].value.length === 0 ) {
             BCapp.throwError(BClanguage.pleaseProvideAURL);
             
@@ -63,18 +66,17 @@ var BCwebsiteAddition = {
         console.info('> Handler:  ' + handler);
         console.info('> User:     ' + userName);
         console.info('> Password: ' + password);
-        var website = new BCwebsiteClass({
+        BCwebsiteAddition.website = new BCwebsiteClass({
             URL:      url,
             handler:  handler,
             userName: userName,
             password: password
         });
         
-        BCwebsiteAddition.__fetchManifest(website, function(manifest) {
-            website.manifest = manifest;
-            BCwebsiteAddition.__presetupWebsiteManifest(website, function(website) {
-                    
-                });
+        BCwebsiteAddition.__fetchManifest(function() {
+            BCwebsiteAddition.__checkManifest(function() {
+                BCwebsiteAddition.__saveWebsite();
+            });
         });
         return false;
     },
@@ -96,50 +98,57 @@ var BCwebsiteAddition = {
     
     /**
      * 
-     * @param {BCwebsiteClass} website
-     * @param {function}       callback
+     * @param {function} callback
      * @private
      */
-    __fetchManifest: function(website, callback) {
+    __fetchManifest: function(callback) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-            console.log("Filesystem open: " + fs.name);
             
-            console.log("Creating dir for " + website.handler);
-            fs.root.getDirectory(website.handler, {create: true, exclusive: false}, function(dir) {
+            console.log("Filesystem open: " + fs.name);
+            console.log("Creating dir for " + BCwebsiteAddition.website.handler);
+            
+            fs.root.getDirectory(BCwebsiteAddition.website.handler, {create: true, exclusive: false}, function(dir) {
+                
                 console.log("Created dir " + dir.name);
                 
                 fs.root.getFile(dir.name + '/manifest.json', { create: true, exclusive: false }, function (fileEntry) {
                     
                     console.log('Truncating local manifest file...');
+                    
                     fileEntry.createWriter(function(writer) {
                         writer.onwriteend = function() {
-                            console.log('Local manifest file truncated.');
-                            BCtoolbox.showNetworkActivityIndicator();
-                            
                             // noinspection JSClosureCompilerSyntax
                             var fileTransfer = new FileTransfer();
                             var target       = fileEntry.toURL();
-                            var source       = website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+                            var source       = BCwebsiteAddition.website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+                            
+                            console.log('Local manifest file truncated.');
                             console.log(sprintf('Fetching "%s"...', source));
+                            
+                            BCapp.framework.showPreloader(BClanguage.checkingWebsite);
+                            BCtoolbox.showNetworkActivityIndicator();
                             fileTransfer.download(
                                 source,
                                 target,
                                 function(entry) {
+                                    BCapp.framework.hidePreloader();
                                     BCtoolbox.hideNetworkActivityIndicator();
                                     
                                     var manifestURL = fileEntry.toURL();
+                                    
                                     console.log(sprintf('Successful download of %s...', entry.name));
                                     console.log('Local URL to the file: ' + manifestURL);
                                     
                                     fileEntry.file(function (file) {
                                         var reader = new FileReader();
                                         reader.onloadend = function () {
-                                            var manifest = new BCwebsiteManifestClass(JSON.parse(this.result));
-                                            
-                                            callback(manifest);
+                                            BCwebsiteAddition.manifest =
+                                                new BCwebsiteManifestClass(JSON.parse(this.result));
+                                            callback();
                                         };
                                         reader.readAsText(file);
                                     }, function(error) {
+                                        BCapp.framework.hidePreloader();
                                         BCtoolbox.hideNetworkActivityIndicator();
                                         BCapp.framework.alert(sprintf(
                                             BClanguage.cannotReadManifest, BClanguage.fileErrors[error.code]
@@ -147,6 +156,7 @@ var BCwebsiteAddition = {
                                     });
                                 },
                                 function(error) {
+                                    BCapp.framework.hidePreloader();
                                     BCtoolbox.hideNetworkActivityIndicator();
                                     BCapp.framework.alert(sprintf(
                                         BClanguage.cannotDownloadWebsiteManifest,
@@ -180,58 +190,157 @@ var BCwebsiteAddition = {
     },
     
     /**
-     * 
-     * @param {BCwebsiteClass} website
-     * @param {function}       callback
+     *
+     * @param {function} callback
      * @private
      */
-    __presetupWebsiteManifest: function(website, callback) {
-        var services = website.manifest.services;
+    __checkManifest: function(callback) {
         
-        if( services.length === 0 ) {
+        if( BCwebsiteAddition.manifest.services.length === 0 ) {
             BCapp.framework.alert(BClanguage.websiteHasNoServices);
             
             return;
         }
-        
-        console.log("Website record: ", website);
         
         //
         // Case 1: no disclaimer, no login required
         //         '--> Add the site immmediately
         //
         
-        
+        if( BCwebsiteAddition.manifest.disclaimer.length === 0 && ! BCwebsiteAddition.manifest.loginRequired ) {
+            callback();
+            
+            return;
+        }
         
         //
-        // Case 1: no disclaimer, login required
+        // Case 2: no disclaimer, login required
         //         '--> Alert login requirement message and abort if no credentials have been provided
         //
         
-        
+        if( BCwebsiteAddition.manifest.disclaimer.length === 0 && BCwebsiteAddition.manifest.loginRequired ) {
+            if( BCwebsiteAddition.website.userName.length === 0 || BCwebsiteAddition.website.password.length === 0 ) {
+                // No login credentials provided
+                BCapp.framework.alert(BClanguage.websiteRequiresAuthentication);
+            }
+            else {
+                // Flow is passed to the login validator
+                BCwebsiteAddition.__validateWebsiteLogin(function() {
+                    callback();
+                });
+            }
+            
+            return;
+        }
         
         //
-        // Case 1: has disclaimer, login required
-        //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
+        // Has disclaimer case inits
         //
         
+        var disclaimer = typeof BCwebsiteAddition.manifest.disclaimer === 'string'
+            ? BCwebsiteAddition.manifest.disclaimer
+            : BCwebsiteAddition.manifest.disclaimer.join(' ');
         
+        var content;
         
         //
-        // Case 2: has disclaimer, no login required
+        // Case 3: has disclaimer, no login required
         //         '--> Show disclaimer and "proceed" button
         //
         
+        if( BCwebsiteAddition.manifest.disclaimer.length > 0 && ! BCwebsiteAddition.manifest.loginRequired ) {
+            
+            // Flow is passed to the callback
+            window.__tempWebsiteAdditionCallback = function() {
+                callback();
+            };
+            
+            $.get('pages/website_addition/disclaimer.html', function(html) {
+                var compiled = Template7.compile(html);
+                content      = compiled({
+                    websiteName:        BCwebsiteAddition.manifest.shortName,
+                    iconURL:            BCwebsiteAddition.manifest.icon,
+                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
+                    companyName:        BCwebsiteAddition.manifest.company,
+                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    disclaimerContents: disclaimer,
+                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                    okButton:           BClanguage.frameworkCaptions.modalButtonOk
+                });
+                BCapp.currentView.router.loadContent(content);
+            });
+            
+            return;
+        }
         
+        //
+        // Case 4: has disclaimer, login required
+        //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
+        //
         
+        if( BCwebsiteAddition.website.userName.length === 0 || BCwebsiteAddition.website.password.length === 0 ) {
+            // Missing login credentials
+            $.get('pages/website_addition/disclaimer.html', function(html) {
+                var compiled = Template7.compile(html);
+                content      = compiled({
+                    websiteName:        BCwebsiteAddition.manifest.shortName,
+                    iconURL:            BCwebsiteAddition.manifest.icon,
+                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
+                    companyName:        BCwebsiteAddition.manifest.company,
+                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    warningText:        sprintf(
+                        '%s<br>%s', BClanguage.websiteRequiresAuthentication, BClanguage.cancelAndEnterCredentials
+                    ),
+                    disclaimerContents: disclaimer,
+                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel
+                });
+                BCapp.currentView.router.loadContent(content);
+            });
+        }
+        else {
+            // Login provided. Flow is passed to the login validator
+            window.__tempWebsiteAdditionCallback = function() {
+                BCwebsiteAddition.__validateWebsiteLogin(function() {
+                    callback();
+                });
+            };
+            
+            $.get('pages/website_addition/disclaimer.html', function(html) {
+                var compiled = Template7.compile(html);
+                content      = compiled({
+                    websiteName:        BCwebsiteAddition.manifest.shortName,
+                    iconURL:            BCwebsiteAddition.manifest.icon,
+                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
+                    companyName:        BCwebsiteAddition.manifest.company,
+                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    disclaimerContents: disclaimer,
+                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                    okButton:           BClanguage.frameworkCaptions.modalButtonOk
+                });
+                BCapp.currentView.router.loadContent(content);
+            });
+        }
     },
     
     /**
-     * 
-     * @param {BCwebsiteManifestClass} manifest
      * @private
      */
-    __fetchWebsiteManifestImages: function(manifest) {
-        
+    __fetchWebsiteManifestImages: function() {
+        console.log('Here images from manifest should be downloaded!');
+    },
+    
+    /**
+     * @private
+     */
+    __saveWebsite: function() {
+        console.log('Here the website must be registered and the sites selector should be refreshed!');
+    },
+    
+    /**
+     * @param {function} callback
+     * @private
+     */
+    __validateWebsiteLogin: function(callback) {
+        alert('Authentication checker runs here.');
     }
 };

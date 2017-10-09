@@ -69,6 +69,9 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please try again. If the problem persists, please check your device storage.',
     websiteHasNoServices:            'Sorry, but the website doesn\'t seem to have any services available.',
+    websiteRequiresAuthentication:   'You need to provide login credentials for this website.',
+    cancelAndEnterCredentials:       'Please hit "Cancel" and provide a user name or alias and a password.',
+    checkingWebsite:                 'Lookin up website...',
     
     fileErrors: [
         'Undefined',

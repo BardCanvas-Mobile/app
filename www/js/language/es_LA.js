@@ -73,6 +73,9 @@ var BClanguage = {
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',
     websiteHasNoServices:            'Lo sentimos, pero el sitio web no parece tener ningún servicio disponible.',
+    websiteRequiresAuthentication:   'Necesitas proporcionar credenciales de acceso para este sitio web.',
+    cancelAndEnterCredentials:       'Da click en "Cancelar" y provee un nombre de usuario o alias y una contraseña.',
+    checkingWebsite:                 'Buscando sitio web...',
     
     fileErrors: [
         'No especificado',
