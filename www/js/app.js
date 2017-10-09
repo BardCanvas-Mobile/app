@@ -29,6 +29,8 @@ var BCapp = {
     
     batteryIsLow: false,
     
+    screenWidth: 0,
+    
     /**
      * @var {BCglobalSettingsClass}
      */
@@ -80,7 +82,14 @@ var BCapp = {
     },
     
     __adjustOrientation: function() {
-        var orientation = $(window).width() <= $(window).height() ? 'portrait' : 'landscape';
+        var screenWidth  = $(window).width();
+        var screenHeight = $(window).height();
+        
+        if( screenWidth === BCapp.screenWidth ) return;
+        
+        BCapp.screenWidth = screenWidth;
+        
+        var orientation = screenWidth <= screenHeight ? 'portrait' : 'landscape';
         $('body').attr('data-orientation', orientation);
     },
     
