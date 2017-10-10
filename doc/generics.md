@@ -40,7 +40,7 @@ with the [ImgCache plugin](https://github.com/chrisben/imgcache.js/).
 
 ## Website manifest
 
-It is a JSON file containing all website underlying data, E.G.:
+It is a JSON file placed at the document root (or the subdirectory where the BardCanvas instance is installed) and named `bardcanvas_mobile.json`. Contains all website underlying data, E.G.:
 
     {
       "name":           "Website name",

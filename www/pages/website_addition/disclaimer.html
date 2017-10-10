@@ -1,10 +1,23 @@
 
-<div class="page navbar-fixed toolbar-fixed" data-page="my-page">
+<div class="page navbar-fixed toolbar-fixed" data-page="website-disclaimer">
+    
     <div class="navbar">
         <div class="navbar-inner">
             <div class="center">{{websiteName}}</div>
         </div>
     </div>
+    
+    <div class="toolbar toolbar-bottom">
+        <div class="toolbar-inner">
+            {{#if cancelButton}}
+                <a href="#" class="back link color-red">{{cancelButton}}</a>
+            {{/if}}
+            {{#if okButton}}
+                <a class="link" onclick="window.__tempWebsiteAdditionCallback()">{{okButton}}</a>
+            {{/if}}
+        </div>
+    </div>
+    
     <div class="page-content">
         <div class="content-block">
             <div class="list-block media-list">
@@ -38,14 +51,5 @@
             {{disclaimerContents}}
         </div>
     </div>
-    <div class="toolbar">
-        <div class="toolbar-inner">
-            {{#if cancelButton}}
-                <a href="#" class="back link color-red">{{cancelButton}}</a>
-            {{/if}}
-            {{#if okButton}}
-                <a class="link" onclick="window.__tempWebsiteAdditionCallback()">{{okButton}}</a>
-            {{/if}}
-        </div>
-    </div>
+    
 </div>
