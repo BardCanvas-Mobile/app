@@ -1,9 +1,70 @@
 
-var BCwebsiteAddition = {
+var BCwebsitesRepository = {
     
+    /**
+     * @var {BCwebsiteClass}
+     */
     website: null,
     
+    /**
+     * @var {BCwebsiteManifestClass}
+     */
     manifest: null,
+    
+    /**
+     * @var {BCwebsiteClass[]}
+     */
+    websitesRegistry: [],
+    
+    loadWebsitesRegistry: function()
+    {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
+        {
+            console.log('Filesystem open: ' + fs.name);
+            
+            var filePath = 'websites-registry.json';
+            fs.root.getFile(filePath, { create: true, exclusive: false }, function(fileEntry)
+            {
+                fileEntry.file(function (file)
+                {
+                    var reader = new FileReader();
+                    
+                    reader.onloadend = function()
+                    {
+                        if( this.result.length > 0 )
+                        {
+                            BCwebsitesRepository.websitesRegistry = JSON.parse(this.result);
+                            console.log('Websites registry loaded: ', BCwebsitesRepository.websitesRegistry);
+                        }
+                        else
+                        {
+                            console.log('Websites registry is empty.');
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                },
+                function(error)
+                {
+                    BCapp.framework.alert(sprintf(
+                        BClanguage.cannotOpenWebsitesRegistry, BClanguage.fileErrors[error.code]
+                    )); 
+                });
+            },
+            function(error)
+            {
+                BCapp.framework.alert(sprintf(
+                    BClanguage.cannotOpenWebsitesRegistry, BClanguage.fileErrors[error.code]
+                ));
+            });
+        },
+        function(errror)
+        {
+            BCapp.framework.alert(sprintf(
+                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
+            ));
+        });
+    },
     
     showFeaturedSiteDetails: function(title, screenShot, url)
     {
@@ -64,22 +125,22 @@ var BCwebsiteAddition = {
             return false;
         }
         
-        var handler = BCwebsiteAddition.__convertSiteURLtoHandler(url);
+        var handler = BCwebsitesRepository.convertSiteURLtoHandler(url);
         console.info('> URL:      ' + url);
         console.info('> Handler:  ' + handler);
         console.info('> User:     ' + userName);
         console.info('> Password: ' + password);
-        BCwebsiteAddition.website = new BCwebsiteClass({
+        BCwebsitesRepository.website = new BCwebsiteClass({
             URL:      url,
             handler:  handler,
             userName: userName,
             password: password
         });
         
-        BCwebsiteAddition.__fetchManifest(function() {
-            BCwebsiteAddition.__checkManifest(function() {
-                BCwebsiteAddition.__saveManifest(function() {
-                    BCwebsiteAddition.__saveWebsite(function() {
+        BCwebsitesRepository.__fetchManifest(function() {
+            BCwebsitesRepository.__checkManifest(function() {
+                BCwebsitesRepository.__saveManifest(function() {
+                    BCwebsitesRepository.__saveWebsite(function() {
                         
                     });
                 });
@@ -92,9 +153,8 @@ var BCwebsiteAddition = {
      * @param {string} source
      * 
      * @returns {string}
-     * @private
      */
-    __convertSiteURLtoHandler: function(source)
+    convertSiteURLtoHandler: function(source)
     {
         source = source.toLowerCase();
         source = source.replace(/http:\/\/|https:\/\//i, '');
@@ -114,13 +174,13 @@ var BCwebsiteAddition = {
         BCapp.framework.showPreloader(BClanguage.checkingWebsite);
         BCtoolbox.showNetworkActivityIndicator();
         
-        var url = BCwebsiteAddition.website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+        var url = BCwebsitesRepository.website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
         $.getJSON(url, function(data)
         {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
             
-            BCwebsiteAddition.manifest = new BCwebsiteManifestClass(data);
+            BCwebsitesRepository.manifest = new BCwebsiteManifestClass(data);
             callback();
         })
         .fail(function($xhr, status, error)
@@ -141,7 +201,7 @@ var BCwebsiteAddition = {
     __checkManifest: function(callback)
     {
         
-        if( BCwebsiteAddition.manifest.services.length === 0 )
+        if( BCwebsitesRepository.manifest.services.length === 0 )
         {
             BCapp.framework.alert(BClanguage.websiteHasNoServices);
             
@@ -153,7 +213,7 @@ var BCwebsiteAddition = {
         //         '--> Add the site immmediately
         //
         
-        if( BCwebsiteAddition.manifest.disclaimer.length === 0 && ! BCwebsiteAddition.manifest.loginRequired )
+        if( BCwebsitesRepository.manifest.disclaimer.length === 0 && ! BCwebsitesRepository.manifest.loginRequired )
         {
             callback();
             
@@ -165,15 +225,15 @@ var BCwebsiteAddition = {
         //         '--> Alert login requirement message and abort if no credentials have been provided
         //
         
-        if( BCwebsiteAddition.manifest.disclaimer.length === 0 && BCwebsiteAddition.manifest.loginRequired )
+        if( BCwebsitesRepository.manifest.disclaimer.length === 0 && BCwebsitesRepository.manifest.loginRequired )
         {
-            if( BCwebsiteAddition.website.userName.length === 0 || BCwebsiteAddition.website.password.length === 0 ) {
+            if( BCwebsitesRepository.website.userName.length === 0 || BCwebsitesRepository.website.password.length === 0 ) {
                 // No login credentials provided
                 BCapp.framework.alert(BClanguage.websiteRequiresAuthentication);
             }
             else {
                 // Flow is passed to the login validator
-                BCwebsiteAddition.__validateWebsiteLogin(function()
+                BCwebsitesRepository.__validateWebsiteLogin(function()
                 {
                     callback();
                 });
@@ -186,9 +246,9 @@ var BCwebsiteAddition = {
         // Has disclaimer case inits
         //
         
-        var disclaimer = typeof BCwebsiteAddition.manifest.disclaimer === 'string'
-            ? BCwebsiteAddition.manifest.disclaimer
-            : BCwebsiteAddition.manifest.disclaimer.join(' ');
+        var disclaimer = typeof BCwebsitesRepository.manifest.disclaimer === 'string'
+            ? BCwebsitesRepository.manifest.disclaimer
+            : BCwebsitesRepository.manifest.disclaimer.join(' ');
         
         var content;
         
@@ -197,7 +257,7 @@ var BCwebsiteAddition = {
         //         '--> Show disclaimer and "proceed" button
         //
         
-        if( BCwebsiteAddition.manifest.disclaimer.length > 0 && ! BCwebsiteAddition.manifest.loginRequired )
+        if( BCwebsitesRepository.manifest.disclaimer.length > 0 && ! BCwebsitesRepository.manifest.loginRequired )
         {
             // Flow is passed to the callback
             window.__tempWebsiteAdditionCallback = function() { callback(); };
@@ -206,11 +266,11 @@ var BCwebsiteAddition = {
             {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsiteAddition.manifest.shortName,
-                    iconURL:            BCwebsiteAddition.manifest.icon,
-                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
-                    companyName:        BCwebsiteAddition.manifest.company,
-                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    websiteName:        BCwebsitesRepository.manifest.shortName,
+                    iconURL:            BCwebsitesRepository.manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
+                    companyName:        BCwebsitesRepository.manifest.company,
+                    websiteDescription: BCwebsitesRepository.manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     okButton:           BClanguage.frameworkCaptions.modalButtonOk
@@ -226,17 +286,17 @@ var BCwebsiteAddition = {
         //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
         //
         
-        if( BCwebsiteAddition.website.userName.length === 0 || BCwebsiteAddition.website.password.length === 0 )
+        if( BCwebsitesRepository.website.userName.length === 0 || BCwebsitesRepository.website.password.length === 0 )
         {
             // Missing login credentials
             $.get('pages/website_addition/disclaimer.html', function(html) {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsiteAddition.manifest.shortName,
-                    iconURL:            BCwebsiteAddition.manifest.icon,
-                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
-                    companyName:        BCwebsiteAddition.manifest.company,
-                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    websiteName:        BCwebsitesRepository.manifest.shortName,
+                    iconURL:            BCwebsitesRepository.manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
+                    companyName:        BCwebsitesRepository.manifest.company,
+                    websiteDescription: BCwebsitesRepository.manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     warningText:        sprintf(
@@ -250,7 +310,7 @@ var BCwebsiteAddition = {
         {
             // Login provided. Flow is passed to the login validator
             window.__tempWebsiteAdditionCallback = function() {
-                BCwebsiteAddition.__validateWebsiteLogin(function() {
+                BCwebsitesRepository.__validateWebsiteLogin(function() {
                     callback();
                 });
             };
@@ -259,11 +319,11 @@ var BCwebsiteAddition = {
             {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsiteAddition.manifest.shortName,
-                    iconURL:            BCwebsiteAddition.manifest.icon,
-                    websiteFullName:    BCwebsiteAddition.manifest.fullName,
-                    companyName:        BCwebsiteAddition.manifest.company,
-                    websiteDescription: BCwebsiteAddition.manifest.description,
+                    websiteName:        BCwebsitesRepository.manifest.shortName,
+                    iconURL:            BCwebsitesRepository.manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
+                    companyName:        BCwebsitesRepository.manifest.company,
+                    websiteDescription: BCwebsitesRepository.manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     okButton:           BClanguage.frameworkCaptions.modalButtonOk
@@ -290,10 +350,10 @@ var BCwebsiteAddition = {
         BCapp.framework.showPreloader(BClanguage.validatingCredentials);
         BCtoolbox.showNetworkActivityIndicator();
         
-        var url    = BCwebsiteAddition.manifest.loginAuthenticator;
+        var url    = BCwebsitesRepository.manifest.loginAuthenticator;
         var params = {
-            username: BCwebsiteAddition.website.userName,
-            password: CryptoJS.MD5(BCwebsiteAddition.website.password).toString()
+            username: BCwebsitesRepository.website.userName,
+            password: CryptoJS.MD5(BCwebsitesRepository.website.password).toString()
         };
         $.getJSON(url, params, function(data) {
             BCapp.framework.hidePreloader();
@@ -305,8 +365,8 @@ var BCwebsiteAddition = {
                 return;
             }
             
-            BCwebsiteAddition.website.accessToken     = data.data.access_token;
-            BCwebsiteAddition.website.userDisplayName = data.data.display_name;
+            BCwebsitesRepository.website.accessToken     = data.data.access_token;
+            BCwebsitesRepository.website.userDisplayName = data.data.display_name;
             callback();
         })
         .fail(function($xhr, status, error) {
@@ -327,7 +387,7 @@ var BCwebsiteAddition = {
         {
             console.log("Filesystem open: " + fs.name);
             
-            var filePath = BCwebsiteAddition.website.handler + '.manifest.json';
+            var filePath = BCwebsitesRepository.website.handler + '.manifest.json';
             fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
             {
                 fileEntry.createWriter(function(writer)
@@ -345,7 +405,7 @@ var BCwebsiteAddition = {
                         ));
                     };
                     writer.seek(0);
-                    writer.write( new Blob([JSON.stringify(BCwebsiteAddition.manifest)], {type: 'text/plain'}) );
+                    writer.write( new Blob([JSON.stringify(BCwebsitesRepository.manifest)], {type: 'text/plain'}) );
                 },
                 function(error)
                 {
@@ -379,7 +439,7 @@ var BCwebsiteAddition = {
             console.log("Filesystem open: " + fs.name);
             
             var filePath   = 'websites-registry.json';
-            var websiteKey = BCwebsiteAddition.website.handler + '-' + BCwebsiteAddition.website.userName;
+            var websiteKey = BCwebsitesRepository.website.handler + '-' + BCwebsitesRepository.website.userName;
             fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
             {
                 fileEntry.createWriter(function(writer)
@@ -397,7 +457,7 @@ var BCwebsiteAddition = {
                         ));
                     };
                     
-                    BCapp.websitesRegistry[BCapp.websitesRegistry.length] = BCwebsiteAddition.website;
+                    BCapp.websitesRegistry[BCapp.websitesRegistry.length] = BCwebsitesRepository.website;
                     writer.seek(0);
                     writer.write( new Blob([JSON.stringify(BCapp.websitesRegistry)], {type: 'text/plain'}) );
                 },
