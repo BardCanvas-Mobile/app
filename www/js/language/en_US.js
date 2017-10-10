@@ -51,6 +51,10 @@ var BClanguage = {
     pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
     websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.',
     
+    passwordMissing:                 'Please type the password to access the specified user account.',
+    websiteAlreadyAdded:             'You already have this website/user name combination in the registry. '
+                                     + 'If you want to add another view of this website, you should do it without '
+                                     + 'login credentials (if the site allows it).',
     errorCallingLFSAPI:              'Error opening storage system:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>' 
                                      + 'Please check if your device storage is OK and try again.',

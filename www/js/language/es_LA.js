@@ -51,10 +51,14 @@ var BClanguage = {
     pleaseProvideAURL:   'Provee el dominio o la URL de un sitio web a añadir o selecciona uno de la lista de sitios destacados.',
     websiteURLisInvalid: 'La URL del sitio web es inválida. Chécala e intenta de nuevo.',
     
-    errorCallingLFSAPI:  'Error al abrir almacenamiento del sistema:<br><br>'
-                         + '<span class="color-red">%s</span><br><br>'
-                         + 'Por favor revisa si el almacenamiento de tu dispositivo está en buenas condiciones e' 
-                         + ' intenta de nuevo.',
+    passwordMissing:                 'Por favor especifica la contraseña para accesar a la cuenta especificada.',
+    websiteAlreadyAdded:             'Ya has registrado esta combinación de sitio web y nombre de usuario. '
+                                     + 'Si quieres agregar otra vista de este sitio, deberías intentarlo sin '
+                                     + 'credenciales de acceso (si es que el sitio lo permite).',
+    errorCallingLFSAPI:              'Error al abrir almacenamiento del sistema:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Por favor revisa si el almacenamiento de tu dispositivo está en buenas condiciones e' 
+                                     + ' intenta de nuevo.',
     unableToOpenWebsiteStorageDir:   'No se puede abrir el directorio de datos del sitio web:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor asegúrate de que no hay alguna app de seguridad interponiéndose con '

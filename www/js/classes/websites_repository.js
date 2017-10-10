@@ -111,8 +111,8 @@ var BCwebsitesRepository = {
             return false;
         }
         
-        var url      = data[0].value;
-        var userName = data[1].value;
+        var url      = $.trim(data[0].value);
+        var userName = $.trim(data[1].value);
         var password = data[2].value;
         
         if( url.search(/http/i) < 0 ) url = 'http://' + url;
@@ -130,6 +130,21 @@ var BCwebsitesRepository = {
         console.info('> Handler:  ' + handler);
         console.info('> User:     ' + userName);
         console.info('> Password: ' + password);
+        
+        if( userName.length > 0 && password.length == 0 )
+        {
+            BCapp.framework.alert( BClanguage.passwordMissing );
+            
+            return;
+        }
+        
+        if( BCwebsitesRepository.__searchWebsiteInRegistry(handler, userName) !== null )
+        {
+            BCapp.framework.alert( BClanguage.websiteAlreadyAdded );
+            
+            return;
+        }
+        
         BCwebsitesRepository.website = new BCwebsiteClass({
             URL:      url,
             handler:  handler,
@@ -162,6 +177,37 @@ var BCwebsitesRepository = {
         source = source.replace(/\//g, '-');
         
         return source;
+    },
+    
+    /**
+     * 
+     * @param handler
+     * @param userName
+     * @returns {BCwebsiteClass | null}
+     * @private
+     */
+    __searchWebsiteInRegistry: function(handler, userName)
+    {
+        if( BCwebsitesRepository.websitesRegistry.length == 0 ) return null;
+        
+        console.log(sprintf('Starting search of website %s-%s...', handler, userName));
+        
+        var inuserName = $.trim(userName.toLowerCase());
+        for( var i in BCwebsitesRepository.websitesRegistry )
+        {
+            var website    = BCwebsitesRepository.websitesRegistry[i];
+            var wsUserName = $.trim(website.userName.toLowerCase());
+            
+            if( website.handler == handler && wsUserName == inuserName )
+            {
+                console.log('Match found! ', website);
+                
+                return website;
+            }
+        }
+        
+        console.log('Website/username combination not found.');
+        return null;
     },
     
     /**
@@ -457,9 +503,12 @@ var BCwebsitesRepository = {
                         ));
                     };
                     
-                    BCapp.websitesRegistry[BCapp.websitesRegistry.length] = BCwebsitesRepository.website;
+                    BCwebsitesRepository.websitesRegistry[BCwebsitesRepository.websitesRegistry.length]
+                        = BCwebsitesRepository.website;
                     writer.seek(0);
-                    writer.write( new Blob([JSON.stringify(BCapp.websitesRegistry)], {type: 'text/plain'}) );
+                    writer.write(
+                        new Blob([JSON.stringify(BCwebsitesRepository.websitesRegistry)], {type: 'text/plain'})
+                    );
                 },
                 function(error)
                 {
