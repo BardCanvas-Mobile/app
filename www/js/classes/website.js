@@ -1,8 +1,8 @@
 /**
  * @constructor
  */
-var BCwebsiteClass = function(source) {
-    
+var BCwebsiteClass = function(source)
+{
     this.URL = '';
     
     this.handler = '';

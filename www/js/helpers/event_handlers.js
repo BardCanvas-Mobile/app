@@ -1,7 +1,8 @@
 
-var BCeventHandlers = {
-    
-    init: function() {
+var BCeventHandlers =
+{
+    init: function()
+    {
         document.addEventListener('batterystatus', BCeventHandlers.__batteryStatusChange, false);
         document.addEventListener('offline',       BCeventHandlers.__networkDisconnected, false);
         document.addEventListener('online',        BCeventHandlers.__networkConnected,    false);
@@ -12,10 +13,12 @@ var BCeventHandlers = {
      * @param e
      * @private
      */
-    __backButtonPressed: function(e) {
+    __backButtonPressed: function(e)
+    {
         e.preventDefault();
         
-        if( $('#left-panel').is(':visible') ||  $('#right-panel').is(':visible') ) {
+        if( $('#left-panel').is(':visible') || $('#right-panel').is(':visible') )
+        {
             BCapp.framework.closePanel();
             
             return;
@@ -25,7 +28,8 @@ var BCeventHandlers = {
         var page = view.activePage;
         BCapp.framework.hidePreloader();
         
-        if( page.name.indexOf("-index") < 0 ) {
+        if( page.name.indexOf('-index') < 0 )
+        {
             view.router.back();
             
             return;
@@ -34,7 +38,8 @@ var BCeventHandlers = {
         BCapp.framework.confirm(
             BClanguage.exit.message,
             BClanguage.exit.title,
-            function () {
+            function()
+            {
                 navigator.app.clearHistory();
                 navigator.app.exitApp();
             }
@@ -45,14 +50,16 @@ var BCeventHandlers = {
      * @param status
      * @private
      */
-    __batteryStatusChange: function(status) {
+    __batteryStatusChange: function(status)
+    {
         BCapp.batteryIsLow = status.level < 10;
     },
     
     /**
      * @private
      */
-    __networkDisconnected: function() {
+    __networkDisconnected: function()
+    {
         BCapp.networkType      = navigator.connection.type;
         BCapp.networkConnected = false;
     },
@@ -60,10 +67,11 @@ var BCeventHandlers = {
     /**
      * @private
      */
-    __networkConnected: function() {
+    __networkConnected: function()
+    {
         BCapp.networkType      = navigator.connection.type;
         BCapp.networkConnected = (
-            BCapp.networkType === Connection.WIFI ||
+            BCapp.networkType === Connection.WIFI     ||
             BCapp.networkType === Connection.ETHERNET ||
             BCapp.networkType === Connection.UNKNOWN
         );

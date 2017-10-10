@@ -45,7 +45,7 @@ var BCwebsiteAddition = {
     {
         if( data[0].value.length === 0 )
         {
-            BCapp.throwError(BClanguage.pleaseProvideAURL);
+            BCapp.framework.alert(BClanguage.pleaseProvideAURL);
             
             return false;
         }
@@ -59,7 +59,7 @@ var BCwebsiteAddition = {
         
         if( ! BCtoolbox.isValidURL(url) )
         {
-            BCapp.throwError(BClanguage.websiteURLisInvalid);
+            BCapp.framework.alert(BClanguage.websiteURLisInvalid);
             
             return false;
         }

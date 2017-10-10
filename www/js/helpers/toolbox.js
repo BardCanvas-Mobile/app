@@ -1,8 +1,8 @@
 
 var BCtoolbox = {
     
-    scanQRcode: function( targetSelector, type ) {
-        
+    scanQRcode: function( targetSelector, type )
+    {
         var $target = $(targetSelector);
         var params  = {
             preferFrontCamera:     false,                       // iOS and Android
@@ -19,20 +19,23 @@ var BCtoolbox = {
         };
         
         cordova.plugins.barcodeScanner.scan(
-            function (result) {
+            function (result)
+            {
                 if( result.cancelled ) return;
                 
-                if( ! BCtoolbox.__validateQRcode(result.text, type) ) {
+                if( ! BCtoolbox.__validateQRcode(result.text, type) )
+                {
                     BCapp.framework.alert(
                         BClanguage.qrScanner.invalidResult
                     );
                     
                     return;
                 }
-    
+                
                 $target.focus().val( result.text );
             },
-            function (error) {
+            function (error)
+            {
                 BCapp.framework.alert(
                     sprintf(BClanguage.qrScanner.scanFailed.message, error),
                     BClanguage.qrScanner.scanFailed.title
@@ -48,7 +51,8 @@ var BCtoolbox = {
      * @returns {boolean}
      * @private
      */
-    __validateQRcode: function(value, type) {
+    __validateQRcode: function(value, type)
+    {
         if( type !== 'url' ) return false;
         
         res = value.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z‌​]{2,6}\b([-a-zA-Z0-9‌​@:%_\+.~#?&=]*)/);
@@ -58,35 +62,40 @@ var BCtoolbox = {
     /**
      * @returns {jQuery}
      */
-    getCurrentPageContentArea: function() {
+    getCurrentPageContentArea: function()
+    {
         var view = BCapp.currentView;
         var page = view.activePage;
         
         return $(page.container).find('.page-content');
     },
     
-    isValidURL: function(url) {
+    isValidURL: function(url)
+    {
         var regexQuery = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
         var reg        = new RegExp(regexQuery, "i");
         
         return reg.test(url);
     },
     
-    showNetworkActivityIndicator: function() {
+    showNetworkActivityIndicator: function()
+    {
         return;
         
         if( BCapp.os === 'ios' )
             NetworkActivityIndicator.show();
     },
     
-    hideNetworkActivityIndicator: function() {
+    hideNetworkActivityIndicator: function()
+    {
         return;
         
         if( BCapp.os === 'ios' )
             NetworkActivityIndicator.hide();
     },
     
-    wasuuup: function() {
+    wasuuup: function()
+    {
         return parseInt(Math.random() * 1000000000000000);
     }
 };

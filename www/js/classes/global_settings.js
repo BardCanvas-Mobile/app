@@ -1,7 +1,8 @@
 /**
  * @constructor
  */
-var BCglobalSettingsClass = function() {
+var BCglobalSettingsClass = function()
+{
     
     // noinspection JSUnusedGlobalSymbols
     this.firstRunCompleted = false;

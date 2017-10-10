@@ -2,8 +2,8 @@
  * @param {object} source
  * @constructor
  */
-var BCwebsiteManifestClass = function(source) {
-    
+var BCwebsiteManifestClass = function(source)
+{
     this.fullName = '';
     
     this.shortName = '';

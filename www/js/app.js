@@ -56,8 +56,8 @@ var BCapp = {
      */
     currentView: null,
     
-    init: function() {
-        
+    init: function()
+    {
         BCapp.settings = new BCglobalSettingsClass();
         BCapp.os = BCapp.framework.device.os;
         
@@ -81,7 +81,8 @@ var BCapp = {
         BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
     },
     
-    __adjustOrientation: function() {
+    __adjustOrientation: function()
+    {
         var screenWidth  = $(window).width();
         var screenHeight = $(window).height();
         
@@ -93,8 +94,8 @@ var BCapp = {
         $('body').attr('data-orientation', orientation);
     },
     
-    __setLanguage: function() {
-        
+    __setLanguage: function()
+    {
         var browserLanguage = navigator.language;
         if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
         
@@ -113,17 +114,21 @@ var BCapp = {
         $('head title').text(BClanguage.appName.replace('{{platform}}', BCapp.os));
     },
     
-    __loadRequirements: function() {
+    __loadRequirements: function()
+    {
         if( BCapp.os === 'ios' ) {
-            $('head').append('<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">');
+            $('head').append(
+                '<link rel="stylesheet" href="lib/framework7-icons/css/framework7-icons.css">');
         }
         else {
             $('#f7_ui_styles').attr('href', 'lib/framework7/css/framework7.material.min.css');
-            $('#f7_ui_colors').attr('href', 'lib/framework7/css/framework7.material.colors.min.css');
+            $('#f7_ui_colors').attr('href',
+                'lib/framework7/css/framework7.material.colors.min.css');
         }
     },
     
-    __initViews: function(preRenderingAction) {
+    __initViews: function(preRenderingAction)
+    {
         var params = { main: true };
         switch( BCapp.os ) {
             case 'ios':
@@ -161,7 +166,8 @@ var BCapp = {
             });
     },
     
-    renderPage: function(templateFileName, view, params, callback) {
+    renderPage: function(templateFileName, view, params, callback)
+    {
         var languageFileName = sprintf('%s.%s.json', templateFileName, BClanguage.iso);
         $.getJSON(languageFileName, function(pageLanguage) {
             params.context = pageLanguage;
@@ -172,10 +178,6 @@ var BCapp = {
                 if( typeof callback === 'function' ) callback();
             });
         });
-    },
-    
-    throwError: function(message) {
-        BCapp.framework.alert(message);
     }
 };
 
