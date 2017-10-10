@@ -7,10 +7,6 @@ var BCwebsiteClass = function(source)
     
     this.handler = '';
     
-    this.iconURL = '';
-    
-    this.serviceIconURLs = [];
-    
     this.userName = '';
     
     this.password = '';

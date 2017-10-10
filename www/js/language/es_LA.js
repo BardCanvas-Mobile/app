@@ -55,7 +55,7 @@ var BClanguage = {
                          + '<span class="color-red">%s</span><br><br>'
                          + 'Por favor revisa si el almacenamiento de tu dispositivo está en buenas condiciones e' 
                          + ' intenta de nuevo.',
-    unableToCreateWebsiteStorageDir: 'No se puede crear el contenedor de datos del sitio web:<br><br>'
+    unableToOpenWebsiteStorageDir:   'No se puede abrir el directorio de datos del sitio web:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor asegúrate de que no hay alguna app de seguridad interponiéndose con '
                                      + 'BardCanvas y el almacenamiento de tu dispositivo está en buenas condiciones '
@@ -69,6 +69,14 @@ var BClanguage = {
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',
     cannotWriteManifest:             'No se ha podido guardar el manifiesto del sitio web:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
+                                     + 'de tu dispositivo.',
+    cannotOpenWebsitesRegistry:      'No se ha podido abrir el registro de sitios web:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
+                                     + 'de tu dispositivo.',
+    cannotWriteWebsitesRegistry:     'No se ha podido guardar el registro de sitios web:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',

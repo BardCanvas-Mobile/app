@@ -54,7 +54,7 @@ var BClanguage = {
     errorCallingLFSAPI:              'Error opening storage system:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>' 
                                      + 'Please check if your device storage is OK and try again.',
-    unableToCreateWebsiteStorageDir: 'Unable to create website storage directory:<br><br>'
+    unableToOpenWebsiteStorageDir:   'Unable to open website storage directory:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please check if some security app is messing with BardCanvas and your ' 
                                      + 'device storage is OK and try again.',
@@ -69,6 +69,12 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please try again. If the problem persists, please check your device storage.',
     cannotWriteManifest:             'Unable to save the manifest file for website:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please try again. If the problem persists, please check your device storage.',
+    cannotOpenWebsitesRegistry:      'Unable to open the websites registry:<br><br>'
+                                     + '<span class="color-red">%s</span><br><br>'
+                                     + 'Please try again. If the problem persists, please check your device storage.',
+    cannotWriteWebsitesRegistry:     'Unable to save the websites registry:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please try again. If the problem persists, please check your device storage.',
     websiteHasNoServices:            'Sorry, but the website doesn\'t seem to have any services available.',

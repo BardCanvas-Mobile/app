@@ -56,6 +56,11 @@ var BCapp = {
      */
     currentView: null,
     
+    /**
+     * @var {BCwebsiteClass[]}
+     */
+    websitesRegistry: [],
+    
     init: function()
     {
         BCapp.settings = new BCglobalSettingsClass();
@@ -70,15 +75,68 @@ var BCapp = {
         $progress.circleProgress();
         
         BCapp.__setLanguage();
-        $progress.circleProgress('value', 0.25);
+        $progress.circleProgress('value', 0.2);
         
         BCapp.__loadRequirements();
-        $progress.circleProgress('value', 0.50);
+        $progress.circleProgress('value', 0.4);
+        
+        BCapp.__loadWebsitesRegistry();
+        $progress.circleProgress('value', 0.6);
         
         BCeventHandlers.init();
-        $progress.circleProgress('value', 0.75);
+        $progress.circleProgress('value', 0.8);
         
         BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
+    },
+    
+    __loadWebsitesRegistry: function()
+    {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
+        {
+            console.log('Filesystem open: ' + fs.name);
+            
+            var filePath = 'websites-registry.json';
+            fs.root.getFile(filePath, { create: true, exclusive: false }, function(fileEntry)
+            {
+                fileEntry.file(function (file)
+                {
+                    var reader = new FileReader();
+                    
+                    reader.onloadend = function()
+                    {
+                        if( this.result.length > 0 )
+                        {
+                            BCapp.websitesRegistry = JSON.parse(this.result);
+                            console.log('Websites registry loaded: ', BCapp.websitesRegistry);
+                        }
+                        else
+                        {
+                            console.log('Websites registry is empty.');
+                        }
+                    };
+                    
+                    reader.readAsText(file);
+                },
+                function(error)
+                {
+                    BCapp.framework.alert(sprintf(
+                        BClanguage.cannotOpenWebsitesRegistry, BClanguage.fileErrors[error.code]
+                    )); 
+                });
+            },
+            function(error)
+            {
+                BCapp.framework.alert(sprintf(
+                    BClanguage.cannotOpenWebsitesRegistry, BClanguage.fileErrors[error.code]
+                ));
+            });
+        },
+        function(errror)
+        {
+            BCapp.framework.alert(sprintf(
+                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
+            ));
+        });
     },
     
     __adjustOrientation: function()
