@@ -62,7 +62,7 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please check the domain or URL is correct and your device is connected '
                                      + 'to the internet and try again.',
-    cannotOpenManifest:              'Unable to open the website manifest file for writing:<br><br>'
+    cannotOpenManifest:              'Unable to open the website manifest file:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please try again. If the problem persists, please check your device storage.',
     cannotReadManifest:              'Unable to read the downloaded manifest file for website:<br><br>'

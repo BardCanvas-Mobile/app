@@ -64,7 +64,7 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor checa que el dominio o la URL es correcta y que tu dispositivo '
                                      + 'está conectado a internet e intenta de nuevo.',
-    cannotOpenManifest:              'No se ha podido abrir el manifiesto del sitio web para escritura:<br><br>'
+    cannotOpenManifest:              'No se ha podido abrir el manifiesto del sitio web:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',
