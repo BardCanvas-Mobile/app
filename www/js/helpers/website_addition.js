@@ -334,7 +334,7 @@ var BCwebsiteAddition = {
                     {
                         writer.onwriteend = function()
                         {
-                            console.log('Local manifest file saved: ' + manifestFile);
+                            console.log('Local manifest file saved: ' + fileEntry.toURL());
                             
                             callback();
                         };
