@@ -34,20 +34,28 @@
       "description": "Un punto central de crítica sobre la vida moderna, sus subidas y sus bajadas."
     },
     {
-      "title":       "Frugal Travel Chick Club",
-      "language":    "Inglés (Estados Unidos)",
-      "url":         "https://frugaltravelchick.club",
-      "icon":        "pages/website_addition/featured_site_icons/frugal_travel_chick_club.jpg",
-      "screenshot":  "pages/website_addition/featured_site_shots/frugal_travel_chick_club.jpg",
-      "description": "Un lugar dedicado a mostrarte cómo maximizar el uso de tus recursos durante tus vacaciones (y tu vida regular)."
-    },
-    {
       "title":       "Minimus Club",
       "language":    "Español (América Latina)",
       "url":         "https://minimus.club",
       "icon":        "pages/website_addition/featured_site_icons/minimus_club.jpg",
       "screenshot":  "pages/website_addition/featured_site_shots/minimus_club.jpg",
       "description": "Un blog que toma lo mejor del estilo de vida minimalista desde un punto de vista más realista y no como si fuese una moda."
+    },
+    {
+      "title":       "Tintereando Club",
+      "language":    "Español (América Latina)",
+      "url":         "https://tintereando.club",
+      "icon":        "pages/website_addition/featured_site_icons/tintereando_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/tintereando_club.jpg",
+      "description": "A club that features tales and stories from hobbyist writers."
+    },
+    {
+      "title":       "Frugal Travel Chick Club",
+      "language":    "Inglés (Estados Unidos)",
+      "url":         "https://frugaltravelchick.club",
+      "icon":        "pages/website_addition/featured_site_icons/frugal_travel_chick_club.jpg",
+      "screenshot":  "pages/website_addition/featured_site_shots/frugal_travel_chick_club.jpg",
+      "description": "Un lugar dedicado a mostrarte cómo maximizar el uso de tus recursos durante tus vacaciones (y tu vida regular)."
     },
     {
       "title":       "Space Escalator Club",
@@ -64,14 +72,6 @@
       "icon":        "pages/website_addition/featured_site_icons/subspace_club.jpg",
       "screenshot":  "pages/website_addition/featured_site_shots/subspace_club.jpg",
       "description": "Un A place dedicated to the Cryptocurrencies ecosystems, with information about coins, mining, etc. And other technology related topics."
-    },
-    {
-      "title":       "Tintereando Club",
-      "language":    "Español (América Latina)",
-      "url":         "https://tintereando.club",
-      "icon":        "pages/website_addition/featured_site_icons/tintereando_club.jpg",
-      "screenshot":  "pages/website_addition/featured_site_shots/tintereando_club.jpg",
-      "description": "A club that features tales and stories from hobbyist writers."
     }
   ]
 }
