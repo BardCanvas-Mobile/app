@@ -68,7 +68,7 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',
-    cannotReadManifest:              'No se ha podido leer el manifiesto descargado del sitio web:<br><br>'
+    cannotWriteManifest:             'No se ha podido guardar el manifiesto del sitio web:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor intenta de nuevo. Si el problema persiste, revisa el almacenamiento '
                                      + 'de tu dispositivo.',
