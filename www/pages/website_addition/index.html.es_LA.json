@@ -47,7 +47,7 @@
       "url":         "https://tintereando.club",
       "icon":        "pages/website_addition/featured_site_icons/tintereando_club.jpg",
       "screenshot":  "pages/website_addition/featured_site_shots/tintereando_club.jpg",
-      "description": "A club that features tales and stories from hobbyist writers."
+      "description": "Un club dedicado a la lectura, por autores de historias por hobby."
     },
     {
       "title":       "Frugal Travel Chick Club",
@@ -71,7 +71,7 @@
       "url":         "https://subspace.club",
       "icon":        "pages/website_addition/featured_site_icons/subspace_club.jpg",
       "screenshot":  "pages/website_addition/featured_site_shots/subspace_club.jpg",
-      "description": "Un A place dedicated to the Cryptocurrencies ecosystems, with information about coins, mining, etc. And other technology related topics."
+      "description": "Un lugar dedicado a las cryptomonedas y temas diversos sobre tecnología."
     }
   ]
 }
