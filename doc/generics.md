@@ -21,6 +21,23 @@
 
 * Once the data package is downloaded, the contents are displayed.
 
+## Storage structure
+
+Website manifests are saved on **PERMANENT** storage, one per domain, E.G.:
+
+    domain1.com.manifest.json
+    domain2.com.manifest.json
+    domain3.com-subdir1.manifest.json
+    domain3.com-subdir2.manifest.json
+
+Websites registry is a collection of website objects (with login info, etc.)
+and is saved as:
+
+    websites-registry.json
+
+All images and media files from data packages are cached using **TEMPORARY** storage
+with the [ImgCache plugin](https://github.com/chrisben/imgcache.js/).
+
 ## Website manifest
 
 It is a JSON file containing all website underlying data, E.G.:
@@ -56,7 +73,7 @@ Services are the pages that will be rendered on the website's view on BardCanvas
   tabs bar and a "more" tab will be shown. This tab will show a popover with
   the rest of the services to be selected. 
 
-**Note about service icons:** there are four variants on this property:
+**Note about service icons:** there are *four* variants on this property:
   
 * `fa-something` To show an icon from a Font Awesome icon class,  
   E.G. `fa-info-circle` to render `<i class="fa fa-info-circle"></i>`
@@ -66,8 +83,8 @@ Services are the pages that will be rendered on the website's view on BardCanvas
   icons from Framework7 for iOS and Font Awesome for Android using the
   directives described above. This is the preferred method to increase the
   odds on Apple iTunes submissions.
-* `data:image/type;base64,...` To show an inlined 256x256 JPEG/PNG/GIF icon
-  instead of a font based icon.
+* `http://domain.com/image.png` To fetch an image from a remote website and
+  save it to temporary cache.
 
 ## Data Packages
 
