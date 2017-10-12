@@ -399,13 +399,16 @@ var BCwebsitesRepository = {
         var url    = BCwebsitesRepository.manifest.loginAuthenticator;
         var params = {
             username: BCwebsitesRepository.website.userName,
-            password: CryptoJS.MD5(BCwebsitesRepository.website.password).toString()
+            password: CryptoJS.MD5(BCwebsitesRepository.website.password).toString(),
+            device:   sprintf('%s; %s; %s; %s', device.manufacturer, device.platform, device.model, device.version)
         };
-        $.getJSON(url, params, function(data) {
+        $.getJSON(url, params, function(data)
+        {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
             
-            if( data.message !== 'OK' ) {
+            if( data.message !== 'OK' )
+            {
                 BCapp.framework.alert(data.message);
                 
                 return;
@@ -415,7 +418,8 @@ var BCwebsitesRepository = {
             BCwebsitesRepository.website.userDisplayName = data.data.display_name;
             callback();
         })
-        .fail(function($xhr, status, error) {
+        .fail(function($xhr, status, error)
+        {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
             BCapp.framework.alert(sprintf( BClanguage.validatingError, error ));
