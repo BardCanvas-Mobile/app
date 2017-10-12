@@ -61,8 +61,6 @@ var BCapp = {
         BCapp.settings = new BCglobalSettingsClass();
         BCapp.os = BCapp.framework.device.os;
         
-        $('body').attr('data-os', BCapp.os);
-        
         BCapp.__adjustOrientation();
         $(window).resize(function() { BCapp.__adjustOrientation(); });
         
