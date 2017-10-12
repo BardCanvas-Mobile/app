@@ -323,6 +323,8 @@ var BCapp = {
     
     showView: function( selector, callback )
     {
+        console.log('Actual view: ' + BCapp.currentView.selector);
+        
         if( selector === BCapp.currentView.selector )
         {
             if( typeof callback === 'function' ) callback();
@@ -336,16 +338,28 @@ var BCapp = {
         if( $(selector).not(':visible') )
             $(selector).fadeIn('fast');
         
-        for( var i in BCapp.viewsCollection )
+        if( selector === '.view-main' )
         {
-            if( BCapp.viewsCollection[i].selector == selector )
+            BCapp.currentView = BCapp.mainView;
+        }
+        else if( selector === '.view-add-site' )
+        {
+            BCapp.currentView = BCapp.addSiteView;
+        }
+        else
+        {
+            for( var i in BCapp.viewsCollection )
             {
-                BCapp.currentView = BCapp.viewsCollection[i];
-                
-                break;
+                if( BCapp.viewsCollection[i].selector === selector )
+                {
+                    BCapp.currentView = BCapp.viewsCollection[i];
+                    
+                    break;
+                }
             }
         }
         
+        console.log('Current view internal pointer set to ' + BCapp.currentView.selector);
         if( typeof callback === 'function' ) callback();
     }
 };

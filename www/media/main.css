@@ -49,6 +49,8 @@ html.ios .framed_content { border-radius: 5px; }
 
 .content-block-inner { margin-left: 0 !important; }
 .material-icons      { font-size: 33px !important; }
+a.open-panel         { color: inherit; }
+.bc-no-margin        { margin: 0; }
 
 /*html.android .page { background-color: #efeff4; }*/
 

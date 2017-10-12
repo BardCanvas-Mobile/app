@@ -1,19 +1,37 @@
 
-<div class="list-block media-list">
-    <ul>
-        {{#registeredSites}}
-        <li>
-            <a href="#" class="item-link item-content close-panel"
-               onclick="BCapp.showView('.view-zonadivascom')">
-                <div class="item-media"><img src="{{siteIcon}}" width="32"></div>
-                <div class="item-inner">
-                    <div class="item-title-row">
-                        <div class="item-title">{{siteShortName}}</div>
-                    </div>
-                    <div class="item-text">{{userDisplayName}}</div>
-                </div>
-            </a>
-        </li>
-        {{/registeredSites}}
-    </ul>
+<div class="page navbar-fixed bg-black">
+    
+    <div class="navbar color-white bg-gray">
+        <div class="navbar-inner">
+            <div class="left">{{@global.language.websites}}</div>
+            <div class="right">
+                <a href="#" onclick="BCapp.showView('.view-add-site')" class="link icon-only close-panel">
+                    <i class="bc-ios-icon icon f7-icons">add</i>
+                    <i class="bc-android-icon fa fa-plus fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="page-content">
+        <div class="list-block media-list bc-no-margin bg-white">
+            <ul>
+                {{#registeredSites}}
+                <li>
+                    <a href="#" class="item-link item-content close-panel"
+                       onclick="BCapp.showView('.view-zonadivascom')">
+                        <div class="item-media"><img src="{{siteIcon}}" width="32"></div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{{siteShortName}}</div>
+                            </div>
+                            <div class="item-text">{{userDisplayName}}</div>
+                        </div>
+                    </a>
+                </li>
+                {{/registeredSites}}
+            </ul>
+        </div>
+    </div>
+    
 </div>

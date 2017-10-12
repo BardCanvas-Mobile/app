@@ -52,9 +52,7 @@ var BClanguage = {
     websiteURLisInvalid: 'La URL del sitio web es inválida. Chécala e intenta de nuevo.',
     
     passwordMissing:                 'Por favor especifica la contraseña para accesar a la cuenta especificada.',
-    websiteAlreadyAdded:             'Ya has registrado esta combinación de sitio web y nombre de usuario. '
-                                     + 'Si quieres agregar otra vista de este sitio, deberías intentarlo sin '
-                                     + 'credenciales de acceso (si es que el sitio lo permite).',
+    websiteAlreadyAdded:             'Ya has registrado esta combinación de sitio web y nombre de usuario.',
     errorCallingLFSAPI:              'Error al abrir almacenamiento del sistema:<br><br>'
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor revisa si el almacenamiento de tu dispositivo está en buenas condiciones e' 
@@ -116,5 +114,7 @@ var BClanguage = {
         'Error en conexión',
         'Conexión abortada',
         'Archivo sin modificar'
-    ]
+    ],
+    
+    websites: 'Sitios web'
 };
