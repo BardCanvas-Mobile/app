@@ -361,6 +361,18 @@ var BCapp = {
         
         console.log('Current view internal pointer set to ' + BCapp.currentView.selector);
         if( typeof callback === 'function' ) callback();
+    },
+    
+    showWebsiteAdditionView: function()
+    {
+        window.tmpViewToReturnWhenCancellingWebsiteAddition = BCapp.currentView;
+        $('#cancel_website_addition').show();
+        BCapp.showView('.view-add-site'); 
+    },
+    
+    cancelWebsiteAddition: function()
+    {
+        BCapp.showView(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector);
     }
 };
 
