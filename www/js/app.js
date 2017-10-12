@@ -56,6 +56,11 @@ var BCapp = {
      */
     currentView: null,
     
+    /**
+     * @var {View[]}
+     */
+    viewsCollection: [],
+    
     init: function()
     {
         BCapp.settings = new BCglobalSettingsClass();
@@ -72,14 +77,15 @@ var BCapp = {
         
         BCapp.__loadRequirements();
         $progress.circleProgress('value', 0.4);
-    
-        BCwebsitesRepository.loadWebsitesRegistry();
-        $progress.circleProgress('value', 0.6);
         
         BCeventHandlers.init();
-        $progress.circleProgress('value', 0.8);
+        $progress.circleProgress('value', 0.6);
         
-        BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
+        BCwebsitesRepository.loadWebsitesRegistry(function()
+        {
+            $progress.circleProgress('value', 0.8);
+            BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
+        });
     },
     
     __adjustOrientation: function()
@@ -128,7 +134,7 @@ var BCapp = {
         }
     },
     
-    __initViews: function(preRenderingAction)
+    __initViews: function(postRenderingAction)
     {
         var params = { main: true };
         switch( BCapp.os ) {
@@ -141,13 +147,34 @@ var BCapp = {
                 break;
         }
         
-        params.name    = 'main';
-        BCapp.mainView = BCapp.framework.addView('.view-main',     params);
-        
-        params.name       = 'addSite';
+        BCapp.mainView    = BCapp.framework.addView('.view-main', params);
         BCapp.addSiteView = BCapp.framework.addView('.view-add-site', params);
+        BCapp.currentView = BCapp.mainView;
         
-        preRenderingAction();
+        if( BCwebsitesRepository.collection.length == 0 )
+        {
+            console.log('No websites registered. Showing addition form.');
+            
+            BCapp.renderPage(
+                'pages/website_addition/index.html',
+                BCapp.addSiteView,
+                { reload: true },
+                function() {
+                    var $form = $('#add_website_form');
+                    $form[0].reset();
+                    $form.ajaxForm({
+                        target:       '#ajax_form_target',
+                        beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
+                    });
+                    postRenderingAction();
+                    BCapp.showView('.view-add-site');
+                }
+            );
+            
+            return;
+        }
+        
+        console.log(sprintf('%s websites registered. Prepping addition form.', BCwebsitesRepository.collection.length));
         
         BCapp.renderPage(
             'pages/website_addition/index.html',
@@ -160,11 +187,85 @@ var BCapp = {
                     target:       '#ajax_form_target',
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                 });
+            }
+        );
+        
+        window.tmpWebsiteToShowInterval = null;
+        window.tmpWebsiteToShowSelector = '.view-zonadivascom';
+        
+        console.log('Rendering site selector and adding website views.');
+        BCapp.renderSiteSelector(function()
+        {
+            BCapp.__renderAllWebsiteViews(function()
+            {
+                postRenderingAction();
                 
-                $('.views').fadeOut('fast');
-                $('.view-add-site').show('fast');
-                BCapp.currentView = BCapp.addSiteView;
+                window.tmpWebsiteToShowInterval = setInterval(function()
+                {
+                    if( $(window.tmpWebsiteToShowSelector).length === 0 ) return;
+                    
+                    clearInterval(window.tmpWebsiteToShowInterval);
+                    
+                    console.log('Rendering first website (here the wall should be rendered).');
+                    BCapp.showView(window.tmpWebsiteToShowSelector);
+                }, 100);
             });
+        });
+    },
+    
+    renderSiteSelector: function(callback)
+    {
+        $.get('pages/sites_selector/index.html', function(sourceHTML)
+        {
+            var context = { registeredSites: [] };
+            for( var i in BCwebsitesRepository.collection )
+            {
+                var website   = BCwebsitesRepository.collection[i];
+                var handler   = website.handler;
+                var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+                
+                if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
+                {
+                    var manifest = BCwebsitesRepository.manifests[handler];
+                    context.registeredSites[context.registeredSites.length] = {
+                        targetView:      '.' + websiteCN,
+                        siteLink:        '#' + websiteCN,
+                        siteIcon:        manifest.icon,
+                        siteShortName:   manifest.shortName,
+                        userDisplayName: website.userDisplayName
+                    };
+                    
+                    console.log(sprintf('%s added to the selector menu', manifest.shortName));
+                }
+            }
+            
+            // console.log(context);
+            var template = Template7.compile(sourceHTML);
+            var finalHTML = template(context);
+            
+            $('#left-panel').html(finalHTML);
+            
+            if( typeof callback === 'function' ) callback();
+        });
+    },
+    
+    __renderAllWebsiteViews: function(callback) 
+    {
+        for( var i in BCwebsitesRepository.collection )
+        {
+            var website   = BCwebsitesRepository.collection[i];
+            var handler   = website.handler;
+            var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+            
+            if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
+            {
+                var manifest = BCwebsitesRepository.manifests[handler];
+                
+                BCapp.addWebsiteView(website, manifest, websiteCN);
+            }
+        }
+        
+        if( typeof callback === 'function' ) callback();
     },
     
     renderPage: function(templateFileName, view, params, callback)
@@ -179,6 +280,73 @@ var BCapp = {
                 if( typeof callback === 'function' ) callback();
             });
         });
+    },
+    
+    /**
+     * @param {BCwebsiteClass}         website
+     * @param {BCwebsiteManifestClass} manifest
+     * @param {string}                 websiteViewClassName
+     */
+    addWebsiteView: function(website, manifest, websiteViewClassName)
+    {
+        var file = 'pages/site_templates/site_with_service_tabs.html';
+        $.get(file, function(sourceHTML)
+        {
+            var context = {
+    
+                websiteViewClassName: websiteViewClassName,
+                services:             manifest.services
+            };
+            
+            // console.log(context);
+            var template = Template7.compile(sourceHTML);
+            var finalHTML = template(context);
+            $('.views').append(finalHTML);
+            
+            var params = {};
+            switch( BCapp.os ) {
+                case 'ios':
+                    params.swipeBackPage = true;
+                    break;
+                case 'android':
+                    params.material       = true;
+                    params.materialRipple = true;
+                    break;
+            }
+            
+            params.name = websiteViewClassName;
+            BCapp.viewsCollection[websiteViewClassName]
+                = BCapp.framework.addView('.' + websiteViewClassName, params);
+            console.log(sprintf('%s view rendered.', websiteViewClassName));
+        });
+    },
+    
+    showView: function( selector, callback )
+    {
+        if( selector === BCapp.currentView.selector )
+        {
+            if( typeof callback === 'function' ) callback();
+            
+            return;
+        }
+        
+        if( $(BCapp.currentView.selector).is(':visible') )
+            $(BCapp.currentView.selector).fadeOut('fast');
+        
+        if( $(selector).not(':visible') )
+            $(selector).fadeIn('fast');
+        
+        for( var i in BCapp.viewsCollection )
+        {
+            if( BCapp.viewsCollection[i].selector == selector )
+            {
+                BCapp.currentView = BCapp.viewsCollection[i];
+                
+                break;
+            }
+        }
+        
+        if( typeof callback === 'function' ) callback();
     }
 };
 
