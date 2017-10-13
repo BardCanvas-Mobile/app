@@ -38,6 +38,9 @@
         <icon height="87" platform="ios" src="package-assets/icon/ios/icon-small@3x.png" width="87" />
     </platform>
     <access origin="*" />
+    <platform name="android">
+        <access origin="cdvfile://*" />
+    </platform>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

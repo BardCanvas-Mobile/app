@@ -31,6 +31,8 @@ var BCapp = {
     
     screenWidth: 0,
     
+    imgCacheEnabled: true,
+    
     /**
      * @var {BCglobalSettingsClass}
      */
@@ -57,14 +59,45 @@ var BCapp = {
     currentView: null,
     
     /**
-     * @var {View[]}
+     * @var {View[]} Key: website view selector
      */
     viewsCollection: [],
+    
+    /**
+     * @var {string[]} Key: website view selector
+     */
+    websiteMenusCollection: [],
+    
+    /**
+     * Current view collection of nested views
+     * TODO: Forge this!
+     * 
+     * @var {View[][]} Key 1: website handler, Key 2: service id
+     */
+    nestedViewsCollection: [],
+    
+    /**
+     * TODO: Forge this!
+     * 
+     * @var {View}
+     */
+    currentNestedView: null,
     
     init: function()
     {
         BCapp.settings = new BCglobalSettingsClass();
         BCapp.os = BCapp.framework.device.os;
+        
+        ImgCache.options.chromeQuota           = 50 * 1024 * 1024;
+        ImgCache.options.cordovaFilesystemRoot = cordova.file.cacheDirectory;
+        ImgCache.init(function ()
+        {
+            BCapp.imgCacheEnabled = true;
+        },
+        function ()
+        {
+            BCapp.imgCacheEnabled = false;
+        });
         
         BCapp.__adjustOrientation();
         $(window).resize(function() { BCapp.__adjustOrientation(); });
@@ -189,8 +222,10 @@ var BCapp = {
             }
         );
         
+        // TODO: Evaluate what to show on startup
         window.tmpWebsiteToShowInterval = null;
         window.tmpWebsiteToShowSelector = '.view-zonadivascom';
+        window.tmpWebsite               = BCwebsitesRepository.collection[0];
         
         console.log('Rendering site selector and adding website views.');
         BCapp.renderSiteSelector(function()
@@ -214,7 +249,7 @@ var BCapp = {
     
     renderSiteSelector: function(callback)
     {
-        $.get('pages/sites_selector/index.html', function(sourceHTML)
+        $.get('pages/misc_segments/sites_selector.html', function(sourceHTML)
         {
             var context = { registeredSites: [] };
             for( var i in BCwebsitesRepository.collection )
@@ -284,17 +319,32 @@ var BCapp = {
     /**
      * @param {BCwebsiteClass}         website
      * @param {BCwebsiteManifestClass} manifest
-     * @param {string}                 websiteViewClassName
+     * @param {string}                 websiteMainViewClassName
      */
-    addWebsiteView: function(website, manifest, websiteViewClassName)
+    addWebsiteView: function(website, manifest, websiteMainViewClassName)
     {
+        // TODO: Check different use cases for templates
         var file = 'pages/site_templates/site_with_service_tabs.html';
         $.get(file, function(sourceHTML)
         {
+            // Prep icons
+            for(var i in manifest.services)
+            {
+                var service  = manifest.services[i];
+                service.meta = {
+                    icon:        BCapp.__convertIcon(service.icon),
+                    tabLink:     sprintf('#%s-%s', websiteMainViewClassName, service.id),
+                    tabTarget:   sprintf('%s-%s', websiteMainViewClassName, service.id),
+                    activeTab:   (parseInt(i) === 0 ? 'active' : ''),
+                    pageHandler: sprintf('%s-%s-index', websiteMainViewClassName, service.id),
+                    markup:      BCapp.__getServiceMarkup(service)
+                };
+            }
+            
             var context = {
-    
-                websiteViewClassName: websiteViewClassName,
-                services:             manifest.services
+                websiteMainViewClassName: websiteMainViewClassName,
+                services:                 manifest.services,
+                navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName)
             };
             
             // console.log(context);
@@ -313,10 +363,32 @@ var BCapp = {
                     break;
             }
             
-            params.name = websiteViewClassName;
-            BCapp.viewsCollection[websiteViewClassName]
-                = BCapp.framework.addView('.' + websiteViewClassName, params);
-            console.log(sprintf('%s view rendered.', websiteViewClassName));
+            params.name = websiteMainViewClassName;
+            BCapp.viewsCollection[websiteMainViewClassName]
+                = BCapp.framework.addView('.' + websiteMainViewClassName, params);
+            console.log(sprintf('%s view rendered.', websiteMainViewClassName));
+            
+            BCapp.__addWebsiteMenu(website, manifest, websiteMainViewClassName);
+        });
+    },
+    
+    /**
+     * Manifest should have services with metadata already forged!
+     * 
+     * @param {BCwebsiteClass}         website
+     * @param {BCwebsiteManifestClass} manifest
+     * @param {string}                 websiteMainViewClassName
+     */
+    __addWebsiteMenu: function(website, manifest, websiteMainViewClassName)
+    {
+        var file = 'pages/misc_segments/right_sidebar.html';
+        $.get(file, function(sourceHTML)
+        {
+            var context  = { services: manifest.services, websiteHandler: website.handler };
+            var template = Template7.compile(sourceHTML);
+            // var selector = 'view-' + handler.replace(/[\-\.\/]/g, '');
+            BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
+            console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
         });
     },
     
@@ -359,6 +431,12 @@ var BCapp = {
         }
         
         console.log('Current view internal pointer set to ' + BCapp.currentView.selector);
+        
+        var menuKey = selector.replace(/^\./, '');
+        if( BCapp.websiteMenusCollection[menuKey] )
+            $('#right-panel').html(BCapp.websiteMenusCollection[menuKey]);
+        console.log(sprintf('Injected sidebar menu for %s', menuKey));
+        
         if( typeof callback === 'function' ) callback();
     },
     
@@ -372,6 +450,61 @@ var BCapp = {
     cancelWebsiteAddition: function()
     {
         BCapp.showView(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector);
+    },
+    
+    __convertIcon: function(source)
+    {
+        // iOS,Android
+        if( source.indexOf(',') >= 0 )
+        {
+            var parts = source.split(',');
+            
+            return sprintf('<i class="bc-ios-icon icon f7-icons">%s</i>', parts[0]) +
+                   sprintf('<i class="bc-android-icon icon fa %s"></i>',       parts[1]);
+        }
+        
+        if( source.indexOf('data:') === 0 )
+        {
+            return sprintf('<img class="icon" src="%s">', source);
+        }
+        
+        if( source.indexOf('http') === 0 )
+        {
+            if( BCapp.imgCacheEnabled )
+            {
+                ImgCache.isCached(source, function(path, success)
+                {
+                    if ( ! success) ImgCache.cacheFile(source);
+                });
+            }
+            
+            return sprintf('<img class="icon" src="%s">', source);
+        }
+        
+        if( source.indexOf('fa') === 0 )
+        {
+            return sprintf('<i class="icon fa %s"></i>', source);
+        }
+        
+        return source;
+    },
+    
+    /**
+     * TODO: Implement rendering of markup for other service types
+     * 
+     * @param {BCwebsiteServiceDetailsClass} service
+     * @private
+     */
+    __getServiceMarkup: function(service)
+    {
+        if( service.isOnline )
+        {
+            var html      = $('#iframed_service_template').html();
+            var context   = { url: service.url };
+            var template  = Template7.compile(html);
+            
+            return template(context);
+        }
     }
 };
 

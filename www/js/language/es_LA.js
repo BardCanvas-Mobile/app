@@ -43,7 +43,8 @@ var BClanguage = {
     
     actions: {
         select: 'Seleccionar',
-        cancel: 'Cancelar'
+        cancel: 'Cancelar',
+        deleteWebsite: 'Borrar sitio'
     },
     
     ownedAndOperatedBy: 'Propiedad y operación por %s',
@@ -116,5 +117,13 @@ var BClanguage = {
         'Archivo sin modificar'
     ],
     
-    websites: 'Sitios web'
+    websites:        'Sitios web',
+    websiteServices: 'Servicios del sitio',
+    options:         'Opciones',
+    
+    deleteWebsite: {
+        title:  '¿Deseas borrar este sitio?',
+        prompt: 'Al borrarlo, se removerán de este dispositivo todos los elementos descargados. ' +
+                'Si tienes más de una cuenta vinculada, sólo se removerá la actual.'
+    }
 };

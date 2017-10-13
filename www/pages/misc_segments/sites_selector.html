@@ -5,9 +5,10 @@
         <div class="navbar-inner">
             <div class="left">{{@global.language.websites}}</div>
             <div class="right">
-                <a href="#" onclick="BCapp.showWebsiteAdditionView()" class="link icon-only close-panel">
+                <a href="#" onclick="BCapp.showWebsiteAdditionView()"
+                   class="link icon-only close-panel">
                     <i class="bc-ios-icon icon f7-icons">add</i>
-                    <i class="bc-android-icon fa fa-plus fa-fw"></i>
+                    <i class="bc-android-icon fa fa-plus"></i>
                 </a>
             </div>
         </div>
@@ -19,7 +20,7 @@
                 {{#registeredSites}}
                 <li>
                     <a href="#" class="item-link item-content close-panel"
-                       onclick="BCapp.showView('.view-zonadivascom')">
+                       onclick="BCapp.showView('{{targetView}}')">
                         <div class="item-media"><img src="{{siteIcon}}" width="64"></div>
                         <div class="item-inner">
                             <div class="item-title-row">

@@ -22,14 +22,14 @@
                                 <div class="item-content">
                                     <div class="item-media">
                                         <i class="bc-ios-icon icon f7-icons">world</i>
-                                        <i class="bc-android-icon bc-input-icon fa fa-globe fa-fw"></i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-globe"></i>
                                     </div>
                                     <div class="item-inner">
                                         <div class="item-input">
                                             <input type="text" name="url" id="website_addition_url_textbox" placeholder="{{websiteURLplaceholder}}">
                                         </div>
                                         <div class="item-after">
-                                            <i class="bc-pseudolink fa fa-qrcode fa-fw fa-lg"
+                                            <i class="bc-pseudolink fa fa-qrcode fa-lg"
                                                onclick="BCtoolbox.scanQRcode('#website_addition_url_textbox', 'url')"></i>
                                         </div>
                                     </div>
@@ -40,7 +40,7 @@
                                 <div class="item-content">
                                     <div class="item-media">
                                         <i class="bc-ios-icon icon f7-icons">person</i>
-                                        <i class="bc-android-icon bc-input-icon fa fa-user-circle-o fa-fw"></i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-user-circle-o"></i>
                                     </div>
                                     <div class="item-inner">
                                         <div class="item-input">
@@ -54,7 +54,7 @@
                                 <div class="item-content">
                                     <div class="item-media">
                                         <i class="bc-ios-icon icon f7-icons">lock</i>
-                                        <i class="bc-android-icon bc-input-icon fa fa-lock fa-fw"></i>
+                                        <i class="bc-android-icon bc-input-icon fa fa-lock"></i>
                                     </div>
                                     <div class="item-inner">
                                         <div class="item-input">
@@ -66,13 +66,15 @@
                         </ul>
                         
                         <p class="buttons-row">
-                            <button type="reset" class="button color-red" id="cancel_website_addition"
+                            <button type="submit" class="button" id="submit_website_addition">
+                                {{addWebsiteButtonCaption}}
+                            </button>
+                        </p>
+                        <p class="buttons-row" id="cancel_website_addition">
+                            <button type="reset" class="button color-red"
                                     style="display: none;"
                                     onclick="BCapp.cancelWebsiteAddition(); return false;">
                                 {{@global.language.actions.cancel}}
-                            </button>
-                            <button type="submit" class="button" id="submit_website_addition">
-                                {{addWebsiteButtonCaption}}
                             </button>
                         </p>
                     </form>

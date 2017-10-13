@@ -32,6 +32,10 @@ body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
 
 .bc-no-margin { margin: 0; }
 
+.bc-nested-views-container .page-content { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+.bc-inapp-browser { width: 100%; height: 100%; margin: 0; border: 0; }
+
 /* BC imports */
 
 .framed_content          { border: 2px solid silver; background-color: white; color: black; padding: 5px; }
@@ -49,8 +53,14 @@ html.ios .framed_content { border-radius: 5px; }
 
 /* F7 overrides */
 
-.content-block-inner { margin-left: 0 !important; }
-a.open-panel         { color: inherit; }
+.content-block-inner    { margin-left: 0 !important; }
+a.open-panel            { color: inherit; }
+.toolbar-inner .icon    { font-size: 25px; width: 25px; text-align: center; }
+.item-media .fa         { font-size: 25px; width: 25px; text-align: center; }
+.item-media img.icon    { height: 29px; }
+
+.toolbar-inner .tab-link img.icon        { height: 25px; -webkit-filter: grayscale(100%); filter: grayscale(100%); }
+.toolbar-inner .tab-link.active img.icon { -webkit-filter: none; filter: none; }
 
 /*html.android .page { background-color: #efeff4; }*/
 

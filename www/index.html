@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: ws: https://ssl.gstatic.com http://*.openstreetmap.org https://*.phonegap.com; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:; connect-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap: ws: https://*.gstatic.com http://*.openstreetmap.org https://*.phonegap.com; style-src 'self' 'unsafe-inline'; frame-src *; media-src *; img-src * data:; connect-src *" />
     
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
     
@@ -83,6 +83,7 @@
 <script type="text/javascript" src="lib/jquery.blockUI.min.js"></script>
 <script src="lib/jquery.scrollTo.min.js"></script>
 <script src="lib/crypto-js.js"></script>
+<script src="lib/imgcache.js"></script>
 
 <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
 <!--<script type="text/javascript" src="lib/framework7-upscroller/framework7.upscroller.js"></script>-->
@@ -99,6 +100,10 @@
 <script type="text/javascript" src="js/app.js"></script>
 
 <div id="ajax_form_target" style="display: none"></div>
+
+<script type="text/template" id="iframed_service_template">
+    <iframe class="bc-inapp-browser" src="{{url}}"></iframe>
+</script>
 
 </body>
 

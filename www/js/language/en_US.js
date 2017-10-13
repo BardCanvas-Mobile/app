@@ -43,7 +43,8 @@ var BClanguage = {
     
     actions: {
         select: 'Select',
-        cancel: 'Cancel'
+        cancel: 'Cancel',
+        deleteWebsite: 'Delete website'
     },
     
     ownedAndOperatedBy: 'Owned and operated by %s',
@@ -113,5 +114,14 @@ var BClanguage = {
         'File not modified'
     ],
     
-    websites: 'Websites'
+    websites:        'Websites',
+    websiteServices: 'Website Services',
+    options:         'Options',
+    
+    deleteWebsite: {
+        title:  'Do you want to delete this website?',
+        prompt: 'Only the items downloaded to this device will be removed. ' +
+                'If you have more than one account linked to this domain on this device, ' +
+                'only this one will be removed.'
+    }
 };

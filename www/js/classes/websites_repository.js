@@ -12,12 +12,12 @@ var BCwebsitesRepository = {
     manifest: null,
     
     /**
-     * @var {BCwebsiteClass[]}
+     * @var {BCwebsiteClass[]} Index: numeric, incremental
      */
     collection: [],
     
     /**
-     * @var {BCwebsiteManifestClass[]}
+     * @var {BCwebsiteManifestClass[]} Index: website handler
      */
     manifests: {},
     
@@ -39,6 +39,7 @@ var BCwebsitesRepository = {
                         if( this.result.length > 0 )
                         {
                             BCwebsitesRepository.collection = JSON.parse(this.result);
+                            console.log('Successfully parsed ' + fileEntry.toURL() );
                             console.log('Websites registry loaded: ', BCwebsitesRepository.collection);
                             
                             BCwebsitesRepository.loadRegisteredManifests(callback);
@@ -106,7 +107,9 @@ var BCwebsitesRepository = {
                                 /** @var {BCwebsiteManifestClass} */
                                 var manifest = JSON.parse(this.result);
                                 BCwebsitesRepository.manifests[handler] = manifest;
-                                console.log(sprintf('Manifest for %s (%s) loaded.', handler, manifest.shortName));
+                                console.log(sprintf(
+                                    'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
+                                ));
                             }
                             else
                             {
@@ -234,7 +237,7 @@ var BCwebsitesRepository = {
             return;
         }
         
-        if( BCwebsitesRepository.__searchWebsiteInRegistry(handler, userName) !== null )
+        if( BCwebsitesRepository.__findWebsiteInRegistry(handler, userName) !== null )
         {
             BCapp.framework.alert( BClanguage.websiteAlreadyAdded );
             
@@ -282,7 +285,7 @@ var BCwebsitesRepository = {
      * @returns {BCwebsiteClass | null}
      * @private
      */
-    __searchWebsiteInRegistry: function(handler, userName)
+    __findWebsiteInRegistry: function(handler, userName)
     {
         if( BCwebsitesRepository.collection.length == 0 ) return null;
         
@@ -304,6 +307,21 @@ var BCwebsitesRepository = {
         
         console.log('Website/username combination not found.');
         return null;
+    },
+    
+    /**
+     * 
+     * @param {string} handler
+     * @returns {int}
+     * @private
+     */
+    __getIndexOfWebsiteInRegistry: function(handler)
+    {
+        for(var i in BCwebsitesRepository.collection)
+            if( BCwebsitesRepository.collection[i].handler === handler )
+                return i;
+        
+        return -1;
     },
     
     /**
@@ -633,5 +651,73 @@ var BCwebsitesRepository = {
                 BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
             ));
         });
+    },
+    
+    deleteWebsite: function(handler)
+    {
+        BCapp.framework.confirm(
+            BClanguage.deleteWebsite.prompt,
+            BClanguage.deleteWebsite.title,
+            function()
+            {
+                BCapp.framework.closePanel();
+                BCapp.framework.showIndicator();
+                
+                console.log(sprintf('Starting removal of %s', handler));
+                var selector = 'view-' + handler.replace(/[\-\.\/]/g, '');
+                
+                // Remove website from repository collection
+                var index = BCwebsitesRepository.__getIndexOfWebsiteInRegistry(handler);
+                BCwebsitesRepository.collection =
+                    BCtoolbox.removeFromCollection(index, BCwebsitesRepository.collection);
+                console.log('Updated websites collection: ', BCwebsitesRepository.collection);
+                
+                // Remove website from views
+                if( BCapp.viewsCollection[selector] )
+                {
+                    BCapp.viewsCollection[selector].destroy();
+                    $('.' + selector).fadeOut('fast', function() { $(this).remove(); });
+                    
+                    BCapp.viewsCollection = BCtoolbox.removeFromCollection(selector, BCapp.viewsCollection);
+                    console.log('Updated views collection: ', BCapp.viewsCollection);
+                }
+                
+                // Remove menus
+                if( BCapp.websiteMenusCollection[selector] )
+                {
+                    BCapp.websiteMenusCollection =
+                        BCtoolbox.removeFromCollection(selector, BCapp.websiteMenusCollection);
+                    
+                    console.log('Updated menus collection: ', BCapp.websiteMenusCollection);
+                }
+                
+                //
+                // TODO: Delete website file
+                // 
+                
+                // Remove manifest from collection
+                if( BCwebsitesRepository.manifests[handler] )
+                {
+                    BCwebsitesRepository.manifests =
+                        BCtoolbox.removeFromCollection(handler, BCwebsitesRepository.manifests);
+                    
+                    console.log('Updated manifests collection: ', BCwebsitesRepository.manifests);
+                }
+                
+                //
+                // TODO: Delete manifest file
+                //
+                
+                // Finishing touches
+                console.log(sprintf('Removal of %s completed.', handler));
+                
+                // Show website addition view
+                BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
+            },
+            function()
+            {
+                BCapp.framework.closePanel();
+            }
+        )
     }
 };

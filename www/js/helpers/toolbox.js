@@ -80,7 +80,7 @@ var BCtoolbox = {
     
     showNetworkActivityIndicator: function()
     {
-        return;
+        if( device.platform === 'browser') return;
         
         if( BCapp.os === 'ios' )
             NetworkActivityIndicator.show();
@@ -88,7 +88,7 @@ var BCtoolbox = {
     
     hideNetworkActivityIndicator: function()
     {
-        return;
+        if( device.platform === 'browser') return;
         
         if( BCapp.os === 'ios' )
             NetworkActivityIndicator.hide();
@@ -97,5 +97,16 @@ var BCtoolbox = {
     wasuuup: function()
     {
         return parseInt(Math.random() * 1000000000000000);
+    },
+    
+    removeFromCollection: function(needle, haystack)
+    {
+        var newHaystack = [];
+        
+        for(var i in haystack)
+            if( i !== needle )
+                newHaystack[i] = haystack[i];
+        
+        return newHaystack;
     }
 };
