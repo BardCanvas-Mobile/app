@@ -30,6 +30,8 @@ body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
 .bc-preloader-smaller  { width:  16px; height:  16px; }
 .bc-preloader-smallest { width:   8px; height:   8px; }
 
+.bc-no-margin { margin: 0; }
+
 /* BC imports */
 
 .framed_content          { border: 2px solid silver; background-color: white; color: black; padding: 5px; }
@@ -48,9 +50,7 @@ html.ios .framed_content { border-radius: 5px; }
 /* F7 overrides */
 
 .content-block-inner { margin-left: 0 !important; }
-.material-icons      { font-size: 33px !important; }
 a.open-panel         { color: inherit; }
-.bc-no-margin        { margin: 0; }
 
 /*html.android .page { background-color: #efeff4; }*/
 

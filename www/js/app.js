@@ -175,7 +175,6 @@ var BCapp = {
         }
         
         console.log(sprintf('%s websites registered. Prepping addition form.', BCwebsitesRepository.collection.length));
-        
         BCapp.renderPage(
             'pages/website_addition/index.html',
             BCapp.addSiteView,
