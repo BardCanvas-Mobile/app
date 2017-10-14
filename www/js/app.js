@@ -20,6 +20,8 @@ Template7.global = {
 
 var BCapp = {
     
+    keyname: 'BCMOBILE',
+    name:    'BardCanvas Mobile',
     version: Template7.global.appVersion,
     
     framework: f7,

@@ -571,7 +571,11 @@ var BCwebsitesRepository = {
         var params = {
             username: BCwebsitesRepository.website.userName,
             password: CryptoJS.MD5(BCwebsitesRepository.website.password).toString(),
-            device:   sprintf('%s; %s; %s; %s', device.manufacturer, device.platform, device.model, device.version)
+            device:   sprintf(
+                '%s/%s (%s %s) %s/%s',
+                BCapp.name, BCapp.version,
+                device.manufacturer, device.platform, device.model, device.version
+            )
         };
         $.getJSON(url, params, function(data)
         {
