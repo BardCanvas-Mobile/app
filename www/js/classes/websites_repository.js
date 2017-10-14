@@ -23,6 +23,8 @@ var BCwebsitesRepository = {
     
     loadWebsitesRegistry: function(callback)
     {
+        window.tmpLoadWebsitesRegistryCallback = callback;
+        
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
             console.log('Filesystem open: ' + fs.name);
@@ -38,16 +40,54 @@ var BCwebsitesRepository = {
                     {
                         if( this.result.length > 0 )
                         {
-                            BCwebsitesRepository.collection = JSON.parse(this.result);
+                            try
+                            {
+                                BCwebsitesRepository.collection = JSON.parse(this.result);
+                            }
+                            catch(e)
+                            {
+                                console.warn('The websites registry file seems to be corrupted. It wont be loaded.');
+                                BCwebsitesRepository.collection = [];
+                            }
+                            
                             console.log('Successfully parsed ' + fileEntry.toURL() );
                             console.log('Websites registry loaded: ', BCwebsitesRepository.collection);
                             
-                            BCwebsitesRepository.loadRegisteredManifests(callback);
+                            if( BCwebsitesRepository.collection.length == 0 )
+                            {
+                                window.tmpLoadWebsitesRegistryCallback();
+                                
+                                return;
+                            }
+                            
+                            var sanitizedCollection = [];
+                            for(var i in BCwebsitesRepository.collection)
+                            {
+                                var srcSite = BCwebsitesRepository.collection[i];
+                                
+                                var duplicated = false;
+                                for(var i2 in sanitizedCollection)
+                                {
+                                    var tgtSite = sanitizedCollection[i2];
+                                    
+                                    if( tgtSite.handler === srcSite.handler )
+                                    {
+                                        duplicated = true;
+                                        
+                                        break;
+                                    }
+                                }
+                                
+                                if( ! duplicated ) sanitizedCollection[sanitizedCollection.length] = srcSite;
+                            }
+                            BCwebsitesRepository.collection = sanitizedCollection;
+                            
+                            BCwebsitesRepository.loadRegisteredManifests(window.tmpLoadWebsitesRegistryCallback);
                         }
                         else
                         {
                             console.log('Websites registry is empty.');
-                            callback();
+                            window.tmpLoadWebsitesRegistryCallback();
                         }
                     };
                     
@@ -251,11 +291,28 @@ var BCwebsitesRepository = {
             password: password
         });
         
-        BCwebsitesRepository.__fetchManifest(function() {
-            BCwebsitesRepository.__checkManifest(function() {
-                BCwebsitesRepository.__saveManifest(function() {
-                    BCwebsitesRepository.__saveWebsite(function() {
+        BCwebsitesRepository.__fetchManifest(function()
+        {
+            BCwebsitesRepository.__checkManifest(function()
+            {
+                BCwebsitesRepository.__saveManifest(function()
+                {
+                    BCwebsitesRepository.collection[BCwebsitesRepository.collection.length]
+                        = BCwebsitesRepository.website;
+                    
+                    BCwebsitesRepository.__saveWebsitesRegistry(function()
+                    {
+                        BCapp.renderSiteSelector();
                         
+                        var website   = BCwebsitesRepository.website;
+                        var handler   = website.handler;
+                        var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+                        var manifest  = BCwebsitesRepository.manifest;
+                        
+                        BCapp.addWebsiteView(website, manifest, websiteCN, function()
+                        {
+                            BCapp.showView('.' + websiteCN);
+                        });
                     });
                 });
             });
@@ -547,6 +604,8 @@ var BCwebsitesRepository = {
      */
     __saveManifest: function( callback )
     {
+        window.tmpSaveManifestCallback = callback;
+        
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
             console.log("Filesystem open: " + fs.name);
@@ -558,12 +617,26 @@ var BCwebsitesRepository = {
                 {
                     writer.onwriteend = function()
                     {
-                        console.log('Local manifest file saved as: ' + fileEntry.toURL());
+                        console.log('Local manifest file truncated successfully.');
                         
-                        if( typeof BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] === 'undefined' )
-                            BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] = BCwebsitesRepository.manifest;
-                        
-                        callback();
+                        writer.onwriteend = function()
+                        {
+                            console.log('Local manifest file saved as: ' + fileEntry.toURL());
+                            
+                            if( typeof BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] === 'undefined' )
+                                BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] =
+                                    BCwebsitesRepository.manifest;
+                            
+                            if( typeof window.tmpSaveManifestCallback === 'function' )
+                                window.tmpSaveManifestCallback();
+                        };
+                        writer.onerror = function(e)
+                        {
+                            BCapp.framework.alert(sprintf(
+                                BClanguage.cannotWriteManifest, e.toString()
+                            ));
+                        };
+                        writer.write( new Blob([JSON.stringify(BCwebsitesRepository.manifest)], {type: 'text/plain'}) );
                     };
                     writer.onerror = function(e)
                     {
@@ -571,8 +644,8 @@ var BCwebsitesRepository = {
                             BClanguage.cannotWriteManifest, e.toString()
                         ));
                     };
-                    writer.seek(0);
-                    writer.write( new Blob([JSON.stringify(BCwebsitesRepository.manifest)], {type: 'text/plain'}) );
+                    
+                    writer.truncate(0);
                 },
                 function(error)
                 {
@@ -580,6 +653,8 @@ var BCwebsitesRepository = {
                         BClanguage.cannotOpenManifest, BClanguage.fileErrors[error.code]
                     ));
                 });
+                
+                
             },
             function(error)
             {
@@ -599,23 +674,39 @@ var BCwebsitesRepository = {
     /**
      * @private
      */
-    __saveWebsite: function(callback)
+    __saveWebsitesRegistry: function(callback)
     {
+        window.tmpWebsitesRegistryCallback = callback;
+        
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
             console.log("Filesystem open: " + fs.name);
             
             var filePath   = 'websites-registry.json';
-            var websiteKey = BCwebsitesRepository.website.handler + '-' + BCwebsitesRepository.website.userName;
             fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
             {
                 fileEntry.createWriter(function(writer)
                 {
                     writer.onwriteend = function()
                     {
-                        console.log('Local website file saved: ' + fileEntry.toURL());
+                        console.log('Websites registry file truncated successfully.');
                         
-                        callback();
+                        writer.onwriteend = function()
+                        {
+                            console.log('Websites registry file saved: ' + fileEntry.toURL());
+                            
+                            if( typeof window.tmpWebsitesRegistryCallback === 'function' )
+                                window.tmpWebsitesRegistryCallback();
+                        };
+                        writer.onerror = function(e)
+                        {
+                            BCapp.framework.alert(sprintf(
+                                BClanguage.cannotWriteWebsitesRegistry, e.toString()
+                            ));
+                        };
+                        writer.write(
+                            new Blob([JSON.stringify(BCwebsitesRepository.collection)], {type: 'text/plain'})
+                        );
                     };
                     writer.onerror = function(e)
                     {
@@ -624,12 +715,7 @@ var BCwebsitesRepository = {
                         ));
                     };
                     
-                    BCwebsitesRepository.collection[BCwebsitesRepository.collection.length]
-                        = BCwebsitesRepository.website;
-                    writer.seek(0);
-                    writer.write(
-                        new Blob([JSON.stringify(BCwebsitesRepository.collection)], {type: 'text/plain'})
-                    );
+                    writer.truncate(0);
                 },
                 function(error)
                 {
@@ -655,6 +741,12 @@ var BCwebsitesRepository = {
     
     deleteWebsite: function(handler)
     {
+        console.log(sprintf('Requested removal of %s', handler));
+        
+        var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+        var username  = $('.' + websiteCN).attr('data-username');
+        BCwebsitesRepository.website = BCwebsitesRepository.__findWebsiteInRegistry(handler, username);
+        
         BCapp.framework.confirm(
             BClanguage.deleteWebsite.prompt,
             BClanguage.deleteWebsite.title,
@@ -691,10 +783,6 @@ var BCwebsitesRepository = {
                     console.log('Updated menus collection: ', BCapp.websiteMenusCollection);
                 }
                 
-                //
-                // TODO: Delete website file
-                // 
-                
                 // Remove manifest from collection
                 if( BCwebsitesRepository.manifests[handler] )
                 {
@@ -704,20 +792,74 @@ var BCwebsitesRepository = {
                     console.log('Updated manifests collection: ', BCwebsitesRepository.manifests);
                 }
                 
-                //
-                // TODO: Delete manifest file
-                //
-                
-                // Finishing touches
-                console.log(sprintf('Removal of %s completed.', handler));
-                
-                // Show website addition view
-                BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
+                // Update websites registry
+                BCwebsitesRepository.__saveWebsitesRegistry(function()
+                {
+                    // Delete manifest file
+                    BCwebsitesRepository.__deleteManifest(function()
+                    {
+                        // Finishing touches
+                        console.log(sprintf('Removal of %s completed.', BCwebsitesRepository.website.handler));
+                        
+                        // Show website addition view
+                        if( BCwebsitesRepository.collection.length > 0 )
+                            $('#cancel_website_addition_button').show();
+                        else
+                            $('#cancel_website_addition_button').hide();
+                        
+                        BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
+                    });
+                });
             },
             function()
             {
                 BCapp.framework.closePanel();
             }
         )
+    },
+    
+    /**
+     * @param {function} callback
+     * 
+     * @private
+     */
+    __deleteManifest: function( callback )
+    {
+        window.tmpDeleteManifestCallback = callback;
+        
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
+        {
+            console.log("Filesystem open: " + fs.name);
+            
+            var filePath = BCwebsitesRepository.website.handler + '.manifest.json';
+            fs.root.getFile(filePath, { create: false, exclusive: false }, function (fileEntry)
+            {
+                fileEntry.remove(function(file)
+                {
+                    console.log(sprintf('Manifest file %s deleted successfully.', fileEntry.name));
+                    
+                    if( typeof window.tmpDeleteManifestCallback === 'function' )
+                        window.tmpDeleteManifestCallback();
+                },
+                function()
+                {
+                    console.warn(sprintf(
+                        'Unable to delete manifest file %s! This is not critical though.', fileEntry.name
+                    ));
+                });
+            },
+            function(error)
+            {
+                BCapp.framework.alert(sprintf(
+                    BClanguage.cannotOpenManifest, BClanguage.fileErrors[error.code]
+                ));
+            });
+        },
+        function(error)
+        {
+            BCapp.framework.alert(sprintf(
+                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
+            ));
+        });
     }
 };

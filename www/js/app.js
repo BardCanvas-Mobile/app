@@ -90,13 +90,27 @@ var BCapp = {
         
         ImgCache.options.chromeQuota           = 50 * 1024 * 1024;
         ImgCache.options.cordovaFilesystemRoot = cordova.file.cacheDirectory;
-        ImgCache.init(function ()
+        ImgCache.init(
+            function () { BCapp.imgCacheEnabled = true; },
+            function () { BCapp.imgCacheEnabled = false; }
+        );
+        
+        $.get('pages/misc_segments/right_sidebar.html', function(html)
         {
-            BCapp.imgCacheEnabled = true;
-        },
-        function ()
+            html = '<script type="text/template" id="sidebar_menu_template">'
+                 + html
+                 + '</script>';
+            
+            $('body').append(html);
+        });
+        
+        $.get('pages/misc_segments/sites_selector.html', function(html)
         {
-            BCapp.imgCacheEnabled = false;
+            html = '<script type="text/template" id="sidebar_sites_selector">'
+                 + html
+                 + '</script>';
+            
+            $('body').append(html);
         });
         
         BCapp.__adjustOrientation();
@@ -169,6 +183,8 @@ var BCapp = {
     
     __initViews: function(postRenderingAction)
     {
+        window.tmpInitViewsPostRenderingAction = postRenderingAction;
+        
         var params = { main: true };
         switch( BCapp.os ) {
             case 'ios':
@@ -199,7 +215,7 @@ var BCapp = {
                         target:       '#ajax_form_target',
                         beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                     });
-                    postRenderingAction();
+                    window.tmpInitViewsPostRenderingAction();
                     BCapp.showView('.view-add-site');
                 }
             );
@@ -232,7 +248,7 @@ var BCapp = {
         {
             BCapp.__renderAllWebsiteViews(function()
             {
-                postRenderingAction();
+                window.tmpInitViewsPostRenderingAction();
                 
                 window.tmpWebsiteToShowInterval = setInterval(function()
                 {
@@ -249,38 +265,37 @@ var BCapp = {
     
     renderSiteSelector: function(callback)
     {
-        $.get('pages/misc_segments/sites_selector.html', function(sourceHTML)
+        var sourceHTML = $('#sidebar_sites_selector').html();
+        
+        var context = { registeredSites: [] };
+        for( var i in BCwebsitesRepository.collection )
         {
-            var context = { registeredSites: [] };
-            for( var i in BCwebsitesRepository.collection )
+            var website   = BCwebsitesRepository.collection[i];
+            var handler   = website.handler;
+            var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+            
+            if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
             {
-                var website   = BCwebsitesRepository.collection[i];
-                var handler   = website.handler;
-                var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+                var manifest = BCwebsitesRepository.manifests[handler];
+                context.registeredSites[context.registeredSites.length] = {
+                    targetView:      '.' + websiteCN,
+                    siteLink:        '#' + websiteCN,
+                    siteIcon:        manifest.icon,
+                    siteShortName:   manifest.shortName,
+                    userDisplayName: website.userDisplayName
+                };
                 
-                if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
-                {
-                    var manifest = BCwebsitesRepository.manifests[handler];
-                    context.registeredSites[context.registeredSites.length] = {
-                        targetView:      '.' + websiteCN,
-                        siteLink:        '#' + websiteCN,
-                        siteIcon:        manifest.icon,
-                        siteShortName:   manifest.shortName,
-                        userDisplayName: website.userDisplayName
-                    };
-                    
-                    console.log(sprintf('%s added to the selector menu', manifest.shortName));
-                }
+                console.log(sprintf('%s added to the selector menu', manifest.shortName));
             }
-            
-            // console.log(context);
-            var template = Template7.compile(sourceHTML);
-            var finalHTML = template(context);
-            
-            $('#left-panel').html(finalHTML);
-            
-            if( typeof callback === 'function' ) callback();
-        });
+        }
+        
+        // console.log(context);
+        var template = Template7.compile(sourceHTML);
+        var finalHTML = template(context);
+        
+        $('#left-panel').html(finalHTML);
+        
+        if( typeof callback === 'function' ) callback();
     },
     
     __renderAllWebsiteViews: function(callback) 
@@ -320,9 +335,12 @@ var BCapp = {
      * @param {BCwebsiteClass}         website
      * @param {BCwebsiteManifestClass} manifest
      * @param {string}                 websiteMainViewClassName
+     * @param {function}               callback
      */
-    addWebsiteView: function(website, manifest, websiteMainViewClassName)
+    addWebsiteView: function(website, manifest, websiteMainViewClassName, callback)
     {
+        window.tmpAddWebsiteViewCallback = callback;
+        
         // TODO: Check different use cases for templates
         var file = 'pages/site_templates/site_with_service_tabs.html';
         $.get(file, function(sourceHTML)
@@ -343,6 +361,7 @@ var BCapp = {
             
             var context = {
                 websiteMainViewClassName: websiteMainViewClassName,
+                username:                 website.userName,
                 services:                 manifest.services,
                 navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName)
             };
@@ -369,6 +388,9 @@ var BCapp = {
             console.log(sprintf('%s view rendered.', websiteMainViewClassName));
             
             BCapp.__addWebsiteMenu(website, manifest, websiteMainViewClassName);
+            
+            if( typeof window.tmpAddWebsiteViewCallback === 'function' )
+                window.tmpAddWebsiteViewCallback();
         });
     },
     
@@ -381,15 +403,12 @@ var BCapp = {
      */
     __addWebsiteMenu: function(website, manifest, websiteMainViewClassName)
     {
-        var file = 'pages/misc_segments/right_sidebar.html';
-        $.get(file, function(sourceHTML)
-        {
-            var context  = { services: manifest.services, websiteHandler: website.handler };
-            var template = Template7.compile(sourceHTML);
-            // var selector = 'view-' + handler.replace(/[\-\.\/]/g, '');
-            BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
-            console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
-        });
+        var sourceHTML = $('#sidebar_menu_template').html();
+        var context    = { services: manifest.services, websiteHandler: website.handler };
+        var template   = Template7.compile(sourceHTML);
+        // var selector = 'view-' + handler.replace(/[\-\.\/]/g, '');
+        BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
+        console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
     },
     
     showView: function( selector, callback )
@@ -415,6 +434,7 @@ var BCapp = {
         }
         else if( selector === '.view-add-site' )
         {
+            BCapp.addSiteView.router.back({animatePages: false});
             BCapp.currentView = BCapp.addSiteView;
         }
         else
@@ -443,7 +463,7 @@ var BCapp = {
     showWebsiteAdditionView: function()
     {
         window.tmpViewToReturnWhenCancellingWebsiteAddition = BCapp.currentView;
-        $('#cancel_website_addition').show();
+        $('#cancel_website_addition_button').show();
         BCapp.showView('.view-add-site'); 
     },
     
