@@ -371,7 +371,7 @@ var BCapp = {
                     tabTarget:   sprintf('%s-%s', websiteMainViewClassName, service.id),
                     activeTab:   (parseInt(i) === 0 ? 'active' : ''),
                     pageHandler: sprintf('%s-%s-index', websiteMainViewClassName, service.id),
-                    markup:      BCapp.__getServiceMarkup(service)
+                    markup:      BCapp.__getServiceMarkup(website, service)
                 };
                 
                 renderingServices[renderingServices.length] = service;
@@ -530,15 +530,33 @@ var BCapp = {
     /**
      * TODO: Implement rendering of markup for other service types
      * 
+     * @param {BCwebsiteClass} website
      * @param {BCwebsiteServiceDetailsClass} service
      * @private
      */
-    __getServiceMarkup: function(service)
+    __getServiceMarkup: function(website, service)
     {
         if( service.isOnline )
         {
+            var url = service.url;
+            
+            url = url.replace('{$user_name}',    website.userName);
+            url = url.replace('{$password}',     website.password);
+            url = url.replace('{$access_token}', website.accessToken);
+            url = url.replace('{$random_seed}',  BCtoolbox.wasuuup());
+            
+            if( website.meta )
+            {
+                for(var key in website.meta)
+                {
+                    var search = sprintf('{$%s}', key);
+                    var replace = website.meta[key];
+                    url = url.replace(search, replace);
+                }
+            }
+            
             var html      = $('#iframed_service_template').html();
-            var context   = { url: service.url };
+            var context   = { url: url };
             var template  = Template7.compile(html);
             
             return template(context);

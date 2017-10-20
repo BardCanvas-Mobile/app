@@ -96,7 +96,7 @@ var BCtoolbox = {
     
     wasuuup: function()
     {
-        return parseInt(Math.random() * 1000000000000000);
+        return CryptoJS.MD5('' + (Math.random() * 1000000000000000)).toString();
     },
     
     removeFromCollection: function(needle, haystack)
