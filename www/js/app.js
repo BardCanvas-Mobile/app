@@ -279,9 +279,9 @@ var BCapp = {
             var handler   = website.handler;
             var websiteCN = BCwebsitesRepository.convertHandlerToViewClassName(handler);
             
-            if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
+            if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
             {
-                var manifest = BCmanifestsRepository.collection[handler];
+                var manifest = BCmanifestsRepository.collection[website.manifestFileHandler];
                 context.registeredSites[context.registeredSites.length] = {
                     targetView:      '.' + websiteCN,
                     siteLink:        '#' + websiteCN,
@@ -311,9 +311,9 @@ var BCapp = {
             var handler   = website.handler;
             var websiteCN = BCwebsitesRepository.convertHandlerToViewClassName(handler);
             
-            if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
+            if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
             {
-                var manifest = BCmanifestsRepository.collection[handler];
+                var manifest = BCmanifestsRepository.collection[website.manifestFileHandler];
                 
                 BCapp.addWebsiteView(website, manifest, websiteCN);
             }

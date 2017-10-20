@@ -5,6 +5,8 @@ var BCwebsiteClass = function(source)
 {
     this.URL = '';
     
+    this.manifestFileHandler = '';
+    
     this.handler = '';
     
     this.userName = '';

@@ -15,7 +15,19 @@ var BCmanifestsRepository = {
     {
         window.tmpWebsiteManifestsToLoad   = BCwebsitesRepository.collection.length;
         window.tmpWebsiteManifestsLoaded   = 0;
-        window.tmpWebsiteManifestsInterval = null;
+        window.tmpWebsiteManifestsInterval = setInterval(function()
+        {
+            if( window.tmpWebsiteManifestsLoaded >= window.tmpWebsiteManifestsToLoad )
+            {
+                clearInterval(window.tmpWebsiteManifestsInterval);
+                
+                console.log(sprintf('~ %s manifest files loaded.', Object.keys(BCmanifestsRepository.collection).length));
+                
+                callback();
+            }
+            
+            console.log('~ Waiting for website manifests to load.');
+        }, 100);
         
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
@@ -23,15 +35,20 @@ var BCmanifestsRepository = {
             
             for( var i in BCwebsitesRepository.collection )
             {
-                var website  = BCwebsitesRepository.collection[i];
-                var filePath = website.handler + '.manifest.json';
+                var website = BCwebsitesRepository.collection[i];
+                if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
+                {
+                    console.log(sprintf('~ Manifest for %s already loaded!', website.handler));
+                    window.tmpWebsiteManifestsLoaded++;
+                    
+                    continue;
+                }
+                
+                var filePath = website.manifestFileHandler + '.manifest.json';
                 
                 console.log('Loading manifest file for ' + website.handler);
                 fs.root.getFile(filePath, { create: false, exclusive: false }, function(fileEntry)
                 {
-                    var handler = fileEntry.name.replace('.manifest.json', '');
-                    console.log('Handler: ', handler);
-                    
                     fileEntry.file(function(file)
                     {
                         var reader = new FileReader();
@@ -42,6 +59,9 @@ var BCmanifestsRepository = {
                             {
                                 /** @var {BCwebsiteManifestClass} */
                                 var manifest = JSON.parse(this.result);
+                                var handler  = BCwebsitesRepository.convertSiteURLtoHandler(manifest.rootURL);
+                                console.log('Website handler for manifest: ', handler);
+                                
                                 BCmanifestsRepository.collection[handler] = manifest;
                                 console.log(sprintf(
                                     'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
@@ -49,7 +69,7 @@ var BCmanifestsRepository = {
                             }
                             else
                             {
-                                console.log(sprintf('Manifest for %s is empty!', handler));
+                                console.log(sprintf('Manifest file %s is empty!', fileEntry.name));
                                 this.__bcmWebsite = null;
                             }
                             
@@ -61,8 +81,8 @@ var BCmanifestsRepository = {
                     function(error)
                     {
                         console.log(sprintf(
-                            'Cannot Open Website Manifest file for %s: %s',
-                            handler,
+                            'Cannot Open Website Manifest file %s: %s',
+                            fileEntry.name,
                             BClanguage.fileErrors[error.code]
                         ));
                         
@@ -79,18 +99,6 @@ var BCmanifestsRepository = {
                     
                     window.tmpWebsiteManifestsLoaded++;
                 });
-                
-                window.tmpWebsiteManifestsInterval = setInterval(function()
-                {
-                    if( window.tmpWebsiteManifestsLoaded >= window.tmpWebsiteManifestsToLoad )
-                    {
-                        clearInterval(window.tmpWebsiteManifestsInterval);
-                        
-                        callback();
-                    }
-                    
-                    console.log('~ Waiting for website manifests to load.');
-                }, 100);
             }
         },
         function(errror)
@@ -325,7 +333,7 @@ var BCmanifestsRepository = {
         {
             console.log("Filesystem open: " + fs.name);
             
-            var filePath = BCwebsitesRepository.__website.handler + '.manifest.json';
+            var filePath = BCwebsitesRepository.__website.manifestFileHandler + '.manifest.json';
             fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
             {
                 fileEntry.createWriter(function(writer)
@@ -338,8 +346,8 @@ var BCmanifestsRepository = {
                         {
                             console.log('Local manifest file saved as: ' + fileEntry.toURL());
                             
-                            if( typeof BCmanifestsRepository.collection[BCwebsitesRepository.__website.handler] === 'undefined' )
-                                BCmanifestsRepository.collection[BCwebsitesRepository.__website.handler] =
+                            if( typeof BCmanifestsRepository.collection[BCwebsitesRepository.__website.manifestFileHandler] === 'undefined' )
+                                BCmanifestsRepository.collection[BCwebsitesRepository.__website.manifestFileHandler] =
                                     BCwebsitesRepository.__manifest;
                             
                             if( typeof window.tmpSaveManifestCallback === 'function' )
@@ -384,5 +392,66 @@ var BCmanifestsRepository = {
                 BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
             ));
         });
+    },
+    
+    /**
+     * @param {function} callback
+     */
+    deleteManifest: function( callback )
+    {
+        window.tmpDeleteManifestCallback = callback;
+        
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
+        {
+            console.log("Filesystem open: " + fs.name);
+            
+            var filePath = BCwebsitesRepository.__website.manifestFileHandler + '.manifest.json';
+            console.log(sprintf('Manifest file to remove: %s'), filePath);
+            fs.root.getFile(filePath, { create: false, exclusive: false }, function (fileEntry)
+            {
+                fileEntry.remove(function(file)
+                {
+                    console.log(sprintf('Manifest file %s deleted successfully.', fileEntry.name));
+                    
+                    if( typeof window.tmpDeleteManifestCallback === 'function' )
+                        window.tmpDeleteManifestCallback();
+                },
+                function()
+                {
+                    console.warn(sprintf(
+                        'Unable to delete manifest file %s! This is not critical though.', fileEntry.name
+                    ));
+                });
+            },
+            function(error)
+            {
+                BCapp.framework.alert(sprintf(
+                    BClanguage.cannotOpenManifest, BClanguage.fileErrors[error.code]
+                ));
+            });
+        },
+        function(error)
+        {
+            BCapp.framework.alert(sprintf(
+                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
+            ));
+        });
+    },
+    
+    /**
+     * Return the times the provided manifest is used in all websites
+     * 
+     * @param {string} manifestHandler
+     * @returns {number}
+     */
+    countTimesShared: function(manifestHandler)
+    {
+        var shares = 0;
+        
+        for( var i in BCwebsitesRepository.collection )
+            if( BCwebsitesRepository.collection[i].manifestFileHandler === manifestHandler )
+                shares++;
+        
+        return shares;
     }
 };

@@ -194,6 +194,8 @@ var BCwebsitesRepository = {
                 var rootURL = BCwebsitesRepository.__manifest.rootURL;
                 var handler = BCwebsitesRepository.convertSiteURLtoHandler(rootURL);
                 
+                BCwebsitesRepository.__website.manifestFileHandler = handler;
+                
                 if( BCwebsitesRepository.__website.userName != '' )
                     handler = handler + '-' + BCwebsitesRepository.__website.userName;
                 
@@ -375,7 +377,7 @@ var BCwebsitesRepository = {
         
         var websiteCN                  = BCwebsitesRepository.convertHandlerToViewClassName(handler);
         var username                   = $('.' + websiteCN).attr('data-username');
-        BCwebsitesRepository.__website = BCwebsitesRepository.__findWebsiteInRegistry(handler, username);
+        BCwebsitesRepository.__website = new BCwebsiteClass(BCwebsitesRepository.__findWebsiteInRegistry(handler, username));
         
         BCapp.framework.confirm(
             BClanguage.deleteWebsite.prompt,
@@ -413,32 +415,51 @@ var BCwebsitesRepository = {
                     console.log('Updated menus collection: ', BCapp.websiteMenusCollection);
                 }
                 
-                // Remove manifest from collection
-                if( BCmanifestsRepository.collection[handler] )
+                var finishing = function()
                 {
-                    BCmanifestsRepository.collection =
-                        BCtoolbox.removeFromCollection(handler, BCmanifestsRepository.collection);
+                    // Finishing touches
+                    console.log(sprintf('Removal of %s completed.', BCwebsitesRepository.__website.handler));
                     
-                    console.log('Updated manifests collection: ', BCmanifestsRepository.collection);
-                }
+                    // Show website addition view
+                    if( BCwebsitesRepository.collection.length > 0 )
+                        $('#cancel_website_addition_button').show();
+                    else
+                        $('#cancel_website_addition_button').hide();
+                    
+                    BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
+                };
                 
                 // Update websites registry
                 BCwebsitesRepository.__saveWebsitesRegistry(function()
                 {
-                    // Delete manifest file
-                    BCwebsitesRepository.__deleteManifest(function()
+                    var timesShared = BCmanifestsRepository.countTimesShared(BCwebsitesRepository.__website.manifestFileHandler);
+                    if( timesShared > 0 )
                     {
-                        // Finishing touches
-                        console.log(sprintf('Removal of %s completed.', BCwebsitesRepository.__website.handler));
+                        console.log(sprintf(
+                            'Manifest %s is being used by a total of %s websites. It will be kept.',
+                            BCwebsitesRepository.__website.manifestFileHandler,
+                            timesShared
+                        ));
                         
-                        // Show website addition view
-                        if( BCwebsitesRepository.collection.length > 0 )
-                            $('#cancel_website_addition_button').show();
-                        else
-                            $('#cancel_website_addition_button').hide();
-                        
-                        BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
-                    });
+                        finishing();
+                    }
+                    else
+                    {
+                        // Delete manifest file
+                        BCmanifestsRepository.deleteManifest(function()
+                        {
+                            BCmanifestsRepository.collection =
+                                BCtoolbox.removeFromCollection(
+                                    BCwebsitesRepository.__website.manifestFileHandler,
+                                    BCmanifestsRepository.collection
+                                );
+                            
+                            console.log('Updated manifests collection: ', BCmanifestsRepository.collection);
+                            
+                            finishing();
+                        });
+                    }
+                    
                 });
             },
             function()
@@ -446,50 +467,5 @@ var BCwebsitesRepository = {
                 BCapp.framework.closePanel();
             }
         )
-    },
-    
-    /**
-     * @param {function} callback
-     * 
-     * @private
-     */
-    __deleteManifest: function( callback )
-    {
-        window.tmpDeleteManifestCallback = callback;
-        
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
-        {
-            console.log("Filesystem open: " + fs.name);
-            
-            var filePath = BCwebsitesRepository.__website.handler + '.manifest.json';
-            fs.root.getFile(filePath, { create: false, exclusive: false }, function (fileEntry)
-            {
-                fileEntry.remove(function(file)
-                {
-                    console.log(sprintf('Manifest file %s deleted successfully.', fileEntry.name));
-                    
-                    if( typeof window.tmpDeleteManifestCallback === 'function' )
-                        window.tmpDeleteManifestCallback();
-                },
-                function()
-                {
-                    console.warn(sprintf(
-                        'Unable to delete manifest file %s! This is not critical though.', fileEntry.name
-                    ));
-                });
-            },
-            function(error)
-            {
-                BCapp.framework.alert(sprintf(
-                    BClanguage.cannotOpenManifest, BClanguage.fileErrors[error.code]
-                ));
-            });
-        },
-        function(error)
-        {
-            BCapp.framework.alert(sprintf(
-                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
-            ));
-        });
     }
 };
