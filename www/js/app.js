@@ -276,9 +276,9 @@ var BCapp = {
             var handler   = website.handler;
             var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
             
-            if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
+            if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
             {
-                var manifest = BCwebsitesRepository.manifests[handler];
+                var manifest = BCmanifestsRepository.collection[handler];
                 context.registeredSites[context.registeredSites.length] = {
                     targetView:      '.' + websiteCN,
                     siteLink:        '#' + websiteCN,
@@ -308,9 +308,9 @@ var BCapp = {
             var handler   = website.handler;
             var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
             
-            if( typeof BCwebsitesRepository.manifests[handler] !== 'undefined' )
+            if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
             {
-                var manifest = BCwebsitesRepository.manifests[handler];
+                var manifest = BCmanifestsRepository.collection[handler];
                 
                 BCapp.addWebsiteView(website, manifest, websiteCN);
             }

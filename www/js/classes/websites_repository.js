@@ -4,22 +4,17 @@ var BCwebsitesRepository = {
     /**
      * @var {BCwebsiteClass}
      */
-    website: null,
+    __website: null,
     
     /**
      * @var {BCwebsiteManifestClass}
      */
-    manifest: null,
+    __manifest: null,
     
     /**
      * @var {BCwebsiteClass[]} Index: numeric, incremental
      */
     collection: [],
-    
-    /**
-     * @var {BCwebsiteManifestClass[]} Index: website handler
-     */
-    manifests: {},
     
     loadWebsitesRegistry: function(callback)
     {
@@ -146,7 +141,7 @@ var BCwebsitesRepository = {
                             {
                                 /** @var {BCwebsiteManifestClass} */
                                 var manifest = JSON.parse(this.result);
-                                BCwebsitesRepository.manifests[handler] = manifest;
+                                BCmanifestsRepository.collection[handler] = manifest;
                                 console.log(sprintf(
                                     'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
                                 ));
@@ -284,7 +279,7 @@ var BCwebsitesRepository = {
             return;
         }
         
-        BCwebsitesRepository.website = new BCwebsiteClass({
+        BCwebsitesRepository.__website = new BCwebsiteClass({
             URL:      url,
             handler:  handler,
             userName: userName,
@@ -298,16 +293,16 @@ var BCwebsitesRepository = {
                 BCwebsitesRepository.__saveManifest(function()
                 {
                     BCwebsitesRepository.collection[BCwebsitesRepository.collection.length]
-                        = BCwebsitesRepository.website;
+                        = BCwebsitesRepository.__website;
                     
                     BCwebsitesRepository.__saveWebsitesRegistry(function()
                     {
                         BCapp.renderSiteSelector();
                         
-                        var website   = BCwebsitesRepository.website;
+                        var website   = BCwebsitesRepository.__website;
                         var handler   = website.handler;
                         var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
-                        var manifest  = BCwebsitesRepository.manifest;
+                        var manifest  = BCwebsitesRepository.__manifest;
                         
                         BCapp.addWebsiteView(website, manifest, websiteCN, function()
                         {
@@ -321,18 +316,18 @@ var BCwebsitesRepository = {
     },
     
     /**
-     * @param {string} source
+     * @param {string} url
      * 
      * @returns {string}
      */
-    convertSiteURLtoHandler: function(source)
+    convertSiteURLtoHandler: function(url)
     {
-        source = source.toLowerCase();
-        source = source.replace(/http:\/\/|https:\/\//i, '');
-        source = source.replace(/\/$/, '');
-        source = source.replace(/\//g, '-');
+        url = url.toLowerCase();
+        url = url.replace(/http:\/\/|https:\/\//i, '');
+        url = url.replace(/\/$/, '');
+        url = url.replace(/\//g, '-');
         
-        return source;
+        return url;
     },
     
     /**
@@ -391,13 +386,13 @@ var BCwebsitesRepository = {
         BCapp.framework.showPreloader(BClanguage.checkingWebsite);
         BCtoolbox.showNetworkActivityIndicator();
         
-        var url = BCwebsitesRepository.website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+        var url = BCwebsitesRepository.__website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
         $.getJSON(url, function(data)
         {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
             
-            BCwebsitesRepository.manifest = new BCwebsiteManifestClass(data);
+            BCwebsitesRepository.__manifest = new BCwebsiteManifestClass(data);
             callback();
         })
         .fail(function($xhr, status, error)
@@ -417,8 +412,7 @@ var BCwebsitesRepository = {
      */
     __checkManifest: function(callback)
     {
-        
-        if( BCwebsitesRepository.manifest.services.length === 0 )
+        if( BCwebsitesRepository.__manifest.services.length === 0 )
         {
             BCapp.framework.alert(BClanguage.websiteHasNoServices);
             
@@ -430,7 +424,7 @@ var BCwebsitesRepository = {
         //         '--> Add the site immmediately
         //
         
-        if( BCwebsitesRepository.manifest.disclaimer.length === 0 && ! BCwebsitesRepository.manifest.loginRequired )
+        if( BCwebsitesRepository.__manifest.disclaimer.length === 0 && ! BCwebsitesRepository.__manifest.loginRequired )
         {
             callback();
             
@@ -442,9 +436,9 @@ var BCwebsitesRepository = {
         //         '--> Alert login requirement message and abort if no credentials have been provided
         //
         
-        if( BCwebsitesRepository.manifest.disclaimer.length === 0 && BCwebsitesRepository.manifest.loginRequired )
+        if( BCwebsitesRepository.__manifest.disclaimer.length === 0 && BCwebsitesRepository.__manifest.loginRequired )
         {
-            if( BCwebsitesRepository.website.userName.length === 0 || BCwebsitesRepository.website.password.length === 0 ) {
+            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 ) {
                 // No login credentials provided
                 BCapp.framework.alert(BClanguage.websiteRequiresAuthentication);
             }
@@ -463,9 +457,9 @@ var BCwebsitesRepository = {
         // Has disclaimer case inits
         //
         
-        var disclaimer = typeof BCwebsitesRepository.manifest.disclaimer === 'string'
-            ? BCwebsitesRepository.manifest.disclaimer
-            : BCwebsitesRepository.manifest.disclaimer.join(' ');
+        var disclaimer = typeof BCwebsitesRepository.__manifest.disclaimer === 'string'
+            ? BCwebsitesRepository.__manifest.disclaimer
+            : BCwebsitesRepository.__manifest.disclaimer.join(' ');
         
         var content;
         
@@ -474,7 +468,7 @@ var BCwebsitesRepository = {
         //         '--> Show disclaimer and "proceed" button
         //
         
-        if( BCwebsitesRepository.manifest.disclaimer.length > 0 && ! BCwebsitesRepository.manifest.loginRequired )
+        if( BCwebsitesRepository.__manifest.disclaimer.length > 0 && ! BCwebsitesRepository.__manifest.loginRequired )
         {
             // Flow is passed to the callback
             window.__tempWebsiteAdditionCallback = function() { callback(); };
@@ -483,11 +477,11 @@ var BCwebsitesRepository = {
             {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsitesRepository.manifest.shortName,
-                    iconURL:            BCwebsitesRepository.manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
-                    companyName:        BCwebsitesRepository.manifest.company,
-                    websiteDescription: BCwebsitesRepository.manifest.description,
+                    websiteName:        BCwebsitesRepository.__manifest.shortName,
+                    iconURL:            BCwebsitesRepository.__manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                    companyName:        BCwebsitesRepository.__manifest.company,
+                    websiteDescription: BCwebsitesRepository.__manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     okButton:           BClanguage.frameworkCaptions.modalButtonOk
@@ -503,17 +497,17 @@ var BCwebsitesRepository = {
         //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
         //
         
-        if( BCwebsitesRepository.website.userName.length === 0 || BCwebsitesRepository.website.password.length === 0 )
+        if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 )
         {
             // Missing login credentials
             $.get('pages/website_addition/disclaimer.html', function(html) {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsitesRepository.manifest.shortName,
-                    iconURL:            BCwebsitesRepository.manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
-                    companyName:        BCwebsitesRepository.manifest.company,
-                    websiteDescription: BCwebsitesRepository.manifest.description,
+                    websiteName:        BCwebsitesRepository.__manifest.shortName,
+                    iconURL:            BCwebsitesRepository.__manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                    companyName:        BCwebsitesRepository.__manifest.company,
+                    websiteDescription: BCwebsitesRepository.__manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     warningText:        sprintf(
@@ -536,11 +530,11 @@ var BCwebsitesRepository = {
             {
                 var compiled = Template7.compile(html);
                 content      = compiled({
-                    websiteName:        BCwebsitesRepository.manifest.shortName,
-                    iconURL:            BCwebsitesRepository.manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.manifest.fullName,
-                    companyName:        BCwebsitesRepository.manifest.company,
-                    websiteDescription: BCwebsitesRepository.manifest.description,
+                    websiteName:        BCwebsitesRepository.__manifest.shortName,
+                    iconURL:            BCwebsitesRepository.__manifest.icon,
+                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                    companyName:        BCwebsitesRepository.__manifest.company,
+                    websiteDescription: BCwebsitesRepository.__manifest.description,
                     disclaimerContents: disclaimer,
                     cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
                     okButton:           BClanguage.frameworkCaptions.modalButtonOk
@@ -567,10 +561,10 @@ var BCwebsitesRepository = {
         BCapp.framework.showPreloader(BClanguage.validatingCredentials);
         BCtoolbox.showNetworkActivityIndicator();
         
-        var url    = BCwebsitesRepository.manifest.loginAuthenticator;
+        var url    = BCwebsitesRepository.__manifest.loginAuthenticator;
         var params = {
-            username: BCwebsitesRepository.website.userName,
-            password: CryptoJS.MD5(BCwebsitesRepository.website.password).toString(),
+            username: BCwebsitesRepository.__website.userName,
+            password: CryptoJS.MD5(BCwebsitesRepository.__website.password).toString(),
             device:   sprintf(
                 '%s/%s (%s %s) %s/%s',
                 BCapp.name, BCapp.version,
@@ -589,8 +583,8 @@ var BCwebsitesRepository = {
                 return;
             }
             
-            BCwebsitesRepository.website.accessToken     = data.data.access_token;
-            BCwebsitesRepository.website.userDisplayName = data.data.display_name;
+            BCwebsitesRepository.__website.accessToken     = data.data.access_token;
+            BCwebsitesRepository.__website.userDisplayName = data.data.display_name;
             callback();
         })
         .fail(function($xhr, status, error)
@@ -614,7 +608,7 @@ var BCwebsitesRepository = {
         {
             console.log("Filesystem open: " + fs.name);
             
-            var filePath = BCwebsitesRepository.website.handler + '.manifest.json';
+            var filePath = BCwebsitesRepository.__website.handler + '.manifest.json';
             fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
             {
                 fileEntry.createWriter(function(writer)
@@ -627,9 +621,9 @@ var BCwebsitesRepository = {
                         {
                             console.log('Local manifest file saved as: ' + fileEntry.toURL());
                             
-                            if( typeof BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] === 'undefined' )
-                                BCwebsitesRepository.manifests[BCwebsitesRepository.website.handler] =
-                                    BCwebsitesRepository.manifest;
+                            if( typeof BCmanifestsRepository.collection[BCwebsitesRepository.__website.handler] === 'undefined' )
+                                BCmanifestsRepository.collection[BCwebsitesRepository.__website.handler] =
+                                    BCwebsitesRepository.__manifest;
                             
                             if( typeof window.tmpSaveManifestCallback === 'function' )
                                 window.tmpSaveManifestCallback();
@@ -640,7 +634,7 @@ var BCwebsitesRepository = {
                                 BClanguage.cannotWriteManifest, e.toString()
                             ));
                         };
-                        writer.write( new Blob([JSON.stringify(BCwebsitesRepository.manifest)], {type: 'text/plain'}) );
+                        writer.write( new Blob([JSON.stringify(BCwebsitesRepository.__manifest)], {type: 'text/plain'}) );
                     };
                     writer.onerror = function(e)
                     {
@@ -747,9 +741,9 @@ var BCwebsitesRepository = {
     {
         console.log(sprintf('Requested removal of %s', handler));
         
-        var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
-        var username  = $('.' + websiteCN).attr('data-username');
-        BCwebsitesRepository.website = BCwebsitesRepository.__findWebsiteInRegistry(handler, username);
+        var websiteCN                  = 'view-' + handler.replace(/[\-\.\/]/g, '');
+        var username                   = $('.' + websiteCN).attr('data-username');
+        BCwebsitesRepository.__website = BCwebsitesRepository.__findWebsiteInRegistry(handler, username);
         
         BCapp.framework.confirm(
             BClanguage.deleteWebsite.prompt,
@@ -788,12 +782,12 @@ var BCwebsitesRepository = {
                 }
                 
                 // Remove manifest from collection
-                if( BCwebsitesRepository.manifests[handler] )
+                if( BCmanifestsRepository.collection[handler] )
                 {
-                    BCwebsitesRepository.manifests =
-                        BCtoolbox.removeFromCollection(handler, BCwebsitesRepository.manifests);
+                    BCmanifestsRepository.collection =
+                        BCtoolbox.removeFromCollection(handler, BCmanifestsRepository.collection);
                     
-                    console.log('Updated manifests collection: ', BCwebsitesRepository.manifests);
+                    console.log('Updated manifests collection: ', BCmanifestsRepository.collection);
                 }
                 
                 // Update websites registry
@@ -803,7 +797,7 @@ var BCwebsitesRepository = {
                     BCwebsitesRepository.__deleteManifest(function()
                     {
                         // Finishing touches
-                        console.log(sprintf('Removal of %s completed.', BCwebsitesRepository.website.handler));
+                        console.log(sprintf('Removal of %s completed.', BCwebsitesRepository.__website.handler));
                         
                         // Show website addition view
                         if( BCwebsitesRepository.collection.length > 0 )
@@ -835,7 +829,7 @@ var BCwebsitesRepository = {
         {
             console.log("Filesystem open: " + fs.name);
             
-            var filePath = BCwebsitesRepository.website.handler + '.manifest.json';
+            var filePath = BCwebsitesRepository.__website.handler + '.manifest.json';
             fs.root.getFile(filePath, { create: false, exclusive: false }, function (fileEntry)
             {
                 fileEntry.remove(function(file)
