@@ -123,5 +123,12 @@ var BClanguage = {
         prompt: 'Only the items downloaded to this device will be removed. ' +
                 'If you have more than one account linked to this domain on this device, ' +
                 'only this one will be removed.'
+    },
+    
+    websiteManifestUpdated: {
+        title:   'Website updated',
+        message: 'An update for this website has been downloaded. ' +
+                 'If you don\'t have any pending activity, you should reload now.<br><br>' +
+                 '¿Do you want to reload BardCanvas now?'
     }
 };

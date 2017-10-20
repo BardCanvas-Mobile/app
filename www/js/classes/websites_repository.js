@@ -219,6 +219,13 @@ var BCwebsitesRepository = {
                     
                     BCwebsitesRepository.__saveWebsitesRegistry(function()
                     {
+                        if( window.tmpReloadAppASAP )
+                        {
+                            location.reload();
+                            
+                            return;
+                        }
+                        
                         BCapp.renderSiteSelector();
                         
                         var website   = BCwebsitesRepository.__website;

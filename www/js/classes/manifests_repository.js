@@ -347,11 +347,37 @@ var BCmanifestsRepository = {
                             console.log('Local manifest file saved as: ' + fileEntry.toURL());
                             
                             if( typeof BCmanifestsRepository.collection[BCwebsitesRepository.__website.manifestFileHandler] === 'undefined' )
+                            {
                                 BCmanifestsRepository.collection[BCwebsitesRepository.__website.manifestFileHandler] =
                                     BCwebsitesRepository.__manifest;
-                            
-                            if( typeof window.tmpSaveManifestCallback === 'function' )
-                                window.tmpSaveManifestCallback();
+                                
+                                if( typeof window.tmpSaveManifestCallback === 'function' )
+                                    window.tmpSaveManifestCallback();
+                            }
+                            else
+                            {
+                                var oldManifest = BCmanifestsRepository.collection[BCwebsitesRepository.__website.manifestFileHandler];
+                                
+                                if( oldManifest.version != BCwebsitesRepository.__manifest.version )
+                                {
+                                    BCapp.framework.confirm(
+                                        BClanguage.websiteManifestUpdated.message,
+                                        BClanguage.websiteManifestUpdated.title,
+                                        function()
+                                        {
+                                            window.tmpReloadAppASAP = true;
+                                            
+                                            if( typeof window.tmpSaveManifestCallback === 'function' )
+                                                window.tmpSaveManifestCallback();
+                                        },
+                                        function()
+                                        {
+                                            if( typeof window.tmpSaveManifestCallback === 'function' )
+                                                window.tmpSaveManifestCallback();
+                                        }
+                                    )
+                                }
+                            }
                         };
                         writer.onerror = function(e)
                         {

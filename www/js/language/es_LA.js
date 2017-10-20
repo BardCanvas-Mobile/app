@@ -125,5 +125,12 @@ var BClanguage = {
         title:  '¿Deseas borrar este sitio?',
         prompt: 'Al borrarlo, se removerán de este dispositivo todos los elementos descargados. ' +
                 'Si tienes más de una cuenta vinculada, sólo se removerá la actual.'
+    },
+    
+    websiteManifestUpdated: {
+        title:   'Sitio web actualizado',
+        message: 'Se ha descargado una actualización de este sitio web. ' +
+                 'Si no tienes alguna actividad pendiente, es recomendable recargar ahora.<br><br>' +
+                 '¿Deseas recargar BardCanvas ahora?'
     }
 };
