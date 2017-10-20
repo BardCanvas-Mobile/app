@@ -242,7 +242,7 @@ var BCapp = {
         
         // TODO: Evaluate what to show on startup
         window.tmpWebsiteToShowInterval = null;
-        window.tmpWebsiteToShowSelector = '.view-zonadivascom';
+        window.tmpWebsiteToShowSelector = '.view-soportezonadivascom';
         window.tmpWebsite               = BCwebsitesRepository.collection[0];
         
         console.log('Rendering site selector and adding website views.');

@@ -77,7 +77,7 @@ var BCwebsitesRepository = {
                             }
                             BCwebsitesRepository.collection = sanitizedCollection;
                             
-                            BCwebsitesRepository.loadRegisteredManifests(window.tmpLoadWebsitesRegistryCallback);
+                            BCmanifestsRepository.loadAll(window.tmpLoadWebsitesRegistryCallback);
                         }
                         else
                         {
@@ -101,96 +101,6 @@ var BCwebsitesRepository = {
                     BClanguage.cannotOpenWebsitesRegistry, BClanguage.fileErrors[error.code]
                 ));
             });
-        },
-        function(errror)
-        {
-            BCapp.framework.alert(sprintf(
-                BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
-            ));
-        });
-    },
-    
-    loadRegisteredManifests: function(callback)
-    {
-        window.tmpWebsiteManifestsToLoad   = BCwebsitesRepository.collection.length;
-        window.tmpWebsiteManifestsLoaded   = 0;
-        window.tmpWebsiteManifestsInterval = null;
-        
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
-        {
-            console.log('Filesystem open: ' + fs.name);
-            
-            for( var i in BCwebsitesRepository.collection )
-            {
-                var website  = BCwebsitesRepository.collection[i];
-                var filePath = website.handler + '.manifest.json';
-                
-                console.log('Loading manifest file for ' + website.handler);
-                fs.root.getFile(filePath, { create: false, exclusive: false }, function(fileEntry)
-                {
-                    var handler = fileEntry.name.replace('.manifest.json', '');
-                    console.log('Handler: ', handler);
-                    
-                    fileEntry.file(function(file)
-                    {
-                        var reader = new FileReader();
-                        
-                        reader.onloadend = function()
-                        {
-                            if( this.result.length > 0 )
-                            {
-                                /** @var {BCwebsiteManifestClass} */
-                                var manifest = JSON.parse(this.result);
-                                BCmanifestsRepository.collection[handler] = manifest;
-                                console.log(sprintf(
-                                    'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
-                                ));
-                            }
-                            else
-                            {
-                                console.log(sprintf('Manifest for %s is empty!', handler));
-                                this.__bcmWebsite = null;
-                            }
-                            
-                            window.tmpWebsiteManifestsLoaded++;
-                        };
-                        
-                        reader.readAsText(file);
-                    },
-                    function(error)
-                    {
-                        console.log(sprintf(
-                            'Cannot Open Website Manifest file for %s: %s',
-                            handler,
-                            BClanguage.fileErrors[error.code]
-                        ));
-                        
-                        window.tmpWebsiteManifestsLoaded++;
-                    });
-                },
-                function(error, website)
-                {
-                    console.log(sprintf(
-                        'Cannot Open Website Manifest file for %s: %s',
-                        website.handler,
-                        BClanguage.fileErrors[error.code]
-                    ));
-                    
-                    window.tmpWebsiteManifestsLoaded++;
-                });
-                
-                window.tmpWebsiteManifestsInterval = setInterval(function()
-                {
-                    if( window.tmpWebsiteManifestsLoaded >= window.tmpWebsiteManifestsToLoad )
-                    {
-                        clearInterval(window.tmpWebsiteManifestsInterval);
-                        
-                        callback();
-                    }
-                    
-                    console.log('~ Waiting for website manifests to load.');
-                }, 100);
-            }
         },
         function(errror)
         {
@@ -259,9 +169,7 @@ var BCwebsitesRepository = {
             return false;
         }
         
-        var handler = BCwebsitesRepository.convertSiteURLtoHandler(url);
         console.info('> URL:      ' + url);
-        console.info('> Handler:  ' + handler);
         console.info('> User:     ' + userName);
         console.info('> Password: ' + password);
         
@@ -272,16 +180,8 @@ var BCwebsitesRepository = {
             return;
         }
         
-        if( BCwebsitesRepository.__findWebsiteInRegistry(handler, userName) !== null )
-        {
-            BCapp.framework.alert( BClanguage.websiteAlreadyAdded );
-            
-            return;
-        }
-        
         BCwebsitesRepository.__website = new BCwebsiteClass({
             URL:      url,
-            handler:  handler,
             userName: userName,
             password: password
         });
@@ -290,6 +190,21 @@ var BCwebsitesRepository = {
         {
             BCwebsitesRepository.__checkManifest(function()
             {
+                var rootURL = BCwebsitesRepository.__manifest.rootURL;
+                var handler = BCwebsitesRepository.convertSiteURLtoHandler(rootURL);
+                console.info('> Root URL: ' + rootURL);
+                console.info('> Handler:  ' + handler);
+                
+                BCwebsitesRepository.__website.handler = handler;
+                BCwebsitesRepository.__website.URL     = rootURL;
+                
+                if( BCwebsitesRepository.__findWebsiteInRegistry(handler, userName) !== null )
+                {
+                    BCapp.framework.alert( BClanguage.websiteAlreadyAdded );
+                    
+                    return;
+                }
+                
                 BCwebsitesRepository.__saveManifest(function()
                 {
                     BCwebsitesRepository.collection[BCwebsitesRepository.collection.length]
