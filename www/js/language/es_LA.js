@@ -132,5 +132,43 @@ var BClanguage = {
         message: 'Se ha descargado una actualización de este sitio web. ' +
                  'Si no tienes alguna actividad pendiente, es recomendable recargar ahora.<br><br>' +
                  '¿Deseas recargar BardCanvas ahora?'
+    },
+    
+    colorThemes: {
+        ios: {
+            blue:      'Azul (predeterminado),#007aff',
+            lightblue: 'Azul claro,#5ac8fa',
+            yellow:    'Amarillo,#ffcc00',
+            orange:    'Naranja,#ff9500',
+            pink:      'Rosa,#ff2d55',
+            green:     'Verde,#4cd964',
+            red:       'Rojo,#ff3b30',
+            gray:      'Gris,#8e8e93',
+            white:     'Blanco,#ffffff',
+            black:     'Negro,#000000'
+        },
+        android: {
+            blue:       'Azul (predeterminado),#2196f3',
+            red:        'Rojo,#f44336',
+            pink:       'Rosa,#e91e63',
+            purple:     'Morado,#9c27b0',
+            deeppurple: 'Morado oscuro,#673ab7',
+            indigo:     'Índigo,#3f51b5',
+            lightblue:  'Azul claro,#03a9f4',
+            cyan:       'Cian,#00bcd4',
+            teal:       'Verde azulado,#009688',
+            green:      'Verde,#4caf50',
+            lightgreen: 'Verde claro,#8bc34a',
+            lime:       'Lima,#cddc39',
+            yellow:     'Amarillo,#ffeb3b',
+            amber:      'Ámbar,#ffc107',
+            orange:     'Naranja,#ff9800',
+            deeporange: 'Naranja oscuro,#ff5722',
+            brown:      'Café,#795548',
+            gray:       'Gris,#9e9e9e',
+            bluegray:   'Gris azulado,#607d8b',
+            white:      'Blanco,#ffffff',
+            black:      'Negro,#000000'
+        }
     }
 };

@@ -130,5 +130,43 @@ var BClanguage = {
         message: 'An update for this website has been downloaded. ' +
                  'If you don\'t have any pending activity, you should reload now.<br><br>' +
                  '¿Do you want to reload BardCanvas now?'
+    },
+    
+    colorThemes: {
+        ios: {
+            blue:      'Blue (default),#007aff',
+            lightblue: 'Light Blue,#5ac8fa',
+            yellow:    'Yellow,#ffcc00',
+            orange:    'Orange,#ff9500',
+            pink:      'Pink,#ff2d55',
+            green:     'Green,#4cd964',
+            red:       'Red,#ff3b30',
+            gray:      'Gray,#8e8e93',
+            white:     'White,#ffffff',
+            black:     'Black,#000000'
+        },
+        android: {
+            blue:       'Blue (default),#2196f3',
+            red:        'Red,#f44336',
+            pink:       'Pink,#e91e63',
+            purple:     'Purple,#9c27b0',
+            deeppurple: 'Deep Purple,#673ab7',
+            indigo:     'Indigo,#3f51b5',
+            lightblue:  'Light Blue,#03a9f4',
+            cyan:       'Cyan,#00bcd4',
+            teal:       'Teal,#009688',
+            green:      'Green,#4caf50',
+            lightgreen: 'Light Green,#8bc34a',
+            lime:       'Lime,#cddc39',
+            yellow:     'Yellow,#ffeb3b',
+            amber:      'Amber,#ffc107',
+            orange:     'Orange,#ff9800',
+            deeporange: 'Deep Orange,#ff5722',
+            brown:      'Brown,#795548',
+            gray:       'Gray,#9e9e9e',
+            bluegray:   'Blue Gray,#607d8b',
+            white:      'White,#ffffff',
+            black:      'Black,#000000'
+        }
     }
 };
