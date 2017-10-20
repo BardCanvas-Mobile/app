@@ -350,10 +350,21 @@ var BCapp = {
         var file = 'pages/site_templates/site_with_service_tabs.html';
         $.get(file, function(sourceHTML)
         {
+            var renderingServices = [];
+            
             // Prep icons
             for(var i in manifest.services)
             {
-                var service  = manifest.services[i];
+                var service  = new BCwebsiteServiceDetailsClass(manifest.services[i]);
+                
+                if( service.requires )
+                {
+                    if( typeof website.meta[service.requires] === 'undefined' )
+                    {
+                        continue;
+                    }
+                }
+                
                 service.meta = {
                     icon:        BCapp.__convertIcon(service.icon),
                     tabLink:     sprintf('#%s-%s', websiteMainViewClassName, service.id),
@@ -362,12 +373,14 @@ var BCapp = {
                     pageHandler: sprintf('%s-%s-index', websiteMainViewClassName, service.id),
                     markup:      BCapp.__getServiceMarkup(service)
                 };
+                
+                renderingServices[renderingServices.length] = service;
             }
             
             var context = {
                 websiteMainViewClassName: websiteMainViewClassName,
                 username:                 website.userName,
-                services:                 manifest.services,
+                services:                 renderingServices,
                 navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName)
             };
             
@@ -392,7 +405,7 @@ var BCapp = {
                 = BCapp.framework.addView('.' + websiteMainViewClassName, params);
             console.log(sprintf('%s view rendered.', websiteMainViewClassName));
             
-            BCapp.__addWebsiteMenu(website, manifest, websiteMainViewClassName);
+            BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
             
             if( typeof window.tmpAddWebsiteViewCallback === 'function' )
                 window.tmpAddWebsiteViewCallback();
@@ -402,14 +415,14 @@ var BCapp = {
     /**
      * Manifest should have services with metadata already forged!
      * 
-     * @param {BCwebsiteClass}         website
-     * @param {BCwebsiteManifestClass} manifest
-     * @param {string}                 websiteMainViewClassName
+     * @param {string}                       websiteHandler
+     * @param {BCwebsiteServiceDetailsClass} manifestServices
+     * @param {string}                       websiteMainViewClassName
      */
-    __addWebsiteMenu: function(website, manifest, websiteMainViewClassName)
+    __addWebsiteMenu: function(websiteHandler, manifestServices, websiteMainViewClassName)
     {
         var sourceHTML = $('#sidebar_menu_template').html();
-        var context    = { services: manifest.services, websiteHandler: website.handler };
+        var context    = { services: manifestServices, websiteHandler: websiteHandler };
         var template   = Template7.compile(sourceHTML);
         
         BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);

@@ -312,6 +312,9 @@ var BCmanifestsRepository = {
             
             BCwebsitesRepository.__website.accessToken     = data.data.access_token;
             BCwebsitesRepository.__website.userDisplayName = data.data.display_name;
+            
+            if( data.data.meta )
+                BCwebsitesRepository.__website.meta = data.data.meta;
             callback();
         })
         .fail(function($xhr, status, error)
@@ -376,6 +379,11 @@ var BCmanifestsRepository = {
                                                 window.tmpSaveManifestCallback();
                                         }
                                     )
+                                }
+                                else
+                                {
+                                    if( typeof window.tmpSaveManifestCallback === 'function' )
+                                        window.tmpSaveManifestCallback();
                                 }
                             }
                         };

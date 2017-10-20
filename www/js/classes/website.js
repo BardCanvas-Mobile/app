@@ -17,6 +17,8 @@ var BCwebsiteClass = function(source)
     
     this.accessToken = '';
     
+    this.meta = null;
+    
     if( typeof source === 'undefined' ) return;
     
     for(var i in source) this[i] = source[i];
