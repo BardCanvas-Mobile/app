@@ -242,8 +242,11 @@ var BCapp = {
         
         // TODO: Evaluate what to show on startup
         window.tmpWebsiteToShowInterval = null;
-        window.tmpWebsiteToShowSelector = '.view-soportezonadivascom';
         window.tmpWebsite               = BCwebsitesRepository.collection[0];
+        window.tmpWebsiteToShowSelector = '.' + BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
+        
+        console.log('Website to show: ', window.tmpWebsite);
+        console.log('View selector to show: ', window.tmpWebsiteToShowSelector);
         
         console.log('Rendering site selector and adding website views.');
         BCapp.renderSiteSelector(function()
@@ -274,7 +277,7 @@ var BCapp = {
         {
             var website   = BCwebsitesRepository.collection[i];
             var handler   = website.handler;
-            var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+            var websiteCN = BCwebsitesRepository.convertHandlerToViewClassName(handler);
             
             if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
             {
@@ -306,7 +309,7 @@ var BCapp = {
         {
             var website   = BCwebsitesRepository.collection[i];
             var handler   = website.handler;
-            var websiteCN = 'view-' + handler.replace(/[\-\.\/]/g, '');
+            var websiteCN = BCwebsitesRepository.convertHandlerToViewClassName(handler);
             
             if( typeof BCmanifestsRepository.collection[handler] !== 'undefined' )
             {
@@ -408,7 +411,7 @@ var BCapp = {
         var sourceHTML = $('#sidebar_menu_template').html();
         var context    = { services: manifest.services, websiteHandler: website.handler };
         var template   = Template7.compile(sourceHTML);
-        // var selector = 'view-' + handler.replace(/[\-\.\/]/g, '');
+        
         BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
         console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
     },
