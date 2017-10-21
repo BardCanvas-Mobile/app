@@ -26,7 +26,7 @@
     <title></title>
     
     <!-- Debugging -->
-    <script src="http://192.168.1.211:8080/target/target-script-min.js#bardcanvas"></script>
+    <!--<script src="http://192.168.1.211:8080/target/target-script-min.js#bardcanvas"></script>-->
 </head>
 
 <body data-orientation="portrait">
@@ -107,7 +107,7 @@
 
 <!-- In-app "browser" service template -->
 <script type="text/template" id="iframed_service_template">
-    <iframe class="bc-inapp-browser" src="{{url}}"></iframe>
+    <iframe class="bc-inapp-browser" src="about:blank" data-src="{{url}}" onload="BCtoolbox.hideFullPageLoader();"></iframe>
 </script>
 
 </body>

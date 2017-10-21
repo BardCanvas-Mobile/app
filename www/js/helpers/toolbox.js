@@ -108,5 +108,17 @@ var BCtoolbox = {
                 newHaystack[i] = haystack[i];
         
         return newHaystack;
+    },
+    
+    showFullPageLoader: function()
+    {
+        BCapp.framework.showIndicator();
+        BCtoolbox.showNetworkActivityIndicator();
+    },
+    
+    hideFullPageLoader: function()
+    {
+        BCapp.framework.hideIndicator();
+        BCtoolbox.hideNetworkActivityIndicator();
     }
 };

@@ -567,6 +567,27 @@ var BCapp = {
             
             return template(context);
         }
+    },
+    
+    triggerServiceLoad: function(pageHandler)
+    {
+        var $target  = $(sprintf('.page[data-page="%s"]', pageHandler));
+        var $iframes = $target.find('iframe');
+        
+        console.log(sprintf('Iframes found for %s: %s', pageHandler, $iframes.length));
+        
+        if( $iframes.length === 0 ) return;
+        
+        $iframes.each(function()
+        {
+            if( $(this).attr('data-initialized') ) return;
+            
+            var src = $(this).attr('data-src');
+            $(this).attr('src', src).attr('data-initialized', 'true');
+            
+            console.log(sprintf('Iframe for %s initialized.', pageHandler));
+            BCtoolbox.showFullPageLoader();
+        });
     }
 };
 
