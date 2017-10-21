@@ -300,11 +300,7 @@ var BCmanifestsRepository = {
         var params = {
             username: BCwebsitesRepository.__website.userName,
             password: CryptoJS.MD5(BCwebsitesRepository.__website.password).toString(),
-            device:   sprintf(
-                '%s/%s (%s %s) %s/%s',
-                BCapp.name, BCapp.version,
-                device.manufacturer, device.platform, device.model, device.version
-            )
+            device:   BCapp.userAgent
         };
         $.getJSON(url, params, function(data)
         {

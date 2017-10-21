@@ -30,6 +30,10 @@ var BCapp = {
     name:    'BardCanvas Mobile',
     version: Template7.global.appVersion,
     
+    userAgent: 'BardCanvas Mobile/' + Template7.global.appVersion
+               + ' '
+               + navigator.appCodeName + '/' + navigator.appVersion,
+    
     framework: f7,
     
     networkType:      null,
@@ -590,6 +594,7 @@ var BCapp = {
         {
             var url = service.url;
             
+            url = url.replace('{$platform}',     BCapp.os);
             url = url.replace('{$user_name}',    website.userName);
             url = url.replace('{$password}',     website.password);
             url = url.replace('{$access_token}', website.accessToken);
