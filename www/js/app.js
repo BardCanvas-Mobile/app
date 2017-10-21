@@ -78,7 +78,6 @@ var BCapp = {
     
     /**
      * Current view collection of nested views
-     * TODO: Forge this!
      * 
      * @var {View[][]} Key 1: website handler, Key 2: service id
      */
@@ -154,6 +153,31 @@ var BCapp = {
         
         var orientation = screenWidth <= screenHeight ? 'portrait' : 'landscape';
         $('body').attr('data-orientation', orientation);
+        
+        BCapp.__toggleToolbars();
+    },
+    
+    __toggleToolbars: function()
+    {
+        for(var i in BCapp.viewsCollection )
+        {
+            var view = BCapp.viewsCollection[i];
+            var sel  = view.selector;
+            
+            if( $(sel).attr('data-has-toolbar') )
+            {
+                if( $('body').attr('data-orientation') === 'portrait' )
+                {
+                    $(sel).toggleClass('toolbar-fixed', true);
+                    view.showToolbar();
+                }
+                else
+                {
+                    $(sel).toggleClass('toolbar-fixed', false);
+                    view.hideToolbar();
+                }
+            }
+        }
     },
     
     __setLanguage: function()
@@ -193,7 +217,7 @@ var BCapp = {
     {
         window.tmpInitViewsPostRenderingAction = postRenderingAction;
         
-        var params = { main: true };
+        var params = { };
         switch( BCapp.os ) {
             case 'ios':
                 params.swipeBackPage = true;
@@ -204,8 +228,11 @@ var BCapp = {
                 break;
         }
         
-        BCapp.mainView    = BCapp.framework.addView('.view-main', params);
         BCapp.addSiteView = BCapp.framework.addView('.view-add-site', params);
+        
+        params.main    = true;
+        BCapp.mainView = BCapp.framework.addView('.view-main', params);
+        
         BCapp.currentView = BCapp.mainView;
         
         if( BCwebsitesRepository.collection.length == 0 )
@@ -399,6 +426,7 @@ var BCapp = {
             switch( BCapp.os ) {
                 case 'ios':
                     params.swipeBackPage = true;
+                    params.dynamicNavbar = false;
                     break;
                 case 'android':
                     params.material       = true;
@@ -406,10 +434,24 @@ var BCapp = {
                     break;
             }
             
-            params.name = websiteMainViewClassName;
+            // params.name = websiteMainViewClassName;
             BCapp.viewsCollection[websiteMainViewClassName]
                 = BCapp.framework.addView('.' + websiteMainViewClassName, params);
-            console.log(sprintf('%s view rendered.', websiteMainViewClassName));
+            console.log(sprintf('Website view %s rendered.', websiteMainViewClassName));
+            
+            for( i in renderingServices )
+            {
+                // params.name         = serviceViewName;
+                var serviceViewName = renderingServices[i].meta.tabTarget;
+                var view            = BCapp.framework.addView('.' + serviceViewName, params);
+                console.log(sprintf('Service %s / %s view initialized.', websiteMainViewClassName, serviceViewName));
+                
+                if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
+                    BCapp.nestedViewsCollection[websiteMainViewClassName] = {};
+                
+                BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
+            }
+            console.log('Nested views collection: ', BCapp.nestedViewsCollection);
             
             BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
             
@@ -438,6 +480,8 @@ var BCapp = {
     showView: function( selector, callback )
     {
         console.log('Actual view: ' + BCapp.currentView.selector);
+        
+        BCapp.__toggleToolbars();
         
         if( selector === BCapp.currentView.selector )
         {
@@ -574,8 +618,6 @@ var BCapp = {
         var $target  = $(sprintf('.page[data-page="%s"]', pageHandler));
         var $iframes = $target.find('iframe');
         
-        console.log(sprintf('Iframes found for %s: %s', pageHandler, $iframes.length));
-        
         if( $iframes.length === 0 ) return;
         
         $iframes.each(function()
@@ -588,6 +630,11 @@ var BCapp = {
             console.log(sprintf('Iframe for %s initialized.', pageHandler));
             BCtoolbox.showFullPageLoader();
         });
+    },
+    
+    setNestedView: function(selector)
+    {
+        
     }
 };
 
