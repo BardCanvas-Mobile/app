@@ -296,12 +296,15 @@ var BCmanifestsRepository = {
         BCapp.framework.showPreloader(BClanguage.validatingCredentials);
         BCtoolbox.showNetworkActivityIndicator();
         
-        var url    = BCwebsitesRepository.__manifest.loginAuthenticator;
+        var url = BCwebsitesRepository.__manifest.loginAuthenticator;
+        if( url.indexOf('http') < 0 ) url = BCwebsitesRepository.__manifest.rootURL + url;
+        
         var params = {
             username: BCwebsitesRepository.__website.userName,
             password: CryptoJS.MD5(BCwebsitesRepository.__website.password).toString(),
             device:   BCapp.userAgent
         };
+        console.log('Authenticating with ' + url);
         $.getJSON(url, params, function(data)
         {
             BCapp.framework.hidePreloader();

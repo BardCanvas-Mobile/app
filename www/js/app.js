@@ -593,6 +593,7 @@ var BCapp = {
         if( service.isOnline )
         {
             var url = service.url;
+            if( url.indexOf(':') < 0 ) url = website.URL + url;
             
             url = url.replace('{$platform}',     BCapp.os);
             url = url.replace('{$user_name}',    website.userName);
