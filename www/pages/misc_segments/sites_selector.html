@@ -1,5 +1,5 @@
 
-<div class="page navbar-fixed bg-black">
+<div class="page navbar-fixed toolbar-fixed bg-black">
     
     <div class="navbar color-white bg-gray">
         <div class="navbar-inner">
@@ -11,6 +11,17 @@
                     <i class="bc-android-icon fa fa-plus"></i>
                 </a>
             </div>
+        </div>
+    </div>
+    
+    <div class="toolbar toolbar-bottom color-white bg-gray">
+        <div class="toolbar-inner">
+            <a href="#" class="link color-white">
+                {{@global.language.appConfiguration.caption}}
+            </a>
+            <a href="#" class="link color-white" onclick="navigator.app.exitApp();">
+                {{@global.language.exit.caption}}
+            </a>
         </div>
     </div>
     

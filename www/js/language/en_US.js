@@ -13,6 +13,7 @@ var BClanguage = {
     appName: 'BardCanvas for {{platform}}',
     
     exit: {
+        caption: 'Exit',
         title:   'Exit now?',
         message: 'Note: any background process will be stopped until the next time you open the app.'
     },
@@ -117,6 +118,10 @@ var BClanguage = {
     websites:        'Websites',
     websiteServices: 'Website Services',
     options:         'Options',
+    
+    appConfiguration: {
+        caption: 'Configuration'
+    },
     
     deleteWebsite: {
         title:  'Do you want to delete this website?',
