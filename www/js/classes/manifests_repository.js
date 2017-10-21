@@ -15,26 +15,16 @@ var BCmanifestsRepository = {
     {
         window.tmpWebsiteManifestsToLoad   = BCwebsitesRepository.collection.length;
         window.tmpWebsiteManifestsLoaded   = 0;
-        window.tmpWebsiteManifestsInterval = setInterval(function()
-        {
-            if( window.tmpWebsiteManifestsLoaded >= window.tmpWebsiteManifestsToLoad )
-            {
-                clearInterval(window.tmpWebsiteManifestsInterval);
-                
-                console.log(sprintf('~ %s manifest files loaded.', Object.keys(BCmanifestsRepository.collection).length));
-                
-                callback();
-            }
-            
-            console.log('~ Waiting for website manifests to load.');
-        }, 100);
+        window.tmpLoadAllCAllback          = callback;
         
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
-            console.log('Filesystem open: ' + fs.name);
+            console.log('Filesystem open for manifest loading: ' + fs.name);
             
             for( var i in BCwebsitesRepository.collection )
             {
+                console.log(sprintf('Starting manifset loading loop for website index %s'), i);
+                
                 var website = BCwebsitesRepository.collection[i];
                 if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
                 {
@@ -107,6 +97,24 @@ var BCmanifestsRepository = {
                 BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
             ));
         });
+        
+        window.tmpWebsiteManifestsInterval = setInterval(function()
+        {
+            if( window.tmpWebsiteManifestsLoaded >= window.tmpWebsiteManifestsToLoad )
+            {
+                clearInterval(window.tmpWebsiteManifestsInterval);
+                
+                console.log(sprintf('~ %s manifest files loaded.', Object.keys(BCmanifestsRepository.collection).length));
+                console.log('~ Manifest loading waiter finished. Passing flow to the callback.');
+                window.tmpLoadAllCAllback();
+            }
+            
+            console.log(sprintf(
+                '~ Waiting for website manifests to load (%s/%s done)',
+                window.tmpWebsiteManifestsLoaded,
+                window.tmpWebsiteManifestsToLoad
+            ));
+        }, 100);
     },
     
     /**

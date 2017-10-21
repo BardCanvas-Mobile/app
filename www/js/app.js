@@ -1,4 +1,10 @@
 
+console.log('');
+console.log('>>>>> -------------------------- <<<<<');
+console.log('>>>>> Starting BardCanvas Mobile <<<<<');
+console.log('>>>>> -------------------------- <<<<<');
+console.log('');
+
 // Global helpers
 var f7 = new Framework7();
 
