@@ -29,7 +29,7 @@
                 <div class="toolbar-inner">
                     {{#services}}
                     <a href="{{meta.tabLink}}" class="tab-link {{meta.activeTab}}"
-                       onclick="BCapp.triggerServiceLoad('{{meta.pageHandler}}')">
+                       onclick="BCapp.triggerServiceLoad('{{meta.pageHandler}}'); BCapp.setNestedView('{{../websiteMainViewClassName}}', '{{meta.pageHandler}}')">
                         {{meta.icon}}
                         <span class="tabbar-label">{{caption}}</span>
                     </a>

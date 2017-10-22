@@ -236,6 +236,12 @@ var BCwebsitesRepository = {
                         BCapp.addWebsiteView(website, manifest, websiteCN, function()
                         {
                             BCapp.showView('.' + websiteCN);
+                            
+                            var serviceHandler  = websiteCN + '-' + manifest.services[0].id;
+                            var serviceSelector = serviceHandler + '-index';
+                            console.log(sprintf('Triggering service %s', serviceSelector));
+                            BCapp.triggerServiceLoad(serviceSelector);
+                            BCapp.setNestedView(websiteCN, serviceHandler);
                         });
                     });
                 });

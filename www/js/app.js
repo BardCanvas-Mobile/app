@@ -280,7 +280,8 @@ var BCapp = {
         // TODO: Evaluate what to show on startup
         window.tmpWebsiteToShowInterval = null;
         window.tmpWebsite               = BCwebsitesRepository.collection[0];
-        window.tmpWebsiteToShowSelector = '.' + BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
+        window.tmpWebsiteViewandler     = BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
+        window.tmpWebsiteToShowSelector = '.' + window.tmpWebsiteViewandler;
         
         console.log('Website to show: ', window.tmpWebsite);
         console.log('View selector to show: ', window.tmpWebsiteToShowSelector);
@@ -298,8 +299,18 @@ var BCapp = {
                     
                     clearInterval(window.tmpWebsiteToShowInterval);
                     
-                    console.log('Rendering first website (here the wall should be rendered).');
+                    console.log(sprintf(
+                        'Rendering first website (here the wall should be rendered). Selector: %s',
+                        window.tmpWebsiteToShowSelector
+                    ));
                     BCapp.showView(window.tmpWebsiteToShowSelector);
+                    
+                    var services        = BCmanifestsRepository.getServicesForWebsite(window.tmpWebsite.URL);
+                    var serviceHandler  = window.tmpWebsiteViewandler + '-' + services[0].id;
+                    var serviceSelector = serviceHandler + '-index';
+                    console.log(sprintf('Triggering service %s', serviceSelector));
+                    BCapp.triggerServiceLoad(serviceSelector);
+                    BCapp.setNestedView(window.tmpWebsiteViewandler, serviceHandler);
                 }, 100);
             });
         });
@@ -455,7 +466,7 @@ var BCapp = {
                 
                 BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
             }
-            console.log('Nested views collection: ', BCapp.nestedViewsCollection);
+            // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
             
             BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
             
@@ -638,9 +649,12 @@ var BCapp = {
         });
     },
     
-    setNestedView: function(selector)
+    setNestedView: function(mainViewSelector, websiteServiceSelector)
     {
-        
+        console.log('Nested views collection: ', BCapp.nestedViewsCollection);
+        console.log(sprintf('Setting nested view for %s / %s', mainViewSelector, websiteServiceSelector));
+        BCapp.currentNestedView = BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector];
+        console.log('Current nested view set to ', BCapp.currentNestedView);
     }
 };
 

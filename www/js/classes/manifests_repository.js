@@ -495,5 +495,27 @@ var BCmanifestsRepository = {
                 shares++;
         
         return shares;
+    },
+    
+    /**
+     * @param {string} websiteURL
+     * @returns {BCwebsiteManifestClass}
+     */
+    getForWebsite: function(websiteURL)
+    {
+        var manifestHandler = BCwebsitesRepository.convertSiteURLtoHandler(websiteURL);
+        
+        return BCmanifestsRepository.collection[manifestHandler];
+    },
+    
+    /**
+     * @param {string} websiteURL
+     * @returns {BCwebsiteServiceDetailsClass[]}
+     */
+    getServicesForWebsite: function(websiteURL)
+    {
+        var manifest = BCmanifestsRepository.getForWebsite(websiteURL);
+        
+        return manifest.services;
     }
 };
