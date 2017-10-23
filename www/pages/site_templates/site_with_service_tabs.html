@@ -37,16 +37,20 @@
                 </div>
             </div>
             
-            <div class="page-content tabs bc-nested-views-container hide-tabbar-on-scroll">
+            <div class="page-content tabs bc-nested-views-container">
                 
                 {{#services}}
                 <div id="{{meta.tabTarget}}" class="view tab {{meta.activeTab}} {{meta.tabTarget}}">
                     <div class="pages">
-                        <div data-page="{{meta.pageHandler}}" class="page">
-                            <div class="page-content">
+                        
+                        <div data-page="{{meta.pageHandler}}" class="page service-page"
+                             data-service-title="{{../manifest.shortName}} - {{caption}}"
+                             data-website-icon="{{../manifest.icon}}">
+                            <div class="page-content service-content">
                                 {{meta.markup}}
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 {{/services}}

@@ -6,7 +6,9 @@ console.log('>>>>> -------------------------- <<<<<');
 console.log('');
 
 // Global helpers
-var f7 = new Framework7();
+var f7 = new Framework7({
+    material: navigator.userAgent.search(/android/i) >= 0
+});
 
 // noinspection JSUnusedGlobalSymbols
 var $$ = Dom7;
@@ -283,7 +285,7 @@ var BCapp = {
         window.tmpWebsiteViewandler     = BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
         window.tmpWebsiteToShowSelector = '.' + window.tmpWebsiteViewandler;
         
-        console.log('Website to show: ', window.tmpWebsite);
+        console.log('Website to show: ', window.tmpWebsite.URL);
         console.log('View selector to show: ', window.tmpWebsiteToShowSelector);
         
         console.log('Rendering site selector and adding website views.');
@@ -427,6 +429,7 @@ var BCapp = {
             
             var context = {
                 websiteMainViewClassName: websiteMainViewClassName,
+                manifest:                 manifest,
                 username:                 website.userName,
                 services:                 renderingServices,
                 navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName)
@@ -594,50 +597,116 @@ var BCapp = {
     
     /**
      * TODO: Implement rendering of markup for other service types
-     * 
+     *
      * @param {BCwebsiteClass} website
      * @param {BCwebsiteServiceDetailsClass} service
+     * 
+     * @returns {string}
+     * 
      * @private
      */
     __getServiceMarkup: function(website, service)
     {
-        if( service.isOnline )
+        if( service.type === 'iframe' ) return BCapp.__getIframedServiceMarkup(website, service);
+        if( service.type === 'html'   ) return BCapp.__getHTMLserviceMarkup(website, service);
+        
+        var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
+        var html      = $('#common_service_error_template').html()
+                        .replace('{{title}}',   BClanguage.unknownService.title)
+                        .replace('{{content}}', BClanguage.unknownService.message);
+        var context = { website:  website, service: service, manifest: manifest };
+        var template  = Template7.compile(html);
+        
+        return template(context);
+    },
+    
+    /**
+     * @param {BCwebsiteClass} website
+     * @param {BCwebsiteServiceDetailsClass} service
+     * 
+     * @returns {string}
+     * 
+     * @private
+     */
+    __getIframedServiceMarkup: function(website, service)
+    {
+        var url       = BCapp.__forgeServiceURL(service, website);
+        var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
+        var html      = $('#iframed_service_template').html();
+        var context   = { website: website, service: service, manifest: manifest, url: url };
+        var template  = Template7.compile(html);
+        
+        return template(context);
+    },
+    
+    /**
+     * @param {BCwebsiteClass} website
+     * @param {BCwebsiteServiceDetailsClass} service
+     * 
+     * @returns {string}
+     * 
+     * @private
+     */
+    __getHTMLserviceMarkup: function(website, service)
+    {
+        var url    = BCapp.__forgeServiceURL(service, website);
+        var params = {
+            platform:     BCapp.os,
+            access_token: website.accessToken,
+            wasuuup:      BCtoolbox.wasuuup()
+        };
+        
+        var containerId = 'ajax_' + BCtoolbox.wasuuup();
+        if( typeof window.tmpAjaxifiedServices === 'undefined' )
+            window.tmpAjaxifiedServices = {};
+        
+        window.tmpAjaxifiedServices[containerId] = {
+            url:     url,
+            params:  params,
+            website: website,
+            service: service
+        };
+        
+        return sprintf('<div id="%s" class="bc-ajaxified-service"></div>', containerId);
+    },
+    
+    /**
+     * @param {BCwebsiteServiceDetailsClass} service
+     * @param {BCwebsiteClass} website
+     * 
+     * @returns {string}
+     * 
+     * @private
+     */
+    __forgeServiceURL: function(service, website)
+    {
+        var url = service.url;
+        if( url.indexOf(':') < 0 ) url = website.URL + url;
+        
+        url = url.replace('{{platform}}',     BCapp.os);
+        url = url.replace('{{user_name}}',    website.userName);
+        url = url.replace('{{password}}',     website.password);
+        url = url.replace('{{access_token}}', website.accessToken);
+        url = url.replace('{{random_seed}}',  BCtoolbox.wasuuup());
+        
+        if( website.meta )
         {
-            var url = service.url;
-            if( url.indexOf(':') < 0 ) url = website.URL + url;
-            
-            url = url.replace('{$platform}',     BCapp.os);
-            url = url.replace('{$user_name}',    website.userName);
-            url = url.replace('{$password}',     website.password);
-            url = url.replace('{$access_token}', website.accessToken);
-            url = url.replace('{$random_seed}',  BCtoolbox.wasuuup());
-            
-            if( website.meta )
+            for(var key in website.meta)
             {
-                for(var key in website.meta)
-                {
-                    var search = sprintf('{$%s}', key);
-                    var replace = website.meta[key];
-                    url = url.replace(search, replace);
-                }
+                var search = sprintf('{{%s}}', key);
+                var replace = website.meta[key];
+                url = url.replace(search, replace);
             }
-            
-            var html      = $('#iframed_service_template').html();
-            var context   = { url: url };
-            var template  = Template7.compile(html);
-            
-            return template(context);
         }
+        
+        return url;
     },
     
     triggerServiceLoad: function(pageHandler)
     {
-        var $target  = $(sprintf('.page[data-page="%s"]', pageHandler));
-        var $iframes = $target.find('iframe');
+        var $target = $(sprintf('.page[data-page="%s"]', pageHandler));
         
-        if( $iframes.length === 0 ) return;
-        
-        $iframes.each(function()
+        $target.find('iframe').each(function()
         {
             if( $(this).attr('data-initialized') ) return;
             
@@ -647,14 +716,106 @@ var BCapp = {
             console.log(sprintf('Iframe for %s initialized.', pageHandler));
             BCtoolbox.showFullPageLoader();
         });
+        
+        $target.find('.bc-ajaxified-service').each(function()
+        {
+            var $container = $(this);
+            if( $container.attr('data-initialized') ) return;
+            
+            BCapp.__loadAjaxifiedService($container);
+        });
+    },
+    
+    __loadAjaxifiedService: function($container, showIndicator)
+    {
+        if( typeof showIndicator === 'undefined' ) showIndicator = false;
+        
+        var containerId = $container.attr('id');
+        var data        = window.tmpAjaxifiedServices[containerId];
+        var url         = data.url;
+        var params      = data.params;
+        var website     = data.website;
+        var service     = data.service;
+        
+        console.log(sprintf('Fetching %s...', url));
+        if( showIndicator ) BCtoolbox.showFullPageLoader();
+        
+        $.get(url, params, function(html)
+        {
+            if( showIndicator ) BCtoolbox.hideFullPageLoader();
+            
+            var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
+            var context   = { website: website, service: service, manifest: manifest, url: url };
+            var template  = Template7.compile(html);
+            $container.html( template(context) );
+            $container.attr('data-initialized', 'true');
+            
+            
+            // TODO: Subnavbar detector here
+            
+            
+            var $forms = $container.find('form');
+            if( $forms.length === 0 ) return;
+            
+            $forms.each(function()
+            {
+                var $form    = $(this);
+                var targetId = $form.attr('id') + '_target';
+                var options  = {
+                    target:          '#' + targetId,
+                    beforeSerialize: BCtoolbox.ajaxform_beforeSerialize,
+                    beforeSubmit:    BCtoolbox.ajaxform_beforeSubmit,
+                    beforeSend:      function(xhr, options)
+                                     {
+                                         BCtoolbox.ajaxform_beforeSend(xhr, options, $form);
+                                     },
+                    uploadProgress:  function(event, position, total, percentComplete)
+                                     {
+                                         BCtoolbox.ajaxform_uploadProgress(
+                                             event, position, total, percentComplete, $form
+                                         );
+                                     },
+                    success:         BCtoolbox.ajaxform_success,
+                    error:           function(xhr, textStatus, errorThrown)
+                                     {
+                                         BCtoolbox.ajaxform_fail(xhr, textStatus, errorThrown, $form);
+                                     }
+                };
+                
+                if( $('#' + targetId).length === 0 )
+                    $('body').append(sprintf('<div id="%s" style="display: none"></div>', targetId));
+                
+                $form.ajaxForm(options);
+            });
+        })
+        .fail(function($xhr, status, error)
+        {
+            // BCapp.framework.hideIndicator();
+            // BCtoolbox.hideNetworkActivityIndicator();
+            
+            var html     = $('#common_service_error_template').html()
+                           .replace('{{title}}',   BClanguage.failedToLoadService.title)
+                           .replace('{{content}}', BClanguage.failedToLoadService.message);
+            var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+            var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
+            var template = Template7.compile(html);
+            $container.html( template(context) );
+            $container.attr('data-initialized', 'true');
+        });
+    },
+    
+    reloadAjaxifiedService: function(trigger)
+    {
+        var $container = $(trigger).closest('.service-page').find('.bc-ajaxified-service');
+        BCapp.__loadAjaxifiedService($container, true);
     },
     
     setNestedView: function(mainViewSelector, websiteServiceSelector)
     {
-        console.log('Nested views collection: ', BCapp.nestedViewsCollection);
+        // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
         console.log(sprintf('Setting nested view for %s / %s', mainViewSelector, websiteServiceSelector));
         BCapp.currentNestedView = BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector];
-        console.log('Current nested view set to ', BCapp.currentNestedView);
+        console.log(sprintf('Current nested view set to %s', BCapp.currentNestedView.selector));
     }
 };
 

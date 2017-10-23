@@ -70,8 +70,12 @@ body[data-orientation="landscape"] .row .landscape-50 {
     width: 50%;
 }
 
-/* Icon fixes */
+/* Other fixes */
 
 html.android .bc-ios-icon     { display: none; }
 html.ios     .bc-android-icon { display: none; }
+
 .bc-input-icon { font-size: 29px; }
+
+html.ios     .service-content .page.toolbar-fixed { padding-bottom: 44px; }
+html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }

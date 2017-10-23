@@ -43,9 +43,10 @@ var BClanguage = {
     },
     
     actions: {
-        select: 'Seleccionar',
-        cancel: 'Cancelar',
-        deleteWebsite: 'Borrar sitio'
+        select:        'Seleccionar',
+        cancel:        'Cancelar',
+        deleteWebsite: 'Borrar sitio',
+        retry:         'Reintentar'
     },
     
     ownedAndOperatedBy: 'Propiedad y operación por %s',
@@ -175,5 +176,22 @@ var BClanguage = {
             white:      'Blanco,#ffffff',
             black:      'Negro,#000000'
         }
+    },
+    
+    unknownService: {
+        title:   'Tipo de servicio desconocido',
+        message: '<p>Lo sentimos, pero este servicio está usando un formato desconocido por esta versión de BardCanvas.</p>' +
+                 '<p>Checa si tienes la última versión. De no ser así, deberías actualizarla para ganar acceso a este servicio.</p>' +
+                 '<p>Si este mensaje persiste, por favor contacta a {{manifest.shortName}}' +
+                 '   enviándoles un correo a {{manifest.contactEmail}}  e infórmales al respecto. ' +
+                 '   De ser posible, provee una captura de pantalla de esta vista.</p>'
+    },
+    
+    failedToLoadService: {
+        title:   'Error al cargar servicio',
+        message: '<p>Lo sentimos, pero el servicio no se ha podido cargar por el siguiente error:</p>' +
+                 '<p>{{error}}</p>' +
+                 '<p>Por favor intenta de nuevo. Si el problema persiste, contacta a {{manifest.shortName}} ' +
+                 '   enviándoles un correo a {{manifest.contactEmail}} e infórmales al respecto.</p>'
     }
 };

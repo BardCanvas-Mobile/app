@@ -120,5 +120,58 @@ var BCtoolbox = {
     {
         BCapp.framework.hideIndicator();
         BCtoolbox.hideNetworkActivityIndicator();
+    },
+    
+    ajaxform_beforeSerialize: function($form, options)
+    {
+        if( $form.attr('beforeserialize') ) eval( $form.attr('beforeserialize') );
+    },
+    
+    ajaxform_beforeSend: function(xhr, options, $form)
+    {
+        console.log('•> Before send internally triggered on ', $form.attr('id'));
+    },
+    
+    ajaxform_beforeSubmit: function(formData, $form, options)
+    {
+        if( $form.attr('beforesubmit') ) eval( $form.attr('beforesubmit') );
+        
+        BCtoolbox.showFullPageLoader();
+    },
+    
+    ajaxform_uploadProgress: function(event, position, total, percentComplete, $form)
+    {
+        console.log(sprintf('•> Submitted %s/%s (%s%%) on ', position, total, percentComplete), $form.attr('id'));
+    },
+    
+    ajaxform_success: function(responseText, statusText, xhr, $form)
+    {
+        BCtoolbox.hideFullPageLoader();
+        
+        if( responseText.indexOf('OK') < 0 )
+        {
+            BCapp.framework.alert(responseText);
+            
+            return;
+        }
+        
+        var options = {};
+        options.message = responseText.replace(/^OK:/, '');
+        if( BCapp.os === 'ios')
+        {
+            options.title = $form.closest('.service-page').attr('data-service-title');
+            options.media = sprintf('<img src="%s">', $form.closest('.service-page').attr('data-website-icon'));
+        }
+        
+        BCapp.framework.addNotification(options);
+        
+        if( $form.attr('onsuccess') ) eval( $form.attr('onsuccess') );
+    },
+    
+    ajaxform_fail: function(xhr, textStatus, errorThrown, $form)
+    {
+        BCtoolbox.hideFullPageLoader();
+        
+        if( $form.attr('onerror') ) eval( $form.attr('onerror') );
     }
 };
