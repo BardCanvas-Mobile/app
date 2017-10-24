@@ -51,7 +51,7 @@ html.ios .framed_content { border-radius: 5px; }
 
 .framed_content.state_hover:hover { background-color: #42A0FF; border-color: #000080; color: white;   }
 
-.state_disabled img.gray_on_disabled { filter: grayscale(100%); opacity: 0.75; }
+.state_disabled img.gray_on_disabled { filter: grayscale(100%); opacity: 0.75; -webkit-filter: grayscale(100%); }
 
 /* BC imports: Multiple columns (mangled) */
 
@@ -102,3 +102,5 @@ html.ios     .service-content .page.navbar-fixed  { padding-top:    44px; }
 html.android .service-content .page.navbar-fixed  { padding-top:    56px; }
 html.ios     .service-content .page.toolbar-fixed { padding-bottom: 44px; }
 html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
+
+/* Service tabs responsiveness */

@@ -162,7 +162,18 @@ var BCapp = {
         BCapp.screenWidth = screenWidth;
         
         var orientation = screenWidth <= screenHeight ? 'portrait' : 'landscape';
-        $('body').attr('data-orientation', orientation);
+        var widthClass  = 300;
+        if( screenWidth >=  400 ) widthClass =  400;
+        if( screenWidth >=  500 ) widthClass =  500;
+        if( screenWidth >=  600 ) widthClass =  600;
+        if( screenWidth >=  700 ) widthClass =  700;
+        if( screenWidth >=  800 ) widthClass =  800;
+        if( screenWidth >=  900 ) widthClass =  900;
+        if( screenWidth >= 1000 ) widthClass = 1000;
+        
+        $('body')
+            .attr('data-orientation', orientation)
+            .attr('data-width-class', widthClass);
         
         BCapp.__toggleToolbars();
     },
@@ -188,6 +199,34 @@ var BCapp = {
                 }
             }
         }
+        
+        /*
+        $('.bc-services-toolbar').each(function()
+        {
+            var widthClass = parseInt($('body').attr('data-width-class')) + 100; // Yeah, one icon above.
+            var $toolbar   = $(this);
+            var website    = $toolbar.attr('data-website');
+            var $items     = $toolbar.find('.tab-link');
+            
+            console.log(sprintf('### Screen width class is %s', widthClass));
+            if( $items.length * 100 <= widthClass )
+            {
+                console.log(sprintf('### Showing all items on %s toolbar.', website));
+                $items.show();
+            }
+            else
+            {
+                var maxItems = widthClass / 100;
+                console.log(sprintf('### Hiding items above %s in %s toolbar.', maxItems, website));
+                $items.each(function(index, element)
+                {
+                    $this = $(this);
+                    if( index < maxItems ) $this.show();
+                    else $this.hide();
+                });
+            }
+        });
+        */
     },
     
     __setLanguage: function()
