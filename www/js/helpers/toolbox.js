@@ -173,5 +173,14 @@ var BCtoolbox = {
         BCtoolbox.hideFullPageLoader();
         
         if( $form.attr('onerror') ) eval( $form.attr('onerror') );
+    },
+    
+    toggleFramedContentState: function(trigger)
+    {
+        var $trigger = $(trigger);
+        if( $trigger.hasClass('state_active') )
+            $trigger.toggleClass('state_active', false).toggleClass('state_disabled', true);
+        else if( $trigger.hasClass('state_disabled') )
+            $trigger.toggleClass('state_active', true).toggleClass('state_disabled', false);
     }
 };

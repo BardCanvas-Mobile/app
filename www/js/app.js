@@ -7,7 +7,11 @@ console.log('');
 
 // Global helpers
 var f7 = new Framework7({
-    material: navigator.userAgent.search(/android/i) >= 0
+    material:                navigator.userAgent.search(/android/i) >= 0,
+    hideNavbarOnPageScroll:  true,
+    hideToolbarOnPageScroll: true,
+    hideTabbarOnPageScroll:  true,
+    showBarsOnPageScrollEnd: true
 });
 
 // noinspection JSUnusedGlobalSymbols
@@ -750,9 +754,9 @@ var BCapp = {
             $container.html( template(context) );
             $container.attr('data-initialized', 'true');
             
-            
-            // TODO: Subnavbar detector here
-            
+            var pageId = '#' + $container.closest('.service-page').attr('id');
+            BCapp.framework.initImagesLazyLoad( pageId );
+            console.log( 'Lazy load triggered on ' + pageId );
             
             var $forms = $container.find('form');
             if( $forms.length === 0 ) return;
@@ -800,7 +804,7 @@ var BCapp = {
             var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
             var template = Template7.compile(html);
             $container.html( template(context) );
-            $container.attr('data-initialized', 'true');
+            // $container.attr('data-initialized', 'true');
         });
     },
     
@@ -812,7 +816,7 @@ var BCapp = {
     
     setNestedView: function(mainViewSelector, websiteServiceSelector)
     {
-        // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
+        console.log('Nested views collection: ', BCapp.nestedViewsCollection);
         console.log(sprintf('Setting nested view for %s / %s', mainViewSelector, websiteServiceSelector));
         BCapp.currentNestedView = BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector];
         console.log(sprintf('Current nested view set to %s', BCapp.currentNestedView.selector));
