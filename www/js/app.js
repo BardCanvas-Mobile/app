@@ -200,6 +200,7 @@ var BCapp = {
             }
         }
         
+        // TODO: This snippet doesn't show properly on android.
         /*
         $('.bc-services-toolbar').each(function()
         {
@@ -207,16 +208,19 @@ var BCapp = {
             var $toolbar   = $(this);
             var website    = $toolbar.attr('data-website');
             var $items     = $toolbar.find('.tab-link');
+            var maxItems   = 0;
             
             console.log(sprintf('### Screen width class is %s', widthClass));
             if( $items.length * 100 <= widthClass )
             {
                 console.log(sprintf('### Showing all items on %s toolbar.', website));
                 $items.show();
+    
+                maxItems = $items.length;
             }
             else
             {
-                var maxItems = widthClass / 100;
+                maxItems = widthClass / 100;
                 console.log(sprintf('### Hiding items above %s in %s toolbar.', maxItems, website));
                 $items.each(function(index, element)
                 {
@@ -224,6 +228,12 @@ var BCapp = {
                     if( index < maxItems ) $this.show();
                     else $this.hide();
                 });
+            }
+            
+            if( BCapp.os === 'android' )
+            {
+                var highlighterWidth = (100 / maxItems).toFixed(4) + '%';
+                $toolbar.find('.tab-link-highlight').css('width', highlighterWidth);
             }
         });
         */
@@ -475,7 +485,8 @@ var BCapp = {
                 manifest:                 manifest,
                 username:                 website.userName,
                 services:                 renderingServices,
-                navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName)
+                navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName),
+                serviceTabWidth:          (100 / renderingServices.length).toFixed(4) + '%'
             };
             
             // console.log(context);

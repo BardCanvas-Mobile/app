@@ -32,6 +32,9 @@
                         <span class="tabbar-label">{{caption}}</span>
                     </a>
                     {{/services}}
+                    {{#if @global.isAndroid}}
+                        <span class="tab-link-highlight" style="width: {{serviceTabWidth}};"></span>
+                    {{/if}}
                 </div>
             </div>
             
