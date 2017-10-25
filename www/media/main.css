@@ -103,4 +103,6 @@ html.android .service-content .page.navbar-fixed  { padding-top:    56px; }
 html.ios     .service-content .page.toolbar-fixed { padding-bottom: 44px; }
 html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 
+html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
+
 /* Service tabs responsiveness */

@@ -180,25 +180,42 @@ var BCapp = {
     
     __toggleToolbars: function()
     {
-        for(var i in BCapp.viewsCollection )
+        // for(var i in BCapp.viewsCollection )
+        // {
+        //     var view = BCapp.viewsCollection[i];
+        //     var sel  = view.selector;
+        //    
+        //     if( $(sel).attr('data-has-toolbar') )
+        //     {
+        //         if( $('body').attr('data-orientation') === 'portrait' )
+        //         {
+        //             $(sel).toggleClass('toolbar-fixed', true);
+        //             view.showToolbar();
+        //         }
+        //         else
+        //         {
+        //             $(sel).toggleClass('toolbar-fixed', false);
+        //             view.hideToolbar();
+        //         }
+        //     }
+        // }
+        
+        $('.view[data-has-toolbar="true"], .page[data-has-toolbar="true"]').each(function()
         {
-            var view = BCapp.viewsCollection[i];
-            var sel  = view.selector;
+            var $view = $(this);
             
-            if( $(sel).attr('data-has-toolbar') )
+            if( $('body').attr('data-orientation') === 'portrait' )
             {
-                if( $('body').attr('data-orientation') === 'portrait' )
-                {
-                    $(sel).toggleClass('toolbar-fixed', true);
-                    view.showToolbar();
-                }
-                else
-                {
-                    $(sel).toggleClass('toolbar-fixed', false);
-                    view.hideToolbar();
-                }
+                $view.toggleClass('toolbar-fixed', true, 100);
+                $view.find('.toolbar').show('slide', {direction: 'down'}, 100);
             }
-        }
+            else
+            {
+                $view.toggleClass('toolbar-fixed', false, 100);
+                $view.find('.toolbar').hide('slide', {direction: 'down'}, 100);
+            }
+        });
+        
         
         // TODO: This snippet doesn't show properly on android.
         /*
@@ -485,7 +502,7 @@ var BCapp = {
                 manifest:                 manifest,
                 username:                 website.userName,
                 services:                 renderingServices,
-                navbarTitle:              sprintf('%s - %s', manifest.shortName, website.userDisplayName),
+                navbarTitle:              website.userDisplayName, // sprintf('%s - %s', manifest.shortName, website.userDisplayName),
                 serviceTabWidth:          (100 / renderingServices.length).toFixed(4) + '%'
             };
             
@@ -776,13 +793,14 @@ var BCapp = {
             var $container = $(this);
             if( $container.attr('data-initialized') ) return;
             
-            BCapp.__loadAjaxifiedService($container);
+            BCapp.__loadAjaxifiedService($container, true);
         });
     },
     
     __loadAjaxifiedService: function($container, showIndicator)
     {
         if( typeof showIndicator === 'undefined' ) showIndicator = false;
+        console.log('Show Loading indicator: ', showIndicator);
         
         var containerId = $container.attr('id');
         var data        = window.tmpAjaxifiedServices[containerId];
@@ -854,7 +872,8 @@ var BCapp = {
             var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
             var template = Template7.compile(html);
             $container.html( template(context) );
-            // $container.attr('data-initialized', 'true');
+            
+            if( showIndicator ) BCtoolbox.hideFullPageLoader();
         });
     },
     
