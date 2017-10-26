@@ -111,7 +111,8 @@ body[data-orientation="landscape"] .row .landscape-50 {
 html.android .bc-ios-icon     { display: none; }
 html.ios     .bc-android-icon { display: none; }
 
-.bc-input-icon { font-size: 29px; }
+.bc-input-icon             { font-size: 29px; }
+.f7-icons.f7-embedded-icon { font-size: 1em; width: 1.1em; }
 
 html.ios     .service-content .page.navbar-fixed  { padding-top:    44px; }
 html.android .service-content .page.navbar-fixed  { padding-top:    56px; }
@@ -120,4 +121,20 @@ html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 
 html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
 
-/* Service tabs responsiveness */
+/* Custom helpers */
+.bc-image-uploader .photos { display: inline; }
+.bc-image-uploader .bc-image-item {
+    display: inline-block; vertical-align: top;
+    width: auto; height: 100px; margin: 5px;
+    background-color: whitesmoke; border: 1px solid whitesmoke;
+    background-size: contain;
+}
+.bc-image-uploader .bc-image-item img {
+    width: auto; height: 100px;
+}
+.bc-image-uploader .bc-selector .icon, .bc-image-uploader .bc-selector .fa {
+    font-size: 32px; width: 80px; line-height: 100px;
+    text-align: center; vertical-align: middle;
+    color: black;
+}
+html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }

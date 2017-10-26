@@ -210,5 +210,34 @@ var BCtoolbox = {
         });
         
         browser.open();
+    },
+    
+    /**
+     * @param {string|jQuery} $container
+     */
+    getPhotoFromLibrary: function($container)
+    {
+        if( typeof $container === 'string' ) $container = $($container);
+        
+        var $target = $container.find('.photos');
+        navigator.camera.getPicture(
+            function( fileURI )
+            {
+                $target.append(sprintf( '<div class="bc-image-item"><img src="%s"></div>', fileURI ));
+            },
+            function( error )
+            {
+                if( error.search(/cancel/i) >= 0 ) return;
+                
+                BCapp.framework.alert(
+                    sprintf(BClanguage.photoRetriever.message, error),
+                    BClanguage.photoRetriever.title
+                );
+            },
+            {
+                destinationType: navigator.camera.DestinationType.FILE_URI,
+                sourceType:      navigator.camera.PictureSourceType.PHOTOLIBRARY
+            }
+        );
     }
 };

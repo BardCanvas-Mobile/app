@@ -42,6 +42,13 @@ var BClanguage = {
         invalidResult: 'The QR code has an invalid value'
     },
     
+    photoRetriever: {
+        title:   'Unable to read photo',
+        message: 'The next error was received while trying to read the photo:<br><br>'
+                 + '<span class="color-red">%s</span><br><br>'
+                 + 'Please try again.'
+    },
+    
     actions: {
         select:        'Select',
         cancel:        'Cancel',

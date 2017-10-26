@@ -36,10 +36,17 @@ var BClanguage = {
         scanFailed:    {
             title:     '¡Ha fallado la obtención del código!',
             message:   'Ha habido un error al comunicarse con el lector de QR:<br><br>' 
-                       + '%s<br><br>' 
+                       + '<span class="color-red">%s</span><br><br>' 
                        + 'Por favor intenta de nuevo. Si el error persiste, trata otra vez tras reiniciar tu dispositivo.'
         },
         invalidResult: 'El código QR no tiene un valor válido'
+    },
+    
+    photoRetriever: {
+        title:   'Imposible leer foto',
+        message: 'Se detectó el siguiente problema al tratar de leer la imagen:<br><br>'
+                 + '<span class="color-red">%s</span><br><br>'
+                 + 'Por favor intenta de nuevo.'
     },
     
     actions: {
