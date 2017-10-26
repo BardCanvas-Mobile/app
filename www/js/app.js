@@ -859,6 +859,8 @@ var BCapp = {
                 
                 $form.ajaxForm(options);
             });
+            
+            $container.find('.expandible_textarea').expandingTextArea();
         })
         .fail(function($xhr, status, error)
         {
