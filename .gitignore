@@ -1,5 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 /plugins/*
+/node_modules/*
 !/plugins/fetch.json
 /platforms
 /hooks

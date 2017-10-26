@@ -66,8 +66,7 @@
     <platform name="ios">
         <plugin name="cordova-plugin-networkactivityindicator" spec="~0.1.1" />
     </platform>
-    
-    <!-- Debugging -->
     <plugin name="com.jamiestarke.webviewdebug" spec="https://github.com/jrstarke/webview-debug.git" />
     <access origin="http://192.168.1.211:8080/*" />
+    <plugin name="cordova-plugin-camera" spec="~2.4.1" />
 </widget>
