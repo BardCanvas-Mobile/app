@@ -182,5 +182,33 @@ var BCtoolbox = {
             $trigger.toggleClass('state_active', false).toggleClass('state_disabled', true);
         else if( $trigger.hasClass('state_disabled') )
             $trigger.toggleClass('state_active', true).toggleClass('state_disabled', false);
+    },
+    
+    /**
+     * @param {string|Array|image} source
+     */
+    showPhotoBrowser: function(source)
+    {
+        console.log(source);
+        
+        if( typeof source === 'string' )
+        {
+            source = [ source ];
+        }
+        else if( typeof source === 'object' )
+        {
+            if( typeof source.src === 'string' )
+                source = [ source.src ];
+        }
+        
+        console.log(source);
+        
+        var browser = BCapp.framework.photoBrowser({
+            photos: source,
+            theme:  'dark',
+            type:   'popup'
+        });
+        
+        browser.open();
     }
 };
