@@ -24,81 +24,57 @@ $.fn.expandingTextArea = function() {
             'resize' : 'none'
         });
         var _busyResizing = false;
-        var _needsHelpShrinking = $.browser.mozilla || $.browser.webkit;
+        var _needsHelpShrinking = true;
         var _setTimoutHandle;
 
         var gcs;
 
-        if ($.browser.webkit) {
-            gcs = function(node) {
-                var s;
-                if(node.nodeType == 1){
-                    var dv = node.ownerDocument.defaultView;
+        
+        gcs = function(node) {
+            var s;
+            if(node.nodeType == 1){
+                var dv = node.ownerDocument.defaultView;
+                s = dv.getComputedStyle(node, null);
+                if(!s && node.style){
+                    node.style.display = "";
                     s = dv.getComputedStyle(node, null);
-                    if(!s && node.style){
-                        node.style.display = "";
-                        s = dv.getComputedStyle(node, null);
-                    }
                 }
-                return s || {};
-            };
-        } else if ($.browser.msie) {
-            gcs = function(node){
-                // IE (as of 7) doesn't expose Element like sane browsers
-                return node.nodeType == 1 /* ELEMENT_NODE*/ ? node.currentStyle : {};
-            };
-        } else {
-            gcs = function(node){
-                return node.nodeType == 1 ?
-                    node.ownerDocument.defaultView.getComputedStyle(node, null) : {};
-            };
-        }
-
+            }
+            return s || {};
+        };
+        
         var px;
-        if (!$.browser.msie) {
-            px = function(element, value) {
-                return parseFloat(value) || 0;
-            };
-        } else {
-            px = function(element, avalue) {
-                if(!avalue){ return 0; }
-                // on IE7, medium is usually 4 pixels
-                if(avalue == "medium"){ return 4; }
-                // style values can be floats, client code may
-                // want to round this value for integer pixels.
-                if(avalue.slice && avalue.slice(-2) == 'px'){ return parseFloat(avalue); }
-                with(element){
-                    var sLeft = style.left;
-                    var rsLeft = runtimeStyle.left;
-                    runtimeStyle.left = currentStyle.left;
-                    try{
-                        // 'avalue' may be incompatible with style.left, which can cause IE to throw
-                        // this has been observed for border widths using "thin", "medium", "thick" constants
-                        // those particular constants could be trapped by a lookup
-                        // but perhaps there are more
-                        style.left = avalue;
-                        avalue = style.pixelLeft;
-                    }catch(e){
-                        avalue = 0;
-                    }
-                    style.left = sLeft;
-                    runtimeStyle.left = rsLeft;
+        
+        px = function(element, avalue) {
+            if(!avalue){ return 0; }
+            // on IE7, medium is usually 4 pixels
+            if(avalue == "medium"){ return 4; }
+            // style values can be floats, client code may
+            // want to round this value for integer pixels.
+            if(avalue.slice && avalue.slice(-2) == 'px'){ return parseFloat(avalue); }
+            with(element){
+                var sLeft = style.left;
+                var rsLeft = runtimeStyle.left;
+                runtimeStyle.left = currentStyle.left;
+                try{
+                    // 'avalue' may be incompatible with style.left, which can cause IE to throw
+                    // this has been observed for border widths using "thin", "medium", "thick" constants
+                    // those particular constants could be trapped by a lookup
+                    // but perhaps there are more
+                    style.left = avalue;
+                    avalue = style.pixelLeft;
+                }catch(e){
+                    avalue = 0;
                 }
-                return avalue;
-            };
-        }
-
+                style.left = sLeft;
+                runtimeStyle.left = rsLeft;
+            }
+            return avalue;
+        };
+        
         function _getHeight() {
             var newH = textarea.scrollHeight;
-            if ($.browser.msie) {
-                newH += textarea.offsetHeight - textarea.clientHeight;
-            } else if ($.browser.webkit) {
-                newH += getBorderExtents(textarea).h;
-            } else if ($.browser.mozilla) {
-                newH += textarea.offsetHeight - textarea.clientHeight;
-            } else {
-                newH += getPadBorderExtents(textarea).h;
-            }
+            newH += getBorderExtents(textarea).h;
             return newH;
         }
         function getPadExtents(n, computedStyle) {
