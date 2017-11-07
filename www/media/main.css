@@ -129,6 +129,8 @@ html.android .smart-select-page .list-block { margin-bottom: 0; }
 html.android .tabbar a.link,
 html.android .tabbar a.tab-link { font-size: 11px; text-transform: none; }
 
+html.android .service-content .navbar .left.title { padding-left: 16px; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
