@@ -121,6 +121,14 @@ html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 
 html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
 
+html.ios     .smart-select-page.navbar-fixed .page-content { padding-top:  8px !important; }
+html.android .smart-select-page.navbar-fixed .page-content { padding-top: 24px !important; }
+html.ios     .smart-select-page .list-block { margin-top: 35px; margin-bottom: 5px; }
+html.android .smart-select-page .list-block { margin-bottom: 0; }
+
+html.android .tabbar a.link,
+html.android .tabbar a.tab-link { font-size: 11px; text-transform: none; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {

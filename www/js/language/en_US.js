@@ -53,7 +53,9 @@ var BClanguage = {
         select:        'Select',
         cancel:        'Cancel',
         deleteWebsite: 'Delete website',
-        retry:         'Retry'
+        retry:         'Retry',
+        close:         'Close',
+        back:          'Back'
     },
     
     ownedAndOperatedBy: 'Owned and operated by %s',

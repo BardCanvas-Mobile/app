@@ -53,7 +53,9 @@ var BClanguage = {
         select:        'Seleccionar',
         cancel:        'Cancelar',
         deleteWebsite: 'Borrar sitio',
-        retry:         'Reintentar'
+        retry:         'Reintentar',
+        close:         'Cerrar',
+        back:          'Regresar'
     },
     
     ownedAndOperatedBy: 'Propiedad y operación por %s',
