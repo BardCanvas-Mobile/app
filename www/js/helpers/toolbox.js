@@ -124,6 +124,7 @@ var BCtoolbox = {
     
     ajaxform_beforeSerialize: function($form, options)
     {
+        console.log('•> Before serialize internally triggered on ', $form.attr('id'));
         if( $form.attr('beforeserialize') ) eval( $form.attr('beforeserialize') );
     },
     
@@ -134,6 +135,7 @@ var BCtoolbox = {
     
     ajaxform_beforeSubmit: function(formData, $form, options)
     {
+        console.log('•> Before submit internally triggered on ', $form.attr('id'));
         if( $form.attr('beforesubmit') ) eval( $form.attr('beforesubmit') );
         
         BCtoolbox.showFullPageLoader();
@@ -146,6 +148,7 @@ var BCtoolbox = {
     
     ajaxform_success: function(responseText, statusText, xhr, $form)
     {
+        console.log('•> Success internally triggered on ', $form.attr('id'));
         BCtoolbox.hideFullPageLoader();
         
         if( responseText.indexOf('OK') < 0 )
@@ -155,21 +158,37 @@ var BCtoolbox = {
             return;
         }
         
-        var options = {};
-        options.message = responseText.replace(/^OK:/, '');
-        if( BCapp.os === 'ios')
+        var silent = $form.attr('silent');
+        if(typeof silent === 'undefined') silent = 'false';
+        silent = silent === 'true';
+        if( ! silent )
         {
-            options.title = $form.closest('.service-page').attr('data-service-title');
-            options.media = sprintf('<img src="%s">', $form.closest('.service-page').attr('data-website-icon'));
+            var options = {};
+            var message = responseText.replace(/^OK\:?/, '');
+            
+            if( message !== '' )
+            {
+                options.message = message;
+                if( BCapp.os === 'ios')
+                {
+                    var $view;
+                    if( BCapp.currentNestedView ) $view = $(BCapp.currentNestedView.selector);
+                    else                          $view = $(BCapp.currentView.selector);
+                    
+                    var $page     = $view.find('.service-page');
+                    options.title = $page.attr('data-service-title');
+                    options.media = sprintf('<img src="%s">', $page.attr('data-website-icon'));
+                }
+                BCapp.framework.addNotification(options);
+            }
         }
-        
-        BCapp.framework.addNotification(options);
         
         if( $form.attr('onsuccess') ) eval( $form.attr('onsuccess') );
     },
     
     ajaxform_fail: function(xhr, textStatus, errorThrown, $form)
     {
+        console.log('•> Fail internally triggered on ', $form.attr('id'));
         BCtoolbox.hideFullPageLoader();
         
         if( $form.attr('onerror') ) eval( $form.attr('onerror') );

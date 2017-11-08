@@ -831,7 +831,9 @@ var BCapp = {
             
             $forms.each(function()
             {
-                var $form    = $(this);
+                var $form = $(this);
+                console.log('Binding ajax form ', $form.attr('id'));
+                
                 var targetId = $form.attr('id') + '_target';
                 var options  = {
                     target:          '#' + targetId,
