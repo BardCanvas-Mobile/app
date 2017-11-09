@@ -43,7 +43,7 @@ html.ios .bc-website-icon { height: 1.3em; margin-right: 4px; }
 
 /* BC imports: Framed content */
 
-.framed_content          { border: 2px solid silver; background-color: white; color: black; padding: 5px; }
+.framed_content          { border: 2px solid silver; background-color: white; color: black; }
 html.ios .framed_content { border-radius: 5px; }
 
 .framed_content.state_disabled  { background-color: silver;  border-color: gray;    color: #585858; }
@@ -53,6 +53,8 @@ html.ios .framed_content { border-radius: 5px; }
 .framed_content.state_highlight { background-color: #fff1a0; border-color: #FF8000; color: black;   }
 .framed_content.state_active    { background-color: #BBDDFF; border-color: #42A0FF; color: black;   }
 .framed_content.state_hover     { background-color: #42A0FF; border-color: #000080; color: white;   }
+
+.framed_content:not([class*="content-"]) { padding: 5px; }
 
 .framed_content.state_hover:hover { background-color: #42A0FF; border-color: #000080; color: white;   }
 
@@ -120,6 +122,7 @@ html.ios     .service-content .page.toolbar-fixed { padding-bottom: 44px; }
 html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 
 html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
+html.android #left-panel .navbar-fixed.toolbar-fixed .page-content { padding-top: 56px; }
 
 html.ios     .smart-select-page.navbar-fixed .page-content { padding-top:  8px !important; }
 html.android .smart-select-page.navbar-fixed .page-content { padding-top: 24px !important; }
