@@ -58,6 +58,8 @@ var BClanguage = {
         back:          'Regresar'
     },
     
+    'of': 'de', // When saying "x of y"
+    
     ownedAndOperatedBy: 'Propiedad y operación por %s',
     
     pleaseProvideAURL:   'Provee el dominio o la URL de un sitio web a añadir o selecciona uno de la lista de sitios destacados.',

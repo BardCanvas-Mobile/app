@@ -161,27 +161,7 @@ var BCtoolbox = {
         var silent = $form.attr('silent');
         if(typeof silent === 'undefined') silent = 'false';
         silent = silent === 'true';
-        if( ! silent )
-        {
-            var options = {};
-            var message = responseText.replace(/^OK\:?/, '');
-            
-            if( message !== '' )
-            {
-                options.message = message;
-                if( BCapp.os === 'ios')
-                {
-                    var $view;
-                    if( BCapp.currentNestedView ) $view = $(BCapp.currentNestedView.selector);
-                    else                          $view = $(BCapp.currentView.selector);
-                    
-                    var $page     = $view.find('.service-page');
-                    options.title = $page.attr('data-service-title');
-                    options.media = sprintf('<img src="%s">', $page.attr('data-website-icon'));
-                }
-                BCapp.framework.addNotification(options);
-            }
-        }
+        if( ! silent ) BCtoolbox.addNotification( responseText.replace(/^OK\:?/, '') );
         
         if( $form.attr('onsuccess') ) eval( $form.attr('onsuccess') );
     },
@@ -192,6 +172,27 @@ var BCtoolbox = {
         BCtoolbox.hideFullPageLoader();
         
         if( $form.attr('onerror') ) eval( $form.attr('onerror') );
+    },
+    
+    addNotification: function(message)
+    {
+        if( message === '' ) return;
+        
+        var options = {};
+        
+        options.message = message;
+        if( BCapp.os === 'ios')
+        {
+            var $view;
+            if( BCapp.currentNestedView ) $view = $(BCapp.currentNestedView.selector);
+            else                          $view = $(BCapp.currentView.selector);
+        
+            var $page     = $view.find('.service-page');
+            options.title = $page.attr('data-service-title');
+            options.media = sprintf('<img src="%s">', $page.attr('data-website-icon'));
+        }
+        
+        BCapp.framework.addNotification(options);
     },
     
     toggleFramedContentState: function(trigger)
@@ -208,8 +209,6 @@ var BCtoolbox = {
      */
     showPhotoBrowser: function(source)
     {
-        console.log(source);
-        
         if( typeof source === 'string' )
         {
             source = [ source ];
@@ -223,9 +222,11 @@ var BCtoolbox = {
         console.log(source);
         
         var browser = BCapp.framework.photoBrowser({
-            photos: source,
-            theme:  'dark',
-            type:   'popup'
+            photos:       source,
+            theme:        'dark',
+            type:         'popup',
+            backLinkText: BClanguage.actions.close,
+            ofText:       BClanguage.of
         });
         
         browser.open();

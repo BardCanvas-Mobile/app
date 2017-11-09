@@ -58,6 +58,8 @@ var BClanguage = {
         back:          'Back'
     },
     
+    of: 'of',  // When saying "x of y"
+    
     ownedAndOperatedBy: 'Owned and operated by %s',
     
     pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
