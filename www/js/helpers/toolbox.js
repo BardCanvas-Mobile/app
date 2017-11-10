@@ -88,6 +88,7 @@ var BCtoolbox = {
     
     hideNetworkActivityIndicator: function()
     {
+        if( typeof device === 'undefined' ) return;
         if( device.platform === 'browser') return;
         
         if( BCapp.os === 'ios' )
