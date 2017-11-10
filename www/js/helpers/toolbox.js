@@ -215,8 +215,13 @@ var BCtoolbox = {
         }
         else if( typeof source === 'object' )
         {
-            if( typeof source.src === 'string' )
-                source = [ source.src ];
+            if( source.title || source.src )
+            {
+                source = [{
+                    caption: source.title,
+                    url:     source.src
+                }];
+            }
         }
         
         console.log(source);
