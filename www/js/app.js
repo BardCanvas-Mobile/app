@@ -486,12 +486,13 @@ var BCapp = {
                 }
                 
                 service.meta = {
-                    icon:        BCapp.__convertIcon(service.icon),
-                    tabLink:     sprintf('#%s-%s', websiteMainViewClassName, service.id),
-                    tabTarget:   sprintf('%s-%s', websiteMainViewClassName, service.id),
-                    activeTab:   (parseInt(i) === 0 ? 'active' : ''),
-                    pageHandler: sprintf('%s-%s-index', websiteMainViewClassName, service.id),
-                    markup:      BCapp.__getServiceMarkup(website, service)
+                    icon:         BCapp.__convertIcon(service.icon),
+                    tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
+                    tabTarget:    sprintf('%s-%s', websiteMainViewClassName, service.id),
+                    activeTab:    (parseInt(i) === 0 ? 'active' : ''),
+                    pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
+                    markup:       BCapp.__getServiceMarkup(website, service),
+                    serviceClass: service.type == 'iframe' ? 'iframed-service' : 'standard-service'
                 };
                 
                 renderingServices[renderingServices.length] = service;
@@ -722,9 +723,9 @@ var BCapp = {
     {
         var url    = BCapp.__forgeServiceURL(service, website);
         var params = {
-            platform:     BCapp.os,
-            access_token: website.accessToken,
-            wasuuup:      BCtoolbox.wasuuup()
+            bcm_platform:     BCapp.os,
+            bcm_access_token: website.accessToken,
+            wasuuup:          BCtoolbox.wasuuup()
         };
         
         var containerId = 'ajax_' + BCtoolbox.wasuuup();
@@ -893,7 +894,20 @@ var BCapp = {
         console.log(sprintf('Setting nested view for %s / %s', mainViewSelector, websiteServiceSelector));
         BCapp.currentNestedView = BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector];
         console.log(sprintf('Current nested view set to %s', BCapp.currentNestedView.selector));
+    },
+    
+    openURLinPopup: function(URL, name, specs, replace)
+    {
+        var $popup = $('#window_open_override_template');
+        $popup.find('.navbar .title').text(URL);
+        BCapp.showFullPageLoader();
+        $popup.find('iframe').attr('src', URL);
+        
+        BCapp.framework.popup($popup);
     }
 };
+
+// var windowOpenBackup = window.open;
+// window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
 
 document.addEventListener('deviceready', BCapp.init, false);

@@ -73,50 +73,80 @@
     </div>
 </div>
 
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="lib/jquery.min.js"></script>
-<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
-<script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
-<script type="text/javascript" src="lib/sprintf.min.js"></script>
-<script type="text/javascript" src="lib/circle-progress.min.js"></script>
-<script type="text/javascript" src="lib/jquery.form.min.js"></script>
-<script type="text/javascript" src="lib/jquery.blockUI.min.js"></script>
-<script type="text/javascript" src="lib/jquery.exptextarea_webkit.js"></script>
-<script src="lib/jquery.scrollTo.min.js"></script>
-<script src="lib/crypto-js.js"></script>
-<script src="lib/imgcache.js"></script>
-
-<script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
-
-<script type="text/javascript" src="js/helpers/toolbox.js"></script>
-<script type="text/javascript" src="js/helpers/event_handlers.js"></script>
-
-<script type="text/javascript" src="js/classes/global_settings.js"></script>
-<script type="text/javascript" src="js/classes/website.js"></script>
-<script type="text/javascript" src="js/classes/website_manifest.js"></script>
-<script type="text/javascript" src="js/classes/website_service_details.js"></script>
-<script type="text/javascript" src="js/classes/websites_repository.js"></script>
-<script type="text/javascript" src="js/classes/manifests_repository.js"></script>
-
-<script type="text/javascript" src="js/app.js"></script>
-
-<div id="ajax_form_target" style="display: none"></div>
-
-<!-- In-app "browser" service template -->
-<script type="text/template" id="iframed_service_template">
-    <iframe class="bc-inapp-browser" src="about:blank" data-src="{{url}}"
-            onload="BCtoolbox.hideFullPageLoader();"></iframe>
-</script>
-
-<!-- Common error for services -->
-<script type="text/template" id="common_service_error_template">
-    <div class="content-block-title color-red"><i class="fa fa-warning"></i> {{title}}</div>
-    <div class="content-block">
-        <div class="content-block-inner">
-            {{content}}
+<div class="library" style="display: none">
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="lib/sprintf.min.js"></script>
+    <script type="text/javascript" src="lib/circle-progress.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.form.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.blockUI.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.exptextarea_webkit.js"></script>
+    <script src="lib/jquery.scrollTo.min.js"></script>
+    <script src="lib/crypto-js.js"></script>
+    <script src="lib/imgcache.js"></script>
+    
+    <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
+    
+    <script type="text/javascript" src="js/helpers/toolbox.js"></script>
+    <script type="text/javascript" src="js/helpers/event_handlers.js"></script>
+    
+    <script type="text/javascript" src="js/classes/global_settings.js"></script>
+    <script type="text/javascript" src="js/classes/website.js"></script>
+    <script type="text/javascript" src="js/classes/website_manifest.js"></script>
+    <script type="text/javascript" src="js/classes/website_service_details.js"></script>
+    <script type="text/javascript" src="js/classes/websites_repository.js"></script>
+    <script type="text/javascript" src="js/classes/manifests_repository.js"></script>
+    
+    <script type="text/javascript" src="js/app.js"></script>
+    
+    <div id="ajax_form_target"></div>
+    
+    <!-- In-app "browser" service template -->
+    <script type="text/template" id="iframed_service_template">
+        <iframe class="bc-inapp-browser" src="about:blank" data-src="{{url}}"
+                onload="BCtoolbox.hideFullPageLoader();"></iframe>
+    </script>
+    
+    <!-- Common error for services -->
+    <script type="text/template" id="common_service_error_template">
+        <div class="content-block-title color-red"><i class="fa fa-warning"></i> {{title}}</div>
+        <div class="content-block">
+            <div class="content-block-inner">
+                {{content}}
+            </div>
+        </div>
+    </script>
+    
+    <!-- window.open override template -->
+    <div class="popup" id="window_open_override_template">
+        <div class="view navbar-fixed">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left title">
+                        <i class="fa fa-spinner fa-pulse"></i>
+                    </div>
+                    <div class="right">
+                        <a class="link icon-only close-popup">
+                            <i class="bc-ios-icon icon f7-icons">close_round</i>
+                            <i class="bc-android-icon fa fa-times-circle-o"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pages">
+                <div class="page">
+                    <div class="page-content" style="overflow: hidden">
+                        <iframe class="bc-inapp-browser" src="about:blank"
+                                onload="BCtoolbox.hideFullPageLoader();"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</script>
+    
+</div>
 
 </body>
 

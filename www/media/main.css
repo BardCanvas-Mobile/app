@@ -100,6 +100,9 @@ html.android .toolbar-inner .icon { width: auto; }
 .toolbar-inner .tab-link img.icon        { height: 25px; -webkit-filter: grayscale(100%); filter: grayscale(100%); }
 .toolbar-inner .tab-link.active img.icon { -webkit-filter: none; filter: none; }
 
+html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 50px; }
+.iframed-service .service-content { overflow: hidden; }
+
 /*html.android .page { background-color: #efeff4; }*/
 
 /* F7 extensions */
@@ -123,6 +126,7 @@ html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 
 html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
 html.android #left-panel .navbar-fixed.toolbar-fixed .page-content { padding-top: 56px; }
+html.android body[data-orientation="landscape"] .bc-nested-views-container { padding-bottom: 0 !important; }
 
 html.ios     .smart-select-page.navbar-fixed .page-content { padding-top:  8px !important; }
 html.android .smart-select-page.navbar-fixed .page-content { padding-top: 24px !important; }

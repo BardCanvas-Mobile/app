@@ -1,5 +1,5 @@
 
-<div class="view {{websiteMainViewClassName}} navbar-fixed toolbar-fixed" data-has-toolbar="true"
+<div class="view {{websiteMainViewClassName}} navbar-fixed toolbar-fixed website-main-view" data-has-toolbar="true"
      id="{{websiteMainViewClassName}}" data-username="{{username}}" style="display: none;">
     
     <div class="navbar">
@@ -44,7 +44,7 @@
             <div class="page-content primary-tab-content tabs bc-nested-views-container">
                 
                 {{#services}}
-                <div id="{{meta.tabTarget}}" class="view tab {{meta.activeTab}} {{meta.tabTarget}}">
+                <div id="{{meta.tabTarget}}" class="view tab  {{meta.serviceClass}} {{meta.activeTab}} {{meta.tabTarget}}">
                     <div class="pages">
                         
                         <div data-page="{{meta.pageHandler}}"
