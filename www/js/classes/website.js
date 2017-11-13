@@ -21,5 +21,7 @@ var BCwebsiteClass = function(source)
     
     if( typeof source === 'undefined' ) return;
     
+    // Initialization
+    
     for(var i in source) this[i] = source[i];
 };

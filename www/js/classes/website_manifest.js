@@ -42,7 +42,9 @@ var BCwebsiteManifestClass = function(source)
     
     if( typeof source === 'undefined' ) return;
     
-    var i = 0;
+    // Initialization
+    
+    var i;
     
     for(i in source)
         if( i !== 'services' ) this[i] = source[i];

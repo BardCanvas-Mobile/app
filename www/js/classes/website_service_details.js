@@ -16,10 +16,10 @@ var BCwebsiteServiceDetailsClass = function(source)
      * "iframe": Page will be included in an iframe.
      *           Highly discouraged to avoid session issues!
      * 
-     * "html":   Prebuilt HTML. No <script> tags allowed.
-     *           All URLs must be fully qualified.
-     *           Forms will be sent using AJAX.
+     * "html":   Prebuilt HTML.
      *           Whenever possible, single page apps should be set this way.
+     *           All URLs in code must be fully qualified.
+     *           Forms will be sent using AJAX.
      *           Note: this method will always send the next vars in the request:
      *           • platform     - The platform being called from (ios|android)
      *           • access_token - Pre-authenticated access token
@@ -34,6 +34,8 @@ var BCwebsiteServiceDetailsClass = function(source)
     this.requires = null;
     
     if( typeof source === 'undefined' ) return;
+    
+    // Initialization
     
     for(var i in source) this[i] = source[i];
 };
