@@ -138,6 +138,9 @@ html.android .tabbar a.tab-link { font-size: 11px; text-transform: none; }
 
 html.android .service-content .navbar .left.title { padding-left: 16px; }
 
+html.ios     .messagebar .link { margin-left: 8px; }
+html.android .messagebar .link { font-size: 22px; padding-left: 0; padding-right: 8px; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
