@@ -207,15 +207,14 @@ var BCapp = {
             if( $('body').attr('data-orientation') === 'portrait' )
             {
                 $view.toggleClass('toolbar-fixed', true, 100);
-                $view.find('.toolbar').show('slide', {direction: 'down'}, 100);
+                $view.find('.toolbar:not(.always-visible)').show('slide', {direction: 'down'}, 100);
             }
             else
             {
                 $view.toggleClass('toolbar-fixed', false, 100);
-                $view.find('.toolbar').hide('slide', {direction: 'down'}, 100);
+                $view.find('.toolbar:not(.always-visible)').hide('slide', {direction: 'down'}, 100);
             }
         });
-        
         
         // TODO: This snippet doesn't show properly on android.
         /*
