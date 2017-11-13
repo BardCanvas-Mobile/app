@@ -215,44 +215,6 @@ var BCapp = {
                 $view.find('.toolbar:not(.always-visible)').hide('slide', {direction: 'down'}, 100);
             }
         });
-        
-        // TODO: This snippet doesn't show properly on android.
-        /*
-        $('.bc-services-toolbar').each(function()
-        {
-            var widthClass = parseInt($('body').attr('data-width-class')) + 100; // Yeah, one icon above.
-            var $toolbar   = $(this);
-            var website    = $toolbar.attr('data-website');
-            var $items     = $toolbar.find('.tab-link');
-            var maxItems   = 0;
-            
-            console.log(sprintf('### Screen width class is %s', widthClass));
-            if( $items.length * 100 <= widthClass )
-            {
-                console.log(sprintf('### Showing all items on %s toolbar.', website));
-                $items.show();
-    
-                maxItems = $items.length;
-            }
-            else
-            {
-                maxItems = widthClass / 100;
-                console.log(sprintf('### Hiding items above %s in %s toolbar.', maxItems, website));
-                $items.each(function(index, element)
-                {
-                    $this = $(this);
-                    if( index < maxItems ) $this.show();
-                    else $this.hide();
-                });
-            }
-            
-            if( BCapp.os === 'android' )
-            {
-                var highlighterWidth = (100 / maxItems).toFixed(4) + '%';
-                $toolbar.find('.tab-link-highlight').css('width', highlighterWidth);
-            }
-        });
-        */
     },
     
     __setLanguage: function()
