@@ -91,8 +91,12 @@ html.ios .framed_content { border-radius: 5px; }
 .content-block-inner    { margin-left: 0 !important; }
 a.open-panel            { color: inherit; }
 
-.toolbar-inner .icon    { font-size: 25px; width: 25px; text-align: center; }
-html.android .toolbar-inner .icon { width: auto; }
+html.ios     .toolbar-inner .tab-link        { padding-top: 5px; }
+html.android .toolbar-inner .icon            { font-size: 25px; text-align: center; width: 32px; }
+html         .toolbar-inner .icon-container  { display: inline-block; position: relative; width: 32px; }
+html         .toolbar-inner .badge           { position: absolute; top: -5px; right: -5px;
+                                               font-size: 9px; padding: 0 4px; height: 14px; line-height: 14px;
+                                               transition: display 0.1s; }
 
 .item-media .fa         { font-size: 25px; width: 25px; text-align: center; }
 .item-media img.icon    { height: 29px; }
@@ -100,7 +104,7 @@ html.android .toolbar-inner .icon { width: auto; }
 .toolbar-inner .tab-link img.icon        { height: 25px; -webkit-filter: grayscale(100%); filter: grayscale(100%); }
 .toolbar-inner .tab-link.active img.icon { -webkit-filter: none; filter: none; }
 
-html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 50px; }
+html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 .iframed-service .service-content { overflow: hidden; }
 
 /*html.android .page { background-color: #efeff4; }*/

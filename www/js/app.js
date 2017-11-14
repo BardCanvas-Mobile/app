@@ -599,12 +599,12 @@ var BCapp = {
             var parts = source.split(',');
             
             return sprintf('<i class="bc-ios-icon icon f7-icons">%s</i>', parts[0]) +
-                   sprintf('<i class="bc-android-icon icon fa %s"></i>',       parts[1]);
+                   sprintf('<i class="bc-android-icon icon fa %s"></i>',  parts[1]);
         }
         
         if( source.indexOf('data:') === 0 )
         {
-            return sprintf('<img class="icon" src="%s">', source);
+            return sprintf('<img src="%s">', source);
         }
         
         if( source.indexOf('http') === 0 )
@@ -617,7 +617,7 @@ var BCapp = {
                 });
             }
             
-            return sprintf('<img class="icon" src="%s">', source);
+            return sprintf('<img src="%s">', source);
         }
         
         if( source.indexOf('fa') === 0 )

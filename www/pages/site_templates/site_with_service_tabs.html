@@ -23,13 +23,15 @@
         </div>
     </div>
     
-    <div class="toolbar toolbar-bottom tabbar tabbar-labels">
+    <div class="toolbar toolbar-bottom tabbar">
         <div class="toolbar-inner bc-services-toolbar" data-website="{{websiteMainViewClassName}}">
             {{#services}}
             <a href="{{meta.tabLink}}" class="tab-link {{meta.activeTab}}"
                onclick="BCapp.triggerServiceLoad('{{meta.pageHandler}}'); BCapp.setNestedView('{{../websiteMainViewClassName}}', '{{meta.tabTarget}}')">
-                {{meta.icon}}
-                <span class="tabbar-label">{{caption}}</span>
+                <span class="icon-container">
+                    {{meta.icon}}
+                    <span class="badge" style="display: none"></span>
+                </span>
             </a>
             {{/services}}
             {{#if @global.isAndroid}}
