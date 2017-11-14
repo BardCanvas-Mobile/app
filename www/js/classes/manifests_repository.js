@@ -158,12 +158,22 @@ var BCmanifestsRepository = {
         
         //
         // Case 1: no disclaimer, no login required
-        //         '--> Add the site immmediately
+        //         '--> Validate if credentials are provided or add the site immmediately
         //
         
         if( BCwebsitesRepository.__manifest.disclaimer.length === 0 && ! BCwebsitesRepository.__manifest.loginRequired )
         {
-            callback();
+            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 ) {
+                // No login credentials provided
+                callback();
+            }
+            else {
+                // Flow is passed to the login validator
+                BCmanifestsRepository.__validateWebsiteLogin(function()
+                {
+                    callback();
+                });
+            }
             
             return;
         }
@@ -207,8 +217,19 @@ var BCmanifestsRepository = {
         
         if( BCwebsitesRepository.__manifest.disclaimer.length > 0 && ! BCwebsitesRepository.__manifest.loginRequired )
         {
-            // Flow is passed to the callback
-            window.__tempWebsiteAdditionCallback = function() { callback(); };
+            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 )
+            {
+                // Flow is passed to the callback
+                window.__tempWebsiteAdditionCallback = function() { callback(); };
+            }
+            else {
+                // Login provided. Flow is passed to the login validator
+                window.__tempWebsiteAdditionCallback = function() {
+                    BCmanifestsRepository.__validateWebsiteLogin(function() {
+                        callback();
+                    });
+                };
+            }
             
             $.get('pages/website_addition/disclaimer.html', function(html)
             {
