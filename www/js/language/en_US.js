@@ -55,8 +55,15 @@ var BClanguage = {
         deleteWebsite: 'Delete website',
         retry:         'Retry',
         close:         'Close',
-        back:          'Back'
+        back:          'Back',
+        disableUser:   'Disable user',
+        toTrash:       'To trash',
+        toDraft:       'To draft',
+        toReview:      'To review'
     },
+    
+    userLevelCaption: 'Author level %s (%s)',
+    userMemberSince:  'Member since %s (%s)',
     
     of: 'of',  // When saying "x of y"
     
@@ -202,5 +209,33 @@ var BClanguage = {
                  '<p>{{error}}</p>' +
                  '<p>Please try again. If the problem persists, please contact {{manifest.shortName}} by sending them ' +
                  '   an email to {{manifest.contactEmail}} and inform them about it.</p>'
+    },
+    
+    defaultUserLevels: {
+          '0': 'Unregistered',
+          '1': 'Unconfirmed',
+         '10': 'Newcomer',
+        '100': 'Author',
+        '150': 'VIP',
+        '200': 'Editor',
+        '240': 'Coadmin',
+        '255': 'Admin'
+    },
+    
+    dateFormats: {
+        "shorter": "MMM/DD/YY hh:mm",
+        "short":   "MMM DD h:mm A",
+        "long":    "ddd MMM DD YYYY h:mm A"
+    },
+    
+    feeds: {
+        empty: '<p>There are no entries for this feed.</p>',
+        errorReceived: {
+            title:   'Error received from feed server',
+            message: '<p>Sorry, but the feed server sent an error while fetching the contents:</p>' +
+                     '<p>{{error}}</p>' +
+                     '<p>Please try again. If the problem persists, please contact {{manifest.shortName}} ' +
+                     '   by sending them an email to {{manifest.contactEmail}} and inform them about it.</p>' 
+        }
     }
 };

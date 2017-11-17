@@ -1,0 +1,116 @@
+
+<template data-type="cards:simple">
+    
+    <div class="card">
+        <div class="card-header">{{item.title}}</div>
+        <div class="card-content">
+            <div class="card-content-inner">
+                <p>{{item.excerpt}}</p>
+                {{#if service.options.showAuthors}}
+                    <p class="item-meta">
+                        <span class="user-avatar"><img src="{{item.author_avatar}}"></span>
+                        <span class="user-name">{{item.author_display_name}}</span>
+                        <span class="publishing-date">{{item.publishing_date}}</span>
+                    </p>
+                {{else}}
+                    <p class="color-gray">
+                        <span class="publishing-date">{{item.publishing_date}}</span>
+                    </p>
+                {{/if}}
+                {{#if service.options.showsCommentsOnIndex}}
+                    <ul class="comments">
+                        <li>Comments here!</li>
+                    </ul>
+                {{/if}}
+                
+                {{#if isEditor}}
+                    <div class="color-gray">
+                        <div class="fa-bulleted">
+                            <i class="fa fa-user fa-fw"></i>       {{item._levelCaption}}
+                        </div>
+                        <div class="fa-bulleted">
+                            <i class="fa fa-clock-o fa-fw"></i>    {{item._memberSinceCaption}}
+                        </div>
+                        <div class="fa-bulleted">
+                            <i class="fa fa-globe fa-fw"></i>      {{item.creation_ip}}
+                        </div>
+                        <div class="fa-bulleted">
+                            <i class="fa fa-map-marker fa-fw"></i> {{item.creation_location}}
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+        {{#if isEditor}}
+            <div class="card-footer">
+                {{#if item.author_can_be_disabled}}
+                    <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
+                {{/if}}
+                {{#if item.can_be_deleted}}
+                    <a  class="link nowrap ellipsified color-pink">{{@global.language.actions.toTrash}}</a>
+                {{/if}}
+                {{#if item.can_be_drafted}}
+                    <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
+                {{/if}}
+                {{#if item.can_be_flagged_for_review}}
+                    <a  class="link nowrap ellipsified color-orange">{{@global.language.actions.toReview}}</a>
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+    
+</template>
+
+<template data-type="cards:modern">
+    
+    <div class="card modern">
+        <div style="background-image: url(...)" valign="bottom" 
+             class="card-header color-white no-border">Journey To Mountains</div>
+        <div class="card-content">
+            <div class="card-content-inner">
+                <p class="color-gray">Posted on January 21, 2015</p>
+                <p>Quisque eget vestibulum nulla...</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="#" class="link">Like</a>
+            <a href="#" class="link">Read more</a>
+        </div>
+    </div>
+    
+</template>
+
+<template data-type="cards:facebook">
+    
+    <div class="card facebook">
+        <div class="card-header no-border item-meta">
+            <div class="user-avatar"><img src="..." width="34" height="34"></div>
+            <div class="user-name">John Doe</div>
+            <div class="publishing-date">Monday at 3:47 PM</div>
+        </div>
+        <div class="card-content"><img src="..." width="100%"></div>
+        <div class="card-footer no-border">
+            <a href="#" class="link">Like</a>
+            <a href="#" class="link">Comment</a>
+            <a href="#" class="link">Share</a>
+        </div>
+    </div>
+    
+</template>
+
+<template data-type="media_list">
+    
+    <li>
+        <a class="item-link item-content">
+            <div class="item-inner">
+                <div class="item-title-row">
+                    <div class="item-title">Facebook</div>
+                    <div class="item-after">17:14</div>
+                </div>
+                <div class="item-subtitle">New messages from John Doe</div>
+                <div class="item-text">Lorem ipsum dolor sit amet...</div>
+            </div>
+        </a>
+    </li>
+    
+</template>

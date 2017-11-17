@@ -27,4 +27,7 @@ var BCglobalSettingsClass = function()
         convertAnimatedGIFsToVideos: false
         // ffmpeg -i animated1.gif -movflags faststart -pix_fmt yuv420p -vf "scale=480:-2" -b:v 384k video.mp4
     };
+    
+    // One hour by default
+    this.defaultFeedsRetrievingInterval = 3600 * 1000;
 };

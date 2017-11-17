@@ -94,8 +94,6 @@ var BCapp = {
     nestedViewsCollection: [],
     
     /**
-     * TODO: Forge this!
-     * 
      * @var {View}
      */
     currentNestedView: null,
@@ -112,23 +110,7 @@ var BCapp = {
             function () { BCapp.imgCacheEnabled = false; }
         );
         
-        $.get('pages/misc_segments/right_sidebar.html', function(html)
-        {
-            html = '<script type="text/template" id="sidebar_menu_template">'
-                 + html
-                 + '</script>';
-            
-            $('body').append(html);
-        });
-        
-        $.get('pages/misc_segments/sites_selector.html', function(html)
-        {
-            html = '<script type="text/template" id="sidebar_sites_selector">'
-                 + html
-                 + '</script>';
-            
-            $('body').append(html);
-        });
+        BCapp.__preloadSegments();
         
         BCapp.__adjustOrientation();
         $(window).resize(function() { BCapp.__adjustOrientation(); });
@@ -149,6 +131,41 @@ var BCapp = {
         {
             $progress.circleProgress('value', 0.8);
             BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
+        });
+    },
+    
+    __preloadSegments: function()
+    {
+        $.get('pages/misc_segments/right_sidebar.html', function(html)
+        {
+            html = '<script type="text/template" id="sidebar_menu_template">'
+                 + html
+                 + '</script>';
+            
+            $('body').append(html);
+        });
+        
+        $.get('pages/misc_segments/sites_selector.html', function(html)
+        {
+            html = '<script type="text/template" id="sidebar_sites_selector">'
+                 + html
+                 + '</script>';
+            
+            $('body').append(html);
+        });
+        
+        $.get('pages/misc_segments/navbar_selector_component.html', function(html)
+        {
+            html = '<script type="text/template" id="navbar_selector_component">'
+                 + html
+                 + '</script>';
+            
+            $('body').append(html);
+        });
+        
+        $.get('pages/misc_segments/feed_templates.html', function(html)
+        {
+            $('body').append(html);
         });
     },
     
@@ -224,6 +241,8 @@ var BCapp = {
         
         if( browserLanguage === 'es' ) BCapp.settings.language = 'es_LA';
         else                           BCapp.settings.language = 'en_US';
+        
+        moment.locale(browserLanguage);
         
         $('head').append(sprintf(
             '<script type="text/javascript" src="js/language/%s.js"></script>', BCapp.settings.language
@@ -343,7 +362,10 @@ var BCapp = {
                     var serviceSelector = serviceHandler + '-index';
                     console.log(sprintf('Triggering service %s', serviceSelector));
                     BCapp.triggerServiceLoad(serviceSelector);
-                    BCapp.setNestedView(window.tmpWebsiteViewandler, serviceHandler);
+                    if( services.length > 1 )
+                        BCapp.setNestedView(window.tmpWebsiteViewandler, serviceHandler);
+                    else
+                        BCapp.setNestedView(null);
                 }, 100);
             });
         });
@@ -427,8 +449,13 @@ var BCapp = {
     {
         window.tmpAddWebsiteViewCallback = callback;
         
-        // TODO: Check different use cases for templates
-        var file = 'pages/site_templates/site_with_service_tabs.html';
+        var file;
+        
+        if( manifest.services.length == 1 )
+            file = 'pages/site_templates/single_service_site.html';
+        else
+            file = 'pages/site_templates/site_with_service_tabs.html';
+        
         $.get(file, function(sourceHTML)
         {
             var renderingServices = [];
@@ -446,14 +473,22 @@ var BCapp = {
                     }
                 }
                 
+                service.options.hasNavbar
+                    = typeof service.options.hasNavbar  === 'undefined' ? false : service.options.hasNavbar;
+                
+                service.options.hasToolbar
+                    = typeof service.options.hasToolbar === 'undefined' ? false : service.options.hasToolbar;
+                
                 service.meta = {
-                    icon:         BCapp.__convertIcon(service.icon),
+                    icon:         BChtmlHelper.convertIcon(service.icon),
                     tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
                     tabTarget:    sprintf('%s-%s', websiteMainViewClassName, service.id),
                     activeTab:    (parseInt(i) === 0 ? 'active' : ''),
                     pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
                     markup:       BCapp.__getServiceMarkup(website, service),
-                    serviceClass: service.type == 'iframe' ? 'iframed-service' : 'standard-service'
+                    serviceClass: service.type == 'iframe' ? 'iframed-service' : 'standard-service',
+                    navbarClass:  service.options.hasNavbar  ? 'navbar-fixed'  : '',
+                    toolbarClass: service.options.hasToolbar ? 'toolbar-fixed' : ''
                 };
                 
                 renderingServices[renderingServices.length] = service;
@@ -464,7 +499,8 @@ var BCapp = {
                 manifest:                 manifest,
                 username:                 website.userName,
                 services:                 renderingServices,
-                navbarTitle:              website.userDisplayName, // sprintf('%s - %s', manifest.shortName, website.userDisplayName),
+                navbarTitle:              website.userDisplayName !== '' ? website.userDisplayName : manifest.shortName,
+                                          // sprintf('%s - %s', manifest.shortName, website.userDisplayName),
                 serviceTabWidth:          (100 / renderingServices.length).toFixed(4) + '%'
             };
             
@@ -494,13 +530,17 @@ var BCapp = {
             {
                 // params.name         = serviceViewName;
                 var serviceViewName = renderingServices[i].meta.tabTarget;
-                var view            = BCapp.framework.addView('.' + serviceViewName, params);
                 console.log(sprintf('Service %s / %s view initialized.', websiteMainViewClassName, serviceViewName));
                 
-                if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
-                    BCapp.nestedViewsCollection[websiteMainViewClassName] = {};
-                
-                BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
+                if( renderingServices.length > 1 )
+                {
+                    var view  = BCapp.framework.addView('.' + serviceViewName, params);
+                    
+                    if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
+                        BCapp.nestedViewsCollection[websiteMainViewClassName] = {};
+                    
+                    BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
+                }
             }
             // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
             
@@ -591,46 +631,7 @@ var BCapp = {
         BCapp.showView(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector);
     },
     
-    __convertIcon: function(source)
-    {
-        // iOS,Android
-        if( source.indexOf(',') >= 0 )
-        {
-            var parts = source.split(',');
-            
-            return sprintf('<i class="bc-ios-icon icon f7-icons">%s</i>', parts[0]) +
-                   sprintf('<i class="bc-android-icon icon fa %s"></i>',  parts[1]);
-        }
-        
-        if( source.indexOf('data:') === 0 )
-        {
-            return sprintf('<img src="%s">', source);
-        }
-        
-        if( source.indexOf('http') === 0 )
-        {
-            if( BCapp.imgCacheEnabled )
-            {
-                ImgCache.isCached(source, function(path, success)
-                {
-                    if ( ! success) ImgCache.cacheFile(source);
-                });
-            }
-            
-            return sprintf('<img src="%s">', source);
-        }
-        
-        if( source.indexOf('fa') === 0 )
-        {
-            return sprintf('<i class="icon fa %s"></i>', source);
-        }
-        
-        return source;
-    },
-    
     /**
-     * TODO: Implement rendering of markup for other service types
-     *
      * @param {BCwebsiteClass} website
      * @param {BCwebsiteServiceDetailsClass} service
      * 
@@ -640,8 +641,12 @@ var BCapp = {
      */
     __getServiceMarkup: function(website, service)
     {
-        if( service.type === 'iframe' ) return BCapp.__getIframedServiceMarkup(website, service);
-        if( service.type === 'html'   ) return BCapp.__getHTMLserviceMarkup(website, service);
+        if( service.type === 'iframe'              ) return BCapp.__getIframedServiceMarkup(website, service);
+        if( service.type === 'html'                ) return BCapp.__getHTMLserviceMarkup(website, service);
+        if( service.type === 'feed/cards:simple'   ) return BCapp.__getCardedServiceMarkup(website, service);
+        if( service.type === 'feed/cards:modern'   ) return BCapp.__getCardedServiceMarkup(website, service);
+        if( service.type === 'feed/cards:facebook' ) return BCapp.__getCardedServiceMarkup(website, service);
+        if( service.type === 'feed/media_list'     ) return BCapp.__getCardedServiceMarkup(website, service);
         
         var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
         var html      = $('#common_service_error_template').html()
@@ -663,7 +668,7 @@ var BCapp = {
      */
     __getIframedServiceMarkup: function(website, service)
     {
-        var url       = BCapp.__forgeServiceURL(service, website);
+        var url       = BCapp.forgeServiceURL(service, website);
         var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
         var html      = $('#iframed_service_template').html();
         var context   = { website: website, service: service, manifest: manifest, url: url };
@@ -682,7 +687,7 @@ var BCapp = {
      */
     __getHTMLserviceMarkup: function(website, service)
     {
-        var url    = BCapp.__forgeServiceURL(service, website);
+        var url    = BCapp.forgeServiceURL(service, website);
         var params = {
             bcm_platform:     BCapp.os,
             bcm_access_token: website.accessToken,
@@ -704,16 +709,50 @@ var BCapp = {
     },
     
     /**
-     * @param {BCwebsiteServiceDetailsClass} service
      * @param {BCwebsiteClass} website
+     * @param {BCwebsiteServiceDetailsClass} service
      * 
      * @returns {string}
      * 
      * @private
      */
-    __forgeServiceURL: function(service, website)
+    __getCardedServiceMarkup: function(website, service)
     {
-        var url = service.url;
+        var url    = BCapp.forgeServiceURL(service, website);
+        var params = {
+            bcm_platform:     BCapp.os,
+            bcm_access_token: website.accessToken,
+            offset:           0,
+            tzoffset:         0 - (new Date().getTimezoneOffset() / 60),
+            wasuuup:          BCtoolbox.wasuuup()
+        };
+        
+        var containerId = 'ajax_' + BCtoolbox.wasuuup();
+        if( typeof window.tmpServiceFeeds === 'undefined' )
+            window.tmpServiceFeeds = {};
+        
+        window.tmpServiceFeeds[containerId] = {
+            url:     url,
+            params:  params,
+            website: website,
+            service: service
+        };
+        
+        // console.log(service);
+        return sprintf('<div id="%s" class="bc-service-feed" data-feed-type="%s"></div>', containerId, service.type);
+    },
+    
+    /**
+     * @param {BCwebsiteServiceDetailsClass} service
+     * @param {BCwebsiteClass}               website
+     * @param {string}                       url to convert if not service.url
+     * 
+     * @returns {string}
+     */
+    forgeServiceURL: function(service, website, url)
+    {
+        if( typeof url === 'undefined' ) url = service.url;
+        
         if( url.indexOf(':') < 0 ) url = website.URL + url;
         
         url = url.replace('{{platform}}',     BCapp.os);
@@ -756,6 +795,14 @@ var BCapp = {
             if( $container.attr('data-initialized') ) return;
             
             BCapp.__loadAjaxifiedService($container, true);
+        });
+        
+        $target.find('.bc-service-feed').each(function()
+        {
+            var $container = $(this);
+            if( $container.attr('data-initialized') ) return;
+            
+            BCapp.__loadServiceFeed($container, true);
         });
     },
     
@@ -849,8 +896,128 @@ var BCapp = {
         BCapp.__loadAjaxifiedService($container, true);
     },
     
+    __loadServiceFeed: function($container, showIndicator)
+    {
+        var $parentPage  = $container.closest('.page');
+        var parentPageId = $parentPage.attr('id');
+        console.log($parentPage);
+        
+        BCapp.__initServiceBar($('#' + parentPageId + '-navbar'),  'navbar',  $container);
+        BCapp.__initServiceBar($('#' + parentPageId + '-toolbar'), 'toolbar', $container);
+        
+        if( typeof showIndicator === 'undefined' ) showIndicator = false;
+        console.log('Show Loading indicator: ', showIndicator);
+        
+        var containerId = $container.attr('id');
+        var data        = window.tmpServiceFeeds[containerId];
+        var url         = data.url;
+        var params      = data.params;
+        var website     = data.website;
+        var service     = data.service;
+        
+        console.log(sprintf('Fetching %s...', url));
+        if( showIndicator ) BCtoolbox.showFullPageLoader();
+        
+        $.getJSON(url, params, function(data)
+        {
+            if( showIndicator ) BCtoolbox.hideFullPageLoader();
+            
+            if( data.message !== 'OK' )
+            {
+                var html     = $('#common_service_error_template').html()
+                               .replace('{{title}}',   BClanguage.feeds.errorReceived.title)
+                               .replace('{{content}}', BClanguage.feeds.errorReceived.message);
+                var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+                var context  = { website: website, service: service, manifest: manifest, url: url, error: data.message };
+                var template = Template7.compile(html);
+                $container.html( template(context) );
+                
+                return;
+            }
+            
+            BChtmlHelper.renderFeed($container, website, service, data.data);
+        })
+        .fail(function($xhr, status, error)
+        {
+            // BCapp.framework.hideIndicator();
+            // BCtoolbox.hideNetworkActivityIndicator();
+            
+            var html     = $('#common_service_error_template').html()
+                           .replace('{{title}}',   BClanguage.failedToLoadService.title)
+                           .replace('{{content}}', BClanguage.failedToLoadService.message);
+            var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+            var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
+            var template = Template7.compile(html);
+            $container.html( template(context) );
+            
+            if( showIndicator ) BCtoolbox.hideFullPageLoader();
+        });
+    },
+    
+    reloadServiceFeed: function(trigger)
+    {
+        var $container = $(trigger).closest('.service-page').find('.bc-service-feed');
+        BCapp.__loadServiceFeed($container, true);
+    },
+    
+    /**
+     * 
+     * @param {jQuery} $bar       The navbar/toolbar itself
+     * @param {string} type       navbar|toolbar
+     * @param {jQuery} $container Container view
+     * @private
+     */
+    __initServiceBar: function($bar, type, $container)
+    {
+        if( $bar.length === 0 ) return;
+        if( $bar.attr('initialized') === 'true' ) return;
+        
+        console.log(sprintf('Initializing %s #%s', type, $bar.attr('id')));
+        
+        var containerId = $container.attr('id');
+        var data        = window.tmpServiceFeeds[containerId];
+        var params      = data.params;
+        var website     = data.website;
+        var service     = data.service;
+        var options     = service.options;
+        var helpers     = type === 'navbar' ? options.navbarHelpers : options.toolbarHelpers;
+        
+        var alignments = [];
+        if( helpers.length === 1 ) alignments = ['center'];
+        if( helpers.length === 2 ) alignments = ['left', 'right'];
+        if( helpers.length === 3 ) alignments = ['left', 'center', 'right'];
+        
+        for(var i in helpers)
+        {
+            var helper    = helpers[i];
+            var alignment = alignments[i];
+            
+            if( helper.type === 'selector' )
+            {
+                BChtmlHelper.createNavbarSelector($bar, alignment, helper, containerId);
+            }
+            
+            if( helper.type === 'searchbox' )
+            {
+                BChtmlHelper.createNavbarSearchHelper($bar, alignment, helper, containerId);
+            }
+        }
+        
+        $bar.attr('initialized', 'true');
+    },
+    
     setNestedView: function(mainViewSelector, websiteServiceSelector)
     {
+        if( mainViewSelector === null )
+        {
+            BCapp.currentNestedView = null;
+            
+            return;
+        }
+        
+        if( typeof BCapp.nestedViewsCollection[mainViewSelector] === 'undefined' ) return;
+        if( typeof BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector] === 'undefined' ) return;
+        
         console.log('Nested views collection: ', BCapp.nestedViewsCollection);
         console.log(sprintf('Setting nested view for %s / %s', mainViewSelector, websiteServiceSelector));
         BCapp.currentNestedView = BCapp.nestedViewsCollection[mainViewSelector][websiteServiceSelector];

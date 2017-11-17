@@ -35,6 +35,10 @@ var BCwebsiteManifestClass = function(source)
     
     this.loginAuthenticator = '';
     
+    this.timezoneOffset = 0;
+    
+    this.userLevels = BClanguage.defaultUserLevels;
+    
     /**
      * @type {BCwebsiteServiceDetailsClass[]}
      */

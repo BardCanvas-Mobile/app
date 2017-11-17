@@ -55,8 +55,15 @@ var BClanguage = {
         deleteWebsite: 'Borrar sitio',
         retry:         'Reintentar',
         close:         'Cerrar',
-        back:          'Regresar'
+        back:          'Regresar',
+        disableUser:   'Deshabilitar',
+        toTrash:       'A Papelera',
+        toDraft:       'A Borrador',
+        toReview:      'A revisión'
     },
+    
+    userLevelCaption: 'Autor nivel %s (%s)',
+    userMemberSince:  'Miembro desde %s (%s)',
     
     'of': 'de', // When saying "x of y"
     
@@ -204,5 +211,33 @@ var BClanguage = {
                  '<p>{{error}}</p>' +
                  '<p>Por favor intenta de nuevo. Si el problema persiste, contacta a {{manifest.shortName}} ' +
                  '   enviándoles un correo a {{manifest.contactEmail}} e infórmales al respecto.</p>'
+    },
+    
+    defaultUserLevels: {
+          '0': 'Invitado',
+          '1': 'Sin confirmar',
+         '10': 'Novato',
+        '100': 'Autor',
+        '150': 'VIP',
+        '200': 'Editor',
+        '240': 'Coadmin',
+        '255': 'Admin'
+    },
+    
+    dateFormats: {
+        "shorter": "DD/MMM/YY hh:mm",
+        "short":   "ddd DD MMM h:mm A",
+        "long":    "ddd DD MMM YYYY h:mm A"
+    },
+    
+    feeds: {
+        empty: '<p>No hay entradas en esta fuente.</p>',
+        errorReceived: {
+            title:   'Error al descargar la fuente',
+            message: '<p>Disculpa, pero el servidor de la fuente ha enviado un error al descargar el contenido:</p>' +
+                     '<p>{{error}}</p>' +
+                     '<p>Por favor intenta de nuevo. Si el problema persiste, contacta a {{manifest.shortName}} ' +
+                     '   enviándoles un correo a {{manifest.contactEmail}} e infórmales al respecto.</p>'
+        }
     }
 };

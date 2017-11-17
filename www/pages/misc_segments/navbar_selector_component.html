@@ -1,0 +1,43 @@
+
+<div class="popup selector-component">
+    <div class="page navbar-fixed">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link close-popup">
+                        <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                        <i class="bc-android-icon fa fa-chevron-left"></i>
+                        {{@global.language.actions.back}}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content">
+            
+            <div class="list-block media-list">
+                <ul>
+                    {{#items}}
+                    <li>
+                        <a class="item-link item-content close-popup"
+                           data-component-id="{{../componentId}}"
+                           data-item-id="{{id}}"
+                           data-caption="{{caption}}"
+                           onclick="BChtmlHelper.setSelectedItem(this)">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{caption}}</div>
+                                </div>
+                                {{#if description}}
+                                <div class="item-text">{{description}}</div>
+                                {{/if}}
+                            </div>
+                        </a>
+                    </li>
+                    {{/items}}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</div>

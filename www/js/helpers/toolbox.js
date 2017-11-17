@@ -265,5 +265,19 @@ var BCtoolbox = {
                 sourceType:      navigator.camera.PictureSourceType.PHOTOLIBRARY
             }
         );
+    },
+    
+    convertRemoteDate: function(dateString, serverTimezoneOffsetString)
+    {
+        var parts     = dateString.split(' ');
+        var formatted = parts[0] + 'T' + parts[1];
+        if( serverTimezoneOffsetString.length == 4 )
+            formatted = formatted 
+                      + serverTimezoneOffsetString.substring(0, 2) + ":" + serverTimezoneOffsetString.substring(2);
+        else
+            formatted = formatted
+                      + serverTimezoneOffsetString.substring(0, 3) + ":" + serverTimezoneOffsetString.substring(3);
+        
+        return new Date(formatted);
     }
 };

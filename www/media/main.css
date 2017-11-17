@@ -41,6 +41,12 @@ body[data-orientation="landscape"] .bc-landscape-max-50 { max-width: 50%; }
 .bc-website-icon          { height: 1.4em; vertical-align: middle; }
 html.ios .bc-website-icon { height: 1.3em; margin-right: 4px; }
 
+/* Clearfix  */
+
+.clearfix:after       { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+* html>body .clearfix { display: inline-block; width: 100%; }
+* html .clearfix      { height: 1%; }
+
 /* BC imports: Framed content */
 
 .framed_content          { border: 2px solid silver; background-color: white; color: black; }
@@ -59,6 +65,13 @@ html.ios .framed_content { border-radius: 5px; }
 .framed_content.state_hover:hover { background-color: #42A0FF; border-color: #000080; color: white;   }
 
 .state_disabled img.gray_on_disabled { filter: grayscale(100%); opacity: 0.75; -webkit-filter: grayscale(100%); }
+
+/* BC imports: colors */
+
+a.greengo  , .pseudo_link.greengo  , .greengo   { color: green;     text-shadow: 1px 1px 1px dimgrey; }
+a.alternate, .pseudo_link.alternate, .alternate { color: royalblue; text-shadow: 1px 1px 1px dimgrey; }
+a.important, .pseudo_link.important, .important { color: orange;    text-shadow: 1px 1px 1px dimgrey; }
+a.critical,  .pseudo_link.critical , .critical  { color: red;       text-shadow: 1px 1px 1px dimgrey; }
 
 /* BC imports: Multiple columns (mangled) */
 
@@ -145,6 +158,8 @@ html.android .service-content .navbar .left.title { padding-left: 16px; }
 html.ios     .messagebar .link { margin-left: 8px; }
 html.android .messagebar .link { font-size: 22px; padding-left: 0; padding-right: 8px; }
 
+.popup.selector-component .list-block { margin-top: 0; margin-bottom: 0; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
@@ -162,3 +177,29 @@ html.android .messagebar .link { font-size: 22px; padding-left: 0; padding-right
     color: black;
 }
 html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
+
+/* Feed: card styles */
+
+.card.modern   .card-header     { height: 40vw; background-size: cover; background-position: center; }
+
+.card.facebook .card-header     { display: block; padding: 10px; }
+.item-meta                      { font-size: 0.9em; }
+.item-meta     .user-avatar     { display: block; float: left; }
+.item-meta     .user-avatar img { width: 34px; height: 34px; }
+.item-meta     .user-name       { display: block; margin-left: 44px; font-size: 14px;  font-weight: 500; }
+.item-meta     .publishing-date { display: block; margin-left: 44px; font-size: 13px;  color: #8e8e93; }
+               .publishing-date { font-size: 0.9em; }
+
+.card.facebook .card-footer        { background: #fafafa; }
+.card.facebook .card-footer a      { color: #81848b; font-weight: 500; }
+.card.facebook .card-content img   { display: block;  }
+.card.facebook .card-content-inner { padding: 15px 10px;  }  
+
+.card *:last-child { margin-bottom: 0; }
+.card .comments    { padding-left: 16px; }
+
+.fa-bulleted                 { padding-left: 18px; position: relative; }
+.fa-bulleted .fa:first-child { position: absolute; left: -2px; top: 2px; }
+
+.nowrap      { white-space: nowrap; }
+.ellipsified { overflow: hidden; text-overflow: ellipsis; }
