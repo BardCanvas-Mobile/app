@@ -243,5 +243,8 @@ var BClanguage = {
                      '<p>Por favor intenta de nuevo. Si el problema persiste, contacta a {{manifest.shortName}} ' +
                      '   enviándoles un correo a {{manifest.contactEmail}} e infórmales al respecto.</p>'
         }
-    }
+    },
+    
+    about: 'Acerca de',
+    from:  'De'
 };

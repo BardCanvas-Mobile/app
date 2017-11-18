@@ -241,5 +241,8 @@ var BClanguage = {
                      '<p>Please try again. If the problem persists, please contact {{manifest.shortName}} ' +
                      '   by sending them an email to {{manifest.contactEmail}} and inform them about it.</p>' 
         }
-    }
+    },
+    
+    about: 'About',
+    from:  'From'
 };

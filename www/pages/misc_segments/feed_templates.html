@@ -145,7 +145,7 @@
 </template>
 
 <template data-type="cards:facebook">
-
+    
     <div class="card facebook">
         
         {{#if service.options.showAuthors}}
@@ -238,5 +238,56 @@
             </div>
         </a>
     </li>
+    
+</template>
+
+<template data-type="single_item_page">
+        
+    <div class="page">
+        <div class="page-content inner-navbar-fixed">
+            
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left">
+                        <a class="link back">
+                            <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                            <i class="bc-android-icon fa fa-chevron-left"></i>
+                            {{@global.language.actions.back}}
+                        </a>
+                    </div>
+                    <div class="right">
+                        <a class="link icon-only" disabled>
+                            <i class="bc-ios-icon icon f7-icons">share</i>
+                            <i class="bc-android-icon fa fa-share"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="inner-page-content">
+                <article>
+                    
+                    <div class="content-block">
+                        {{item.content}}
+                    </div>
+                    
+                    {{#if service.options.showAuthors}}
+                        <div class="content-block-title">
+                            {{@global.language.about}} {{item.author_display_name}}:
+                        </div>
+                        <div class="content-block item-meta">
+                            <span class="user-avatar"><img src="{{item.author_avatar}}"></span>
+                            <span class="user-name">
+                                {{item._memberSinceCaption}}<br>
+                                {{@global.language.from}}: {{item.author_country_name}}
+                            </span>
+                        </div>
+                    {{/if}}
+                    
+                </article>
+            </div>
+            
+        </div><!-- /.page-content -->
+    </div><!-- /.page -->
     
 </template>

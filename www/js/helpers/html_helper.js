@@ -221,14 +221,13 @@ var BChtmlHelper = {
             return;
         }
         
-        var manifest = BCmanifestsRepository.getForWebsite(website.URL);
-        
         /** @type {string} cards:simple | cards:modern | cards:facebook | media_list */
-        var type = $container.attr('data-feed-type').replace('feed/', '');
+        var type     = $container.attr('data-feed-type').replace('feed/', '');
+        var manifest = BCmanifestsRepository.getForWebsite(website.URL);
         console.log(sprintf('Rendering %s items of type %s', items.length, type));
-        console.log('Service: ',  service);
-        console.log('Website: ',  website);
-        console.log('Manifest: ', manifest);
+        // console.log('Service: ',  service);
+        // console.log('Website: ',  website);
+        // console.log('Manifest: ', manifest);
         
         var $collection = $(sprintf('<div class="feed-contents" data-type="%s"></div>', type));
         for(var i in items)
@@ -273,16 +272,10 @@ var BChtmlHelper = {
             $card.data('context', context);
             $card.find('.card-header, .card-content').bind('click', function()
             {
-                var $this = $(this);
-                var $card = $this.closest('.card');
-                var context = $card.data('context');
-                
-                console.log(context);
+                BChtmlHelper.renderFeedItemPage( $(this) );
             });
             
             $collection.append($card);
-            
-            console.log('Item: ', item);
         }
         
         $container.html('').append($collection);
@@ -347,5 +340,18 @@ var BChtmlHelper = {
             item._mainCategoryCaption = item.parent_category_title + '/' + item._mainCategoryCaption;
         
         return item;
+    },
+    
+    renderFeedItemPage: function( $trigger )
+    {
+        var $card    = $trigger.closest('.card');
+        var context  = $card.data('context');
+        var markup   = $('body').find('template[data-type="single_item_page"]').html();
+        var template = Template7.compile(markup);
+        var html     = template(context);
+        var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+        
+        console.log(context);
+        view.router.loadContent(html);
     }
 };

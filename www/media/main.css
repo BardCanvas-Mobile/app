@@ -160,6 +160,11 @@ html.android .messagebar .link { font-size: 22px; padding-left: 0; padding-right
 
 .popup.selector-component .list-block { margin-top: 0; margin-bottom: 0; }
 
+html.ios     .inner-navbar-fixed .navbar             { position: fixed; top: 44px; }
+html.ios     .inner-navbar-fixed .inner-page-content { padding-top: 44px; }
+html.android .inner-navbar-fixed .navbar             { position: fixed; top: 56px; }
+html.android .inner-navbar-fixed .inner-page-content { padding-top: 56px; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
@@ -190,12 +195,10 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
                                    }
                                    
 .card.facebook .card-header        { display: block; padding: 10px; }
-.item-meta                         { font-size: 0.9em; }
-.item-meta     .user-avatar        { display: block; float: left; }
+.item-meta     .user-avatar        { display: block; float: left; padding-top: 2px; }
 .item-meta     .user-avatar img    { width: 34px; height: 34px; }
 .item-meta     .user-name          { display: block; margin-left: 44px; font-size: 14px;  font-weight: 500; }
 .item-meta     .publishing-date    { display: block; margin-left: 44px; font-size: 13px;  color: #8e8e93; }
-               .publishing-date    { font-size: 0.9em; }
 
 .card.facebook .card-footer        { background: #fafafa; }
 .card.facebook .card-footer a      { color: #81848b; font-weight: 500; }
@@ -224,3 +227,9 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
         margin: 0 0 10px 0; display: inline-block; width: 100%;
     }
 }
+
+/* Feed: single item page */
+
+video { max-width: 100%; max-height: 50vh; }
+
+.emojione_image { vertical-align: middle; }
