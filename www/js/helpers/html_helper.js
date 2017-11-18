@@ -204,8 +204,10 @@ var BChtmlHelper = {
         BCapp.reloadServiceFeed( '#' + containerId );
     },
     
-    renderFeed: function($container, website, service, items)
+    renderFeed: function($container, website, service, data)
     {
+        var items = data.data;
+        
         if( items.length === 0 )
         {
             $container.html(
@@ -228,35 +230,43 @@ var BChtmlHelper = {
         console.log('Website: ',  website);
         console.log('Manifest: ', manifest);
         
-        var $collection = $('<div class="feed-contents"></div>');
+        var $collection = $(sprintf('<div class="feed-contents" data-type="%s"></div>', type));
         for(var i in items)
         {
-            var item = items[i];
-            var rawDate;
+            var item = BChtmlHelper.__prepareItem(items[i], website, service, manifest);
             
-            rawDate = BCtoolbox.convertRemoteDate(item.publishing_date, manifest.timezoneOffset);
-            item.publishing_date = moment(rawDate).format(BClanguage.dateFormats.short)
-                                 + ' (' + moment(rawDate).fromNow() + ')';
-            
-            var isEditor = false;
+            var itemAuthorUserName = item.author_user_name;
+            var currentUserLevel   = 0;
+            var currentUserName    = '';
             if( website.meta !== null )
-                if( parseInt(website.meta.user_level) >= BCuserLevels.Editor )
-                    isEditor = true;
+            {
+                currentUserLevel = parseInt(website.meta.user_level);
+                currentUserName  = website.userName;
+            }
     
-            item._levelCaption = sprintf(
-                BClanguage.userLevelCaption, item.author_level, manifest.userLevels[item.author_level]
-            );
+            item._showCategoryLabel = true;
+            if( service.options.showsMultipleCategories )
+                if( data.extras )
+                    if( data.extras.hideCategoryInCards )
+                        item._showCategoryLabel = false;
             
-            rawDate = BCtoolbox.convertRemoteDate(item.author_creation_date, manifest.timezoneOffset);
-            item._memberSinceCaption = sprintf(
-                BClanguage.userMemberSince,
-                moment(rawDate).format(BClanguage.dateFormats.shorter),
-                moment(rawDate).fromNow()
-            );
+            var isEditor  = currentUserLevel >= BCuserLevels.Editor;
+            var isOwnItem = currentUserName === itemAuthorUserName;
+            var context   = {
+                item:     item,
+                service:  service,
+                website:  website,
+                manifest: manifest,
+                flags:    {
+                    isEditor:          isEditor,
+                    isOwnItem:         isOwnItem,
+                    showUserDetails:   isEditor && ! isOwnItem,
+                    showAdminControls: isEditor && ! isOwnItem
+                }
+            };
             
             var markup   = $('body').find(sprintf('template[data-type="%s"]', type)).html();
             var template = Template7.compile(markup);
-            var context  = { item: item, service: service, website: website, manifest: manifest, isEditor: isEditor };
             var html     = template(context);
             var $card    = $(html);
             
@@ -286,5 +296,56 @@ var BChtmlHelper = {
         var pageId = '#' + $container.closest('.service-page').attr('id');
         BCapp.framework.initImagesLazyLoad( pageId );
         console.log( 'Lazy load triggered on ' + pageId );
+    },
+    
+    __prepareItem: function(item, website, service, manifest)
+    {
+        var rawDate;
+        var itemAuthorLevel = parseInt(item.author_level);
+        
+        rawDate = BCtoolbox.convertRemoteDate(item.publishing_date, manifest.timezoneOffset);
+        if( service.options.showAuthors )
+        {
+            item._publishedCaption = sprintf(
+                BClanguage.feeds.publishedCaption.full,
+                item.author_display_name,
+                moment(rawDate).format(BClanguage.dateFormats.short),
+                moment(rawDate).fromNow()
+            );
+        }
+        else
+        {
+            item._publishedCaption = sprintf(
+                BClanguage.feeds.publishedCaption.simple,
+                moment(rawDate).format(BClanguage.dateFormats.short),
+                moment(rawDate).fromNow()
+            );
+        }
+        
+        item._altPublishedCaption = sprintf(
+            BClanguage.feeds.publishedCaption.simple,
+            moment(rawDate).format(BClanguage.dateFormats.short),
+            moment(rawDate).fromNow()
+        );
+        
+        item._levelCaption = sprintf(
+            BClanguage.userLevelCaption, itemAuthorLevel, manifest.userLevels[itemAuthorLevel]
+        );
+        
+        rawDate = BCtoolbox.convertRemoteDate(item.author_creation_date, manifest.timezoneOffset);
+        item._memberSinceCaption = sprintf(
+            BClanguage.userMemberSince,
+            moment(rawDate).format(BClanguage.dateFormats.shorter),
+            moment(rawDate).fromNow()
+        );
+        
+        item.featured_image_path      = BCapp.forgeServiceURL(service, website, item.featured_image_path);
+        item.featured_image_thumbnail = BCapp.forgeServiceURL(service, website, item.featured_image_thumbnail);
+        
+        item._mainCategoryCaption = item.main_category_title;
+        if( item.parent_category_title )
+            item._mainCategoryCaption = item.parent_category_title + '/' + item._mainCategoryCaption;
+        
+        return item;
     }
 };

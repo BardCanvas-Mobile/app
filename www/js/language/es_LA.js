@@ -231,6 +231,10 @@ var BClanguage = {
     },
     
     feeds: {
+        publishedCaption: {
+            simple: '%s (%s)',
+            full:   'Por %s el %s (%s)'
+        },
         empty: '<p>No hay entradas en esta fuente.</p>',
         errorReceived: {
             title:   'Error al descargar la fuente',

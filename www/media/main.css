@@ -180,15 +180,22 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 /* Feed: card styles */
 
-.card.modern   .card-header     { height: 40vw; background-size: cover; background-position: center; }
-
-.card.facebook .card-header     { display: block; padding: 10px; }
-.item-meta                      { font-size: 0.9em; }
-.item-meta     .user-avatar     { display: block; float: left; }
-.item-meta     .user-avatar img { width: 34px; height: 34px; }
-.item-meta     .user-name       { display: block; margin-left: 44px; font-size: 14px;  font-weight: 500; }
-.item-meta     .publishing-date { display: block; margin-left: 44px; font-size: 13px;  color: #8e8e93; }
-               .publishing-date { font-size: 0.9em; }
+.card.modern   .card-header        { min-height: 25vh; background-size: cover; background-position: center;
+                                     color: white;
+                                     text-shadow: -1px -1px 5px #000
+                                                ,  1px -1px 5px #000
+                                                ,  1px  1px 5px #000
+                                                , -1px  1px 5px #000
+                                                ;
+                                   }
+                                   
+.card.facebook .card-header        { display: block; padding: 10px; }
+.item-meta                         { font-size: 0.9em; }
+.item-meta     .user-avatar        { display: block; float: left; }
+.item-meta     .user-avatar img    { width: 34px; height: 34px; }
+.item-meta     .user-name          { display: block; margin-left: 44px; font-size: 14px;  font-weight: 500; }
+.item-meta     .publishing-date    { display: block; margin-left: 44px; font-size: 13px;  color: #8e8e93; }
+               .publishing-date    { font-size: 0.9em; }
 
 .card.facebook .card-footer        { background: #fafafa; }
 .card.facebook .card-footer a      { color: #81848b; font-weight: 500; }
@@ -203,3 +210,17 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 .nowrap      { white-space: nowrap; }
 .ellipsified { overflow: hidden; text-overflow: ellipsis; }
+
+@media all and (min-width: 600px)
+{
+    .feed-contents[data-type*="cards"] {
+        -webkit-column-count:    2; -moz-column-count:    2; column-count:    2;
+        -webkit-column-gap:   10px; -moz-column-gap:   10px; column-gap:   10px;
+        
+        padding: 10px 10px 0 10px;
+    }
+    
+    .feed-contents[data-type*="cards"] .card {
+        margin: 0 0 10px 0; display: inline-block; width: 100%;
+    }
+}

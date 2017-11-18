@@ -229,6 +229,10 @@ var BClanguage = {
     },
     
     feeds: {
+        publishedCaption: {
+            simple: '%s (%s)',
+            full:   'Published by %s on %s (%s)'
+        },
         empty: '<p>There are no entries for this feed.</p>',
         errorReceived: {
             title:   'Error received from feed server',

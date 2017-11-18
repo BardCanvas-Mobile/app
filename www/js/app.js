@@ -752,6 +752,7 @@ var BCapp = {
     forgeServiceURL: function(service, website, url)
     {
         if( typeof url === 'undefined' ) url = service.url;
+        else                             url = url.replace(/^\//, '');
         
         if( url.indexOf(':') < 0 ) url = website.URL + url;
         
@@ -935,7 +936,7 @@ var BCapp = {
                 return;
             }
             
-            BChtmlHelper.renderFeed($container, website, service, data.data);
+            BChtmlHelper.renderFeed($container, website, service, data);
         })
         .fail(function($xhr, status, error)
         {
