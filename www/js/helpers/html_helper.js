@@ -369,7 +369,31 @@ var BChtmlHelper = {
             $this.text(repl);
         });
         
-        console.log(context);
+        $html.find('article a').each(function()
+        {
+            var $this = $(this);
+            var href  = $this.attr('href');
+            if( typeof href === 'undefined' ) return;
+            
+            if( href.search(/^http/i) >= 0 )
+            {
+                $this.bind('click', function() {
+                    var name = "popup" + BCtoolbox.wasuuup();
+                    BCapp.openURLinPopup(href, name);
+                });
+            }
+        });
+    
+        $html.find('article img[data-media-type="image"]').each(function()
+        {
+            $(this).bind('click', function()
+            {
+                var image = $(this)[0];
+                BCtoolbox.showPhotoBrowser(image);
+            });
+        });
+        
+        // console.log(context);
         view.router.loadContent($html);
     }
 };

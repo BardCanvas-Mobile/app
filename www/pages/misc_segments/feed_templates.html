@@ -77,9 +77,15 @@
     
     <div class="card modern">
         
-        <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
-            {{item.title}}
-        </div>
+        {{#if item.featured_image_path}}
+            <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
+                {{item.title}}
+            </div>
+        {{else}}
+            <div class="card-header no-border no-background" valign="bottom">
+                {{item.title}}
+            </div>
+        {{/if}}
         
         <div class="card-content">
             <div class="card-content-inner">

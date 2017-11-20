@@ -1037,14 +1037,14 @@ var BCapp = {
     {
         var $popup = $('#window_open_override_template');
         $popup.find('.navbar .title').text(URL);
-        BCapp.showFullPageLoader();
+        BCtoolbox.showFullPageLoader();
         $popup.find('iframe').attr('src', URL);
         
         BCapp.framework.popup($popup);
     }
 };
 
-// var windowOpenBackup = window.open;
-// window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
+var windowOpenBackup = window.open;
+window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
 
 document.addEventListener('deviceready', BCapp.init, false);
