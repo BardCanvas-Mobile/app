@@ -479,6 +479,11 @@ var BCapp = {
                 service.options.hasToolbar
                     = typeof service.options.hasToolbar === 'undefined' ? false : service.options.hasToolbar;
                 
+                var serviceClass = '';
+                if(       service.type === 'iframe'           ) serviceClass = 'iframed-service';
+                else if(  service.type === 'html'             ) serviceClass = 'prebuilt-service';
+                else if ( service.type.indexOf('cards:') >= 0 ) serviceClass = 'feed-service';
+                
                 service.meta = {
                     icon:         BChtmlHelper.convertIcon(service.icon),
                     tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
@@ -486,9 +491,9 @@ var BCapp = {
                     activeTab:    (parseInt(i) === 0 ? 'active' : ''),
                     pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
                     markup:       BCapp.__getServiceMarkup(website, service),
-                    serviceClass: service.type == 'iframe' ? 'iframed-service' : 'standard-service',
-                    navbarClass:  service.options.hasNavbar  ? 'navbar-fixed'  : '',
-                    toolbarClass: service.options.hasToolbar ? 'toolbar-fixed' : ''
+                    serviceClass: serviceClass,
+                    navbarClass:  service.options.hasNavbar  ? 'service-navbar-fixed'  : '',
+                    toolbarClass: service.options.hasToolbar ? 'service-toolbar-fixed' : ''
                 };
                 
                 renderingServices[renderingServices.length] = service;
@@ -754,6 +759,8 @@ var BCapp = {
         if( typeof url === 'undefined' ) url = service.url;
         else                             url = url.replace(/^\//, '');
         
+        if( url.length === 0 ) return '';
+        
         if( url.indexOf(':') < 0 ) url = website.URL + url;
         
         url = url.replace('{{platform}}',     BCapp.os);
@@ -937,6 +944,7 @@ var BCapp = {
             }
             
             BChtmlHelper.renderFeed($container, website, service, data);
+            $container.attr('data-initialized', true);
         })
         .fail(function($xhr, status, error)
         {

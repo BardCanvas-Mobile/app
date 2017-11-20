@@ -26,9 +26,11 @@
                 </p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    <ul class="comments">
-                        <li>Comments here!</li>
-                    </ul>
+                    {{#if item.comments_count}}
+                        <ul class="comments">
+                            <li>{{item.comments_count}} comments here!</li>
+                        </ul>
+                    {{/if}}
                 {{/if}}
                 
                 {{#if flags.showUserDetails}}
@@ -98,9 +100,11 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    <ul class="comments">
-                        <li>Comments here!</li>
-                    </ul>
+                    {{#if item.comments_count}}
+                        <ul class="comments">
+                            <li>{{item.comments_count}} comments here!</li>
+                        </ul>
+                    {{/if}}
                 {{/if}}
                 
                 {{#if flags.showUserDetails}}
@@ -173,14 +177,18 @@
                     {{item.title}}
                 </p>
                 
-                <img src="{{item.featured_image_path}}" width="100%">
+                {{#if item.featured_image_path}}
+                    <img src="{{item.featured_image_path}}" width="100%">
+                {{/if}}
                 
                 <p>{{item.excerpt}}</p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    <ul class="comments">
-                        <li>Comments here!</li>
-                    </ul>
+                    {{#if item.comments_count}}
+                        <ul class="comments">
+                            <li>{{item.comments_count}} comments here!</li>
+                        </ul>
+                    {{/if}}
                 {{/if}}
                 
                 {{#if flags.showUserDetails}}
@@ -267,22 +275,34 @@
             <div class="inner-page-content">
                 <article>
                     
-                    <div class="content-block">
+                    {{#if service.options.showAuthors}}
+                        <div class="content-block">
+                            <h1>{{item.title}}</h1>
+                            <div class="item-meta">
+                                <span class="user-avatar"><img src="{{item.author_avatar}}"></span>
+                                <span class="user-name">{{item.author_display_name}} ({{item._levelOnlyCaption}})</span>
+                                <span class="publishing-date">{{item._altPublishedCaption}}</span>
+                            </div>
+                        </div>
+                    {{else}}
+                        <div class="content-block">
+                            <h1>{{item.title}}</h1>
+                            <span class="publishing-date">{{item._altPublishedCaption}}</span>
+                        </div>
+                    {{/if}}
+                    
+                    <div class="content-block main-content">
                         {{item.content}}
                     </div>
                     
-                    {{#if service.options.showAuthors}}
-                        <div class="content-block-title">
-                            {{@global.language.about}} {{item.author_display_name}}:
+                    {{#item.extra_content_blocks}}
+                        {{#if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{/if}}
+                        <div class="content-block extra-content {{class}}">
+                            {{contents}}
                         </div>
-                        <div class="content-block item-meta">
-                            <span class="user-avatar"><img src="{{item.author_avatar}}"></span>
-                            <span class="user-name">
-                                {{item._memberSinceCaption}}<br>
-                                {{@global.language.from}}: {{item.author_country_name}}
-                            </span>
-                        </div>
-                    {{/if}}
+                    {{/item.extra_content_blocks}}
                     
                 </article>
             </div>

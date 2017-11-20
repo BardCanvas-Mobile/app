@@ -120,6 +120,8 @@ html         .toolbar-inner .badge           { position: absolute; top: -5px; ri
 html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 .iframed-service .service-content { overflow: hidden; }
 
+.list-block .item-text.no-clamp { -webkit-line-clamp: none; }
+
 /*html.android .page { background-color: #efeff4; }*/
 
 /* F7 extensions */
@@ -140,6 +142,9 @@ html.ios     .service-content .page.navbar-fixed  { padding-top:    44px; }
 html.android .service-content .page.navbar-fixed  { padding-top:    56px; }
 html.ios     .service-content .page.toolbar-fixed { padding-bottom: 44px; }
 html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
+
+html.ios     .view.service-navbar-fixed { padding-top: 44px; }
+html.android .view.service-navbar-fixed { padding-top: 56px; }
 
 html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
 html.android #left-panel .navbar-fixed.toolbar-fixed .page-content { padding-top: 56px; }
@@ -202,7 +207,6 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 .card.facebook .card-footer        { background: #fafafa; }
 .card.facebook .card-footer a      { color: #81848b; font-weight: 500; }
-.card.facebook .card-content img   { display: block;  }
 .card.facebook .card-content-inner { padding: 15px 10px;  }  
 
 .card *:last-child { margin-bottom: 0; }
@@ -232,4 +236,25 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 video { max-width: 100%; max-height: 50vh; }
 
-.emojione_image { vertical-align: middle; }
+img.emojione, .emojione_image { height: 1em; vertical-align: middle; }
+
+article img { max-width: 100%; height: auto; }
+
+article .content-block:first-child *:first-child { margin-top: 0; }
+article .content-block:last-child *:last-child { margin-bottom: 0; }
+
+
+html.ios     .bc-indented-list .bc-indented-entry    { background-color: #d4d4d7; }
+html.android .bc-indented-list .bc-indented-entry    { background-color: #ebebeb; }
+html.android .bc-indented-entry .content-block-inner { background-color: white; }
+
+.bc-indented-list .indent-1  { padding-left:  0;   }
+.bc-indented-list .indent-2  { padding-left:  5px; }
+.bc-indented-list .indent-3  { padding-left: 10px; }
+.bc-indented-list .indent-4  { padding-left: 15px; }
+.bc-indented-list .indent-5  { padding-left: 20px; }
+.bc-indented-list .indent-6  { padding-left: 25px; }
+.bc-indented-list .indent-7  { padding-left: 30px; }
+.bc-indented-list .indent-8  { padding-left: 35px; }
+.bc-indented-list .indent-9  { padding-left: 40px; }
+.bc-indented-list .indent-10 { padding-left: 45px; }

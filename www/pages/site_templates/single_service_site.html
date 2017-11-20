@@ -34,47 +34,47 @@
             
             <div class="page-content">
                 {{#services}}
-                <div id="{{meta.tabTarget}}" class="view {{meta.navbarClass}} {{meta.ToolbarClass}}">
-                    
-                    {{#if options.hasNavbar}}
-                        <div class="navbar" id="{{meta.pageHandler}}-navbar">
-                            <div class="navbar-inner">
-                                <span class="left"></span>
-                                <span class="center">
-                                    <i class="preloader"></i>
-                                </span>
-                                <span class="right"></span>
-                            </div>
-                        </div>
-                    {{/if}}
-                    
-                    {{#if options.hasToolbar}}
-                        <div class="toolbar toolbar-bottom" id="{{meta.pageHandler}}-toolbar">
-                            <div class="toolbar-inner">
-                                <span class="left"></span>
-                                <span class="center">
-                                    <i class="preloader"></i>
-                                </span>
-                                <span class="right"></span>
-                            </div>
-                        </div>
-                    {{/if}}
-                    
-                    <div class="pages">
+                    <div id="{{meta.tabTarget}}" class="view {{meta.navbarClass}} {{meta.ToolbarClass}}">
                         
-                        <div data-page="{{meta.pageHandler}}"
-                             class="page service-page"
-                             id="{{meta.pageHandler}}"
-                             data-service-title="{{../manifest.shortName}} - {{caption}}"
-                             data-website-icon="{{../manifest.icon}}">
-                            <div class="page-content service-content"
-                                 id="sc-{{meta.pageHandler}}">
-                                {{meta.markup}}
+                        {{#if options.hasNavbar}}
+                            <div class="navbar" id="{{meta.pageHandler}}-navbar">
+                                <div class="navbar-inner">
+                                    <span class="left"></span>
+                                    <span class="center">
+                                        <i class="preloader"></i>
+                                    </span>
+                                    <span class="right"></span>
+                                </div>
                             </div>
-                        </div>
+                        {{/if}}
                         
+                        {{#if options.hasToolbar}}
+                            <div class="toolbar toolbar-bottom" id="{{meta.pageHandler}}-toolbar">
+                                <div class="toolbar-inner">
+                                    <span class="left"></span>
+                                    <span class="center">
+                                        <i class="preloader"></i>
+                                    </span>
+                                    <span class="right"></span>
+                                </div>
+                            </div>
+                        {{/if}}
+                        
+                        <div class="pages">
+                            
+                            <div data-page="{{meta.pageHandler}}"
+                                 class="page service-page"
+                                 id="{{meta.pageHandler}}"
+                                 data-service-title="{{../manifest.shortName}} - {{caption}}"
+                                 data-website-icon="{{../manifest.icon}}">
+                                <div class="page-content service-content"
+                                     id="sc-{{meta.pageHandler}}">
+                                    {{meta.markup}}
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
-                </div>
                 {{/services}}
             </div>
         </div>

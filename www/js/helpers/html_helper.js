@@ -151,7 +151,7 @@ var BChtmlHelper = {
         window.tmpHelpersLoaded++;
         
         var sel = '.' + position;
-        var $a  = $('<a class="link search-trigger icon-only"></a>');
+        var $a  = $('<a class="link disabled search-trigger icon-only"></a>');
         $a.data('containerId',  containerId);
         $a.bind('click', function()
         {
@@ -270,6 +270,9 @@ var BChtmlHelper = {
             var $card    = $(html);
             
             $card.data('context', context);
+            $card.data('website', website);
+            $card.data('service', service);
+            $card.data('manifest', manifest);
             $card.find('.card-header, .card-content').bind('click', function()
             {
                 BChtmlHelper.renderFeedItemPage( $(this) );
@@ -325,6 +328,8 @@ var BChtmlHelper = {
             BClanguage.userLevelCaption, itemAuthorLevel, manifest.userLevels[itemAuthorLevel]
         );
         
+        item._levelOnlyCaption = manifest.userLevels[itemAuthorLevel];
+        
         rawDate = BCtoolbox.convertRemoteDate(item.author_creation_date, manifest.timezoneOffset);
         item._memberSinceCaption = sprintf(
             BClanguage.userMemberSince,
@@ -346,12 +351,25 @@ var BChtmlHelper = {
     {
         var $card    = $trigger.closest('.card');
         var context  = $card.data('context');
+        var website  = $card.data('website');
+        var service  = $card.data('service');
+        var manifest = $card.data('manifest');
         var markup   = $('body').find('template[data-type="single_item_page"]').html();
         var template = Template7.compile(markup);
-        var html     = template(context);
+        var $html    = $(template(context));
         var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         
+        $html.find('.convert-to-full-date').each(function()
+        {
+            var $this   = $(this);
+            var val     = $this.text();
+            var rawDate = BCtoolbox.convertRemoteDate(val, manifest.timezoneOffset);
+            var repl    = moment(rawDate).format(BClanguage.dateFormats.shorter)
+                        + ' (' + moment(rawDate).fromNow() + ')';
+            $this.text(repl);
+        });
+        
         console.log(context);
-        view.router.loadContent(html);
+        view.router.loadContent($html);
     }
 };
