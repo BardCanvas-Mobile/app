@@ -232,7 +232,7 @@ var BChtmlHelper = {
         var $collection = $(sprintf('<div class="feed-contents" data-type="%s"></div>', type));
         for(var i in items)
         {
-            var item = BChtmlHelper.__prepareItem(items[i], website, service, manifest);
+            var item = BChtmlHelper.__prepareItem(new BCfeedItemClass(items[i]), website, service, manifest);
             
             var itemAuthorUserName = item.author_user_name;
             var currentUserLevel   = 0;
@@ -294,6 +294,16 @@ var BChtmlHelper = {
         console.log( 'Lazy load triggered on ' + pageId );
     },
     
+    /**
+     *
+     * @param {BCfeedItemClass}              item
+     * @param {BCwebsiteClass}               website
+     * @param {BCwebsiteServiceDetailsClass} service
+     * @param {BCwebsiteManifestClass}       manifest
+     * 
+     * @returns {BCfeedItemClass}
+     * @private
+     */
     __prepareItem: function(item, website, service, manifest)
     {
         var rawDate;
