@@ -193,14 +193,14 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 .card.modern   .card-header             { height: 25vh; background-size: cover;
                                           background-position: center;
-                                          color: white;
+                                          color: white; background-color: black;
                                           text-shadow: -1px -1px 10px black
                                                      ,  1px -1px 10px black
                                                      ,  1px  1px 10px black
                                                      , -1px  1px 10px black
                                                      ;
                                         }
-.card.modern .card-header.no-background { height: auto; color: inherit; text-shadow: none; }
+.card.modern .card-header.no-background { height: auto; background-color: transparent; color: inherit; text-shadow: none; }
 
 .card.facebook .card-header        { display: block; padding: 10px; }
 .item-meta     .user-avatar        { display: block; float: left; padding-top: 2px; }
@@ -214,6 +214,7 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 .card *:last-child { margin-bottom: 0; }
 .card .comments    { padding-left: 16px; }
+.card .comments li { font-size: 12px; }
 
 .fa-bulleted                 { padding-left: 18px; position: relative; }
 .fa-bulleted .fa:first-child { position: absolute; left: -2px; top: 2px; }
@@ -235,6 +236,9 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
     }
 }
 
+.bc-bracketed:before { content: '[' }
+.bc-bracketed:after  { content: ']' }
+
 /* Feed: single item page */
 
 video { max-width: 100%; max-height: 50vh; }
@@ -243,10 +247,10 @@ img.emojione, .emojione_image { height: 1em; vertical-align: middle; }
 img.user_label.small { height: 1em; vertical-align: middle; }
 
 article img { max-width: 100%; height: auto; }
+article .featured_image { height: 200px; background: transparent center center no-repeat; background-size: cover; }
 
 article .content-block:first-child *:first-child { margin-top: 0; }
 article .content-block:last-child *:last-child { margin-bottom: 0; }
-
 
 html.ios     .bc-indented-list .bc-indented-entry    { background-color: #d4d4d7; }
 html.android .bc-indented-list .bc-indented-entry    { background-color: #ebebeb; }
@@ -263,5 +267,5 @@ html.android .bc-indented-entry .content-block-inner { background-color: white; 
 .bc-indented-list .indent-9  { padding-left: 40px; }
 .bc-indented-list .indent-10 { padding-left: 45px; }
 
-.bc-actions-row { display: flex; flex-flow: row wrap; justify-content: space-around; }
+.bc-actions-row { display: flex; flex-flow: row wrap; justify-content: space-between; }
 .bc-action { display: none; }

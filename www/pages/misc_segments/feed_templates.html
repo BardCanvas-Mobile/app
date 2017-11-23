@@ -16,7 +16,6 @@
                     <span class="publishing-date">
                         {{item._publishedCaption}}
                         {{#if item._showCategoryLabel}}
-                            <br>
                             <span class="main-category-title nowrap">
                                 <span class="fa fa-folder"></span>
                                 {{item._mainCategoryCaption}}
@@ -25,50 +24,45 @@
                     </span>
                 </p>
                 
+                {{#item.excerpt_extra_blocks}}
+                    {{#if title}}
+                        <div class="content-block-title">{{title}}</div>
+                    {{/if}}
+                    <div class="extra-content {{class}}">
+                        {{contents}}
+                    </div>
+                {{/item.excerpt_extra_blocks}}
+                
                 {{#if service.options.showsCommentsOnIndex}}
                     {{#if item._hasComments}}
-                        <ul class="comments color-pink">
-                            <li>{{item.comments_count}} comments here!</li>
+                        <ul class="comments">
+                            {{#item._commentsForIndex}}
+                                <li>
+                                    <span class="user-name">{{author_display_name}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="excerpt">{{excerpt}}</span>
+                                </li>
+                            {{/item._commentsForIndex}}
                         </ul>
                     {{/if}}
-                {{/if}}
-                
-                {{#if flags.showUserDetails}}
-                    <div class="color-gray">
-                        <div class="fa-bulleted">
-                            <i class="fa fa-user fa-fw"></i>       {{item._levelCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-clock-o fa-fw"></i>    {{item._memberSinceCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-globe fa-fw"></i>      {{item.creation_ip}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-map-marker fa-fw"></i> {{item.creation_location}}
-                        </div>
-                    </div>
                 {{/if}}
                 
             </div>
         </div>
         
-        {{#if flags.showAdminControls}}
+        {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#if item.author_can_be_disabled}}
-                    <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
-                {{/if}}
-                {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
-                {{/if}}
-                {{#if item.can_be_drafted}}
-                    <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
-                {{/if}}
-                {{#if item.can_be_flagged_for_review}}
-                    <a  class="link nowrap ellipsified color-orange">{{@global.language.actions.toReview}}</a>
-                {{/if}}
+                {{#item.index_actions}}
+                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                        <i class="fa {{icon}} fa-lg"></i>
+                        <span class="bc-action">
+                            <span bc-action-var="caption">{{caption}}</span>
+                        </span>
+                    </a>
+                {{/item.index_actions}}
             </div>
         {{/if}}
+        
     </div>
     
 </template>
@@ -94,7 +88,6 @@
                     <span class="publishing-date">
                         {{item._publishedCaption}}
                         {{#if item._showCategoryLabel}}
-                            <br>
                             <span class="main-category-title nowrap">
                                 <span class="fa fa-folder"></span>
                                 {{item._mainCategoryCaption}}
@@ -105,48 +98,42 @@
                 
                 <p>{{item.excerpt}}</p>
                 
+                {{#item.excerpt_extra_blocks}}
+                    {{#if title}}
+                        <div class="content-block-title">{{title}}</div>
+                    {{/if}}
+                    <div class="extra-content {{class}}">
+                        {{contents}}
+                    </div>
+                {{/item.excerpt_extra_blocks}}
+                
                 {{#if service.options.showsCommentsOnIndex}}
                     {{#if item._hasComments}}
-                        <ul class="comments color-pink">
-                            <li>{{item.comments_count}} comments here!</li>
+                        <ul class="comments">
+                            {{#item._commentsForIndex}}
+                                <li>
+                                    <span class="user-name">{{author_display_name}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="excerpt">{{excerpt}}</span>
+                                </li>
+                            {{/item._commentsForIndex}}
                         </ul>
                     {{/if}}
-                {{/if}}
-                
-                {{#if flags.showUserDetails}}
-                    <div class="color-gray">
-                        <div class="fa-bulleted">
-                            <i class="fa fa-user fa-fw"></i>       {{item._levelCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-clock-o fa-fw"></i>    {{item._memberSinceCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-globe fa-fw"></i>      {{item.creation_ip}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-map-marker fa-fw"></i> {{item.creation_location}}
-                        </div>
-                    </div>
                 {{/if}}
                 
             </div>
         </div>
         
-        {{#if flags.showAdminControls}}
+        {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#if item.author_can_be_disabled}}
-                    <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
-                {{/if}}
-                {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
-                {{/if}}
-                {{#if item.can_be_drafted}}
-                    <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
-                {{/if}}
-                {{#if item.can_be_flagged_for_review}}
-                    <a  class="link nowrap ellipsified color-orange">{{@global.language.actions.toReview}}</a>
-                {{/if}}
+                {{#item.index_actions}}
+                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                        <i class="fa {{icon}} fa-lg"></i>
+                        <span class="bc-action">
+                            <span bc-action-var="caption">{{caption}}</span>
+                        </span>
+                    </a>
+                {{/item.index_actions}}
             </div>
         {{/if}}
         
@@ -189,48 +176,42 @@
                 
                 <p>{{item.excerpt}}</p>
                 
+                {{#item.excerpt_extra_blocks}}
+                    {{#if title}}
+                        <div class="content-block-title">{{title}}</div>
+                    {{/if}}
+                    <div class="extra-content {{class}}">
+                        {{contents}}
+                    </div>
+                {{/item.excerpt_extra_blocks}}
+                
                 {{#if service.options.showsCommentsOnIndex}}
                     {{#if item._hasComments}}
-                        <ul class="comments color-pink">
-                            <li>{{item.comments_count}} comments here!</li>
+                        <ul class="comments">
+                            {{#item._commentsForIndex}}
+                                <li>
+                                    <span class="user-name">{{author_display_name}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="excerpt">{{excerpt}}</span>
+                                </li>
+                            {{/item._commentsForIndex}}
                         </ul>
                     {{/if}}
-                {{/if}}
-                
-                {{#if flags.showUserDetails}}
-                    <div class="color-gray">
-                        <div class="fa-bulleted">
-                            <i class="fa fa-user fa-fw"></i>       {{item._levelCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-clock-o fa-fw"></i>    {{item._memberSinceCaption}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-globe fa-fw"></i>      {{item.creation_ip}}
-                        </div>
-                        <div class="fa-bulleted">
-                            <i class="fa fa-map-marker fa-fw"></i> {{item.creation_location}}
-                        </div>
-                    </div>
                 {{/if}}
                 
             </div>
         </div>
         
-        {{#if flags.showAdminControls}}
+        {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#if item.author_can_be_disabled}}
-                    <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
-                {{/if}}
-                {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
-                {{/if}}
-                {{#if item.can_be_drafted}}
-                    <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
-                {{/if}}
-                {{#if item.can_be_flagged_for_review}}
-                    <a  class="link nowrap ellipsified color-orange">{{@global.language.actions.toReview}}</a>
-                {{/if}}
+                {{#item.index_actions}}
+                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                        <i class="fa {{icon}} fa-lg"></i>
+                        <span class="bc-action">
+                            <span bc-action-var="caption">{{caption}}</span>
+                        </span>
+                    </a>
+                {{/item.index_actions}}
             </div>
         {{/if}}
         
@@ -238,6 +219,7 @@
     
 </template>
 
+<!-- Todo: this one -->
 <template data-type="media_list">
     
     <li>
@@ -255,6 +237,11 @@
     
 </template>
 
+<!-- Todo: This one -->
+<template data-type="card reddit">
+    
+</template>
+
 <template data-type="single_item_page">
         
     <div class="page">
@@ -269,6 +256,9 @@
                             {{@global.language.actions.back}}
                         </a>
                     </div>
+                    <div class="center">
+                        {{item.title}}
+                    </div>
                     <div class="right">
                         <a class="link icon-only" disabled>
                             <i class="bc-ios-icon icon f7-icons">share</i>
@@ -280,6 +270,12 @@
             
             <div class="inner-page-content">
                 <article>
+                    
+                    {{#if item.has_featured_image}}
+                        {{#if item.featured_image_not_in_contents}}
+                            <div class="featured_image" style="background-image: url('{{item.featured_image_thumbnail}}')"></div>
+                        {{/if}}
+                    {{/if}}
                     
                     {{#if service.options.showAuthors}}
                         <div class="content-block">
@@ -309,6 +305,52 @@
                             {{contents}}
                         </div>
                     {{/item.extra_content_blocks}}
+                    
+                    {{#if item._hasComments}}
+                        <div class="content-block-title">{{item.comments_count}} {{@global.language.comments}}</div>
+                        <div class="content-block extra-content bc-indented-list">
+                            
+                            {{#item.comments}}
+                                <div class="bc-indented-entry indent-{{indent_level}}">
+                                    <div class="content-block-inner comment-entry">
+                                        <div class="item-meta">
+                                            <span class="user-avatar"><img src="{{author_avatar}}"></span>
+                                            <span class="user-name">{{comment_reply_path}}</span>
+                                            <span class="publishing-date convert-to-full-date">{{creation_date}}</span>
+                                        </div>
+                                        <div class="item-content">
+                                            
+                                            {{content}}
+                                            
+                                            {{#extra_content_blocks}}
+                                                {{#if title}}
+                                                    <div class="content-block-title">{{title}}</div>
+                                                {{/if}}
+                                                <div class="content-block extra-content {{class}}">
+                                                    {{contents}}
+                                                </div>
+                                            {{/extra_content_blocks}}
+                                            
+                                            {{#if has_actions}}
+                                                <p class="bc-actions-row">
+                                                    {{#actions}}
+                                                        <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                                                            <i class="fa {{icon}} fa-lg"></i>
+                                                            <span class="bc-action">
+                                                                <span bc-action-var="caption">{{caption}}</span>
+                                                            </span>
+                                                        </a>
+                                                    {{/actions}}
+                                                </p>
+                                            {{/if}}
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/item.comments}}
+                            
+                        </div>
+                    {{/if}}
                     
                 </article>
             </div>

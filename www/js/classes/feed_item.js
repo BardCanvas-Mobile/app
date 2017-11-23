@@ -21,9 +21,15 @@ var BCfeedItemClass = function(source)
     
     this.author_country_name = '';
     
+    this.featured_image_id = 0;
+    
     this.featured_image_path = '';
     
     this.featured_image_thumbnail = '';
+    
+    this.has_featured_image = false;
+    
+    this.featured_image_not_in_contents = false;
     
     this.main_category_title = '';
     
@@ -36,27 +42,46 @@ var BCfeedItemClass = function(source)
     this.content = '';
     
     /**
-     * @type {BCfeedItemExtraContentBlockClass}[]
+     * @type {BCContentBlockClass}[]
+     */
+    this.excerpt_extra_blocks = [];
+    
+    /**
+     * @type {BCContentBlockClass}[]
      */
     this.extra_content_blocks = [];
-    
-    this.comments_count = '';
     
     this.creation_ip = '';
     
     this.creation_location = '';
     
-    this.author_can_be_disabled = false;
+    this.index_actions = [];
     
-    this.can_be_deleted = false;
+    this.has_index_actions = false;
     
-    this.can_be_drafted = false;
+    this.item_actions = [];
     
-    this.can_be_flagged_for_review = false;
+    this.has_item_actions = false;
+    
+    this.comments_count = '';
+    
+    /**
+     * @type {BCfeedItemCommentClass}[]
+     */
+    this.comments = [];
+    
+    this.allow_new_comments = false;
+    
+    this.comments_limit_for_index = 10;
     
     // Locally computed
     
     this._hasComments = false;
+    
+    /**
+     * @type {BCfeedItemCommentClass}[]
+     */
+    this._commentsForIndex = [];
     
     this._showCategoryLabel = true;
     
@@ -66,11 +91,7 @@ var BCfeedItemClass = function(source)
     
     this._altPublishedCaption = '';
     
-    this._levelCaption = '';
-    
     this._levelOnlyCaption = '';
-    
-    this._memberSinceCaption = '';
     
     if( typeof source === 'undefined' ) return;
     

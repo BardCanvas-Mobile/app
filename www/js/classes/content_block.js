@@ -1,7 +1,7 @@
 /**
  * @constructor
  */
-var BCfeedItemExtraContentBlockClass = function(source)
+var BCContentBlockClass = function(source)
 {
     this.title = '';
     

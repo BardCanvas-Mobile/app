@@ -249,19 +249,11 @@ var BChtmlHelper = {
                     if( data.extras.hideCategoryInCards )
                         item._showCategoryLabel = false;
             
-            var isEditor  = currentUserLevel >= BCuserLevels.Editor;
-            var isOwnItem = currentUserName === itemAuthorUserName;
             var context   = {
                 item:     item,
                 service:  service,
                 website:  website,
-                manifest: manifest,
-                flags:    {
-                    isEditor:          isEditor,
-                    isOwnItem:         isOwnItem,
-                    showUserDetails:   isEditor && ! isOwnItem,
-                    showAdminControls: isEditor && ! isOwnItem
-                }
+                manifest: manifest
             };
             
             var markup   = $('body').find(sprintf('template[data-type="%s"]', type)).html();
@@ -276,6 +268,25 @@ var BChtmlHelper = {
             $card.find('.card-header, .card-content').bind('click', function()
             {
                 BChtmlHelper.renderFeedItemPage( $(this) );
+            });
+            
+            $card.find('.convert-to-full-date').each(function()
+            {
+                var $this   = $(this);
+                var val     = $this.text();
+                var rawDate = BCtoolbox.convertRemoteDate(val, manifest.timezoneOffset);
+                var repl    = moment(rawDate).format(BClanguage.dateFormats.shorter)
+                            + ' (' + moment(rawDate).fromNow() + ')';
+                $this.text(repl);
+            });
+            
+            $card.find('.convert-to-timeago-date').each(function()
+            {
+                var $this   = $(this);
+                var val     = $this.text();
+                var rawDate = BCtoolbox.convertRemoteDate(val, manifest.timezoneOffset);
+                var repl    = moment(rawDate).fromNow();
+                $this.text(repl);
             });
             
             $collection.append($card);
@@ -334,18 +345,7 @@ var BChtmlHelper = {
             moment(rawDate).fromNow()
         );
         
-        item._levelCaption = sprintf(
-            BClanguage.userLevelCaption, itemAuthorLevel, manifest.userLevels[itemAuthorLevel]
-        );
-        
         item._levelOnlyCaption = manifest.userLevels[itemAuthorLevel];
-        
-        rawDate = BCtoolbox.convertRemoteDate(item.author_creation_date, manifest.timezoneOffset);
-        item._memberSinceCaption = sprintf(
-            BClanguage.userMemberSince,
-            moment(rawDate).format(BClanguage.dateFormats.shorter),
-            moment(rawDate).fromNow()
-        );
         
         item.featured_image_path      = BCapp.forgeServiceURL(service, website, item.featured_image_path);
         item.featured_image_thumbnail = BCapp.forgeServiceURL(service, website, item.featured_image_thumbnail);
@@ -355,6 +355,9 @@ var BChtmlHelper = {
             item._mainCategoryCaption = item.parent_category_title + '/' + item._mainCategoryCaption;
         
         item._hasComments = item.comments_count > 0;
+        
+        if( item._hasComments )
+            item._commentsForIndex = item.comments.slice(0 - item.comments_limit_for_index);
         
         return item;
     },
@@ -381,6 +384,15 @@ var BChtmlHelper = {
             $this.text(repl);
         });
         
+        $html.find('.convert-to-timeago-date').each(function()
+        {
+            var $this   = $(this);
+            var val     = $this.text();
+            var rawDate = BCtoolbox.convertRemoteDate(val, manifest.timezoneOffset);
+            var repl    = moment(rawDate).fromNow();
+            $this.text(repl);
+        });
+        
         $html.find('article a').each(function()
         {
             var $this = $(this);
@@ -395,7 +407,7 @@ var BChtmlHelper = {
                 });
             }
         });
-    
+        
         $html.find('article img[data-media-type="image"]').each(function()
         {
             $(this).bind('click', function()
@@ -405,7 +417,8 @@ var BChtmlHelper = {
             });
         });
         
-        // console.log(context);
+        console.log('Successfully rendered item page using the next context:');
+        console.log(context);
         view.router.loadContent($html);
     }
 };

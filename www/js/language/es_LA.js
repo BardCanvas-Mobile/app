@@ -226,8 +226,8 @@ var BClanguage = {
     
     dateFormats: {
         "shorter": "DD/MMM/YY hh:mm",
-        "short":   "ddd DD MMM h:mm A",
-        "long":    "ddd DD MMM YYYY h:mm A"
+        "short":   "dddd DD/MMM h:mm A",
+        "long":    "dddd DD/MMM/YYYY h:mm A"
     },
     
     feeds: {
@@ -245,6 +245,7 @@ var BClanguage = {
         }
     },
     
-    about: 'Acerca de',
-    from:  'De'
+    about:    'Acerca de',
+    from:     'De',
+    comments: 'comentarios'
 };
