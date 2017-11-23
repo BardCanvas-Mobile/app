@@ -262,3 +262,6 @@ html.android .bc-indented-entry .content-block-inner { background-color: white; 
 .bc-indented-list .indent-8  { padding-left: 35px; }
 .bc-indented-list .indent-9  { padding-left: 40px; }
 .bc-indented-list .indent-10 { padding-left: 45px; }
+
+.bc-actions-row { display: flex; flex-flow: row wrap; justify-content: space-around; }
+.bc-action { display: none; }

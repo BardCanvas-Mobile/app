@@ -26,8 +26,8 @@
                 </p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    {{#if item.comments_count}}
-                        <ul class="comments">
+                    {{#if item._hasComments}}
+                        <ul class="comments color-pink">
                             <li>{{item.comments_count}} comments here!</li>
                         </ul>
                     {{/if}}
@@ -59,7 +59,7 @@
                     <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
                 {{/if}}
                 {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-pink">{{@global.language.actions.toTrash}}</a>
+                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
                 {{/if}}
                 {{#if item.can_be_drafted}}
                     <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
@@ -106,8 +106,8 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    {{#if item.comments_count}}
-                        <ul class="comments">
+                    {{#if item._hasComments}}
+                        <ul class="comments color-pink">
                             <li>{{item.comments_count}} comments here!</li>
                         </ul>
                     {{/if}}
@@ -139,7 +139,7 @@
                     <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
                 {{/if}}
                 {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-pink">{{@global.language.actions.toTrash}}</a>
+                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
                 {{/if}}
                 {{#if item.can_be_drafted}}
                     <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>
@@ -190,8 +190,8 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if service.options.showsCommentsOnIndex}}
-                    {{#if item.comments_count}}
-                        <ul class="comments">
+                    {{#if item._hasComments}}
+                        <ul class="comments color-pink">
                             <li>{{item.comments_count}} comments here!</li>
                         </ul>
                     {{/if}}
@@ -223,7 +223,7 @@
                     <a class="link nowrap ellipsified color-red">{{@global.language.actions.disableUser}}</a>
                 {{/if}}
                 {{#if item.can_be_deleted}}
-                    <a  class="link nowrap ellipsified color-pink">{{@global.language.actions.toTrash}}</a>
+                    <a  class="link nowrap ellipsified color-red">{{@global.language.actions.toTrash}}</a>
                 {{/if}}
                 {{#if item.can_be_drafted}}
                     <a  class="link nowrap ellipsified color-purple">{{@global.language.actions.toDraft}}</a>

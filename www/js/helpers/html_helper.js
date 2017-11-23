@@ -354,6 +354,8 @@ var BChtmlHelper = {
         if( item.parent_category_title )
             item._mainCategoryCaption = item.parent_category_title + '/' + item._mainCategoryCaption;
         
+        item._hasComments = item.comments_count > 0;
+        
         return item;
     },
     

@@ -56,6 +56,8 @@ var BCfeedItemClass = function(source)
     
     // Locally computed
     
+    this._hasComments = false;
+    
     this._showCategoryLabel = true;
     
     this._mainCategoryCaption = '';
