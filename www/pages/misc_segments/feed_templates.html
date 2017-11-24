@@ -1,7 +1,8 @@
 
 <template data-type="cards:simple">
     
-    <div class="card">
+    <div class="card bc-feed-item item-data-container bc-actions-parent"
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
         
         <div class="card-header">
             {{item.title}}
@@ -52,14 +53,12 @@
         
         {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#item.index_actions}}
-                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                {{#item.index_action_triggers}}
+                    <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
                         <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action">
-                            <span bc-action-var="caption">{{caption}}</span>
-                        </span>
+                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
                     </a>
-                {{/item.index_actions}}
+                {{/item.index_action_triggers}}
             </div>
         {{/if}}
         
@@ -69,7 +68,8 @@
 
 <template data-type="cards:modern">
     
-    <div class="card modern">
+    <div class="card modern bc-feed-item item-data-container bc-actions-parent"
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
         
         {{#if item.featured_image_path}}
             <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
@@ -126,14 +126,12 @@
         
         {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#item.index_actions}}
-                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                {{#item.index_action_triggers}}
+                    <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
                         <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action">
-                            <span bc-action-var="caption">{{caption}}</span>
-                        </span>
+                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
                     </a>
-                {{/item.index_actions}}
+                {{/item.index_action_triggers}}
             </div>
         {{/if}}
         
@@ -143,7 +141,8 @@
 
 <template data-type="cards:facebook">
     
-    <div class="card facebook">
+    <div class="card facebook bc-feed-item item-data-container bc-actions-parent"
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
         
         {{#if service.options.showAuthors}}
             <div class="card-header item-meta">
@@ -204,14 +203,12 @@
         
         {{#if item.has_index_actions}}
             <div class="card-footer">
-                {{#item.index_actions}}
-                    <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                {{#item.index_action_triggers}}
+                    <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
                         <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action">
-                            <span bc-action-var="caption">{{caption}}</span>
-                        </span>
+                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
                     </a>
-                {{/item.index_actions}}
+                {{/item.index_action_triggers}}
             </div>
         {{/if}}
         
@@ -269,7 +266,7 @@
             </div>
             
             <div class="inner-page-content">
-                <article>
+                <article class="item-data-container">
                     
                     {{#if item.has_featured_image}}
                         {{#if item.featured_image_not_in_contents}}
@@ -311,7 +308,9 @@
                         <div class="content-block extra-content bc-indented-list">
                             
                             {{#item.comments}}
-                                <div class="bc-indented-entry indent-{{indent_level}}">
+                                <div class="bc-indented-entry indent-{{indent_level}} bc-item-comment bc-actions-parent"
+                                     data-parent-item-type="{{../type}}" data-parent-item-id="{{../id}}" data-comment-id="{{id}}">
+                                    
                                     <div class="content-block-inner comment-entry">
                                         <div class="item-meta">
                                             <span class="user-avatar"><img src="{{author_avatar}}"></span>
@@ -333,19 +332,18 @@
                                             
                                             {{#if has_actions}}
                                                 <p class="bc-actions-row">
-                                                    {{#actions}}
-                                                        <a class="link {{class}}" onclick="console.log( $(this).find('.bc-action').html() );">
+                                                    {{#action_triggers}}
+                                                        <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
                                                             <i class="fa {{icon}} fa-lg"></i>
-                                                            <span class="bc-action">
-                                                                <span bc-action-var="caption">{{caption}}</span>
-                                                            </span>
+                                                            <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
                                                         </a>
-                                                    {{/actions}}
+                                                    {{/action_triggers}}
                                                 </p>
                                             {{/if}}
                                             
                                         </div>
                                     </div>
+                                    
                                 </div>
                             {{/item.comments}}
                             

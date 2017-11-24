@@ -16,7 +16,7 @@ var BCfeedItemCommentClass = function(source)
     this.indent_level = 1;
     
     /**
-     * @type {BCContentBlockClass}[]
+     * @type {BCContentBlockClass[]}
      */
     this.extra_content_blocks = [];
     
@@ -40,7 +40,10 @@ var BCfeedItemCommentClass = function(source)
     
     this.has_actions = false;
     
-    this.actions = [];
+    /**
+     * @type {BCactionTriggerClass[]}
+     */
+    this.action_triggers = [];
     
     if( typeof source === 'undefined' ) return;
     

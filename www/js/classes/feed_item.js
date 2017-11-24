@@ -42,12 +42,12 @@ var BCfeedItemClass = function(source)
     this.content = '';
     
     /**
-     * @type {BCContentBlockClass}[]
+     * @type {BCContentBlockClass[]}
      */
     this.excerpt_extra_blocks = [];
     
     /**
-     * @type {BCContentBlockClass}[]
+     * @type {BCContentBlockClass[]}
      */
     this.extra_content_blocks = [];
     
@@ -55,18 +55,24 @@ var BCfeedItemClass = function(source)
     
     this.creation_location = '';
     
-    this.index_actions = [];
+    /**
+     * @type {BCactionTriggerClass[]}
+     */
+    this.index_action_triggers = [];
     
     this.has_index_actions = false;
     
-    this.item_actions = [];
+    /**
+     * @type {BCactionTriggerClass[]}
+     */
+    this.item_action_triggers = [];
     
     this.has_item_actions = false;
     
     this.comments_count = '';
     
     /**
-     * @type {BCfeedItemCommentClass}[]
+     * @type {BCfeedItemCommentClass[]}
      */
     this.comments = [];
     
@@ -79,7 +85,7 @@ var BCfeedItemClass = function(source)
     this._hasComments = false;
     
     /**
-     * @type {BCfeedItemCommentClass}[]
+     * @type {BCfeedItemCommentClass[]}
      */
     this._commentsForIndex = [];
     
@@ -97,5 +103,57 @@ var BCfeedItemClass = function(source)
     
     // Initialization
     
-    for(var i in source) this[i] = source[i];
+    var i;
+    for(i in source) this[i] = source[i];
+    
+    //
+    // Action triggers for index
+    //
+    
+    var triggers = [];
+    if( this.index_action_triggers.length > 0 )
+    {
+        for(i in this.index_action_triggers)
+        {
+            triggers[triggers.length] = new BCactionTriggerClass(
+                this.index_action_triggers[i]
+            );
+        }
+        
+        this.index_action_triggers = triggers;
+    }
+    
+    //
+    // Action triggers for single page
+    //
+    
+    triggers = [];
+    if( this.item_action_triggers.length > 0 )
+    {
+        for(i in this.item_action_triggers)
+        {
+            triggers[triggers.length] = new BCactionTriggerClass(
+                this.item_action_triggers[i]
+            );
+        }
+        
+        this.item_action_triggers = triggers;
+    }
+    
+    //
+    // Comments forging
+    //
+    
+    if( this.comments_count > 0 )
+    {
+        var comments = [];
+        for(i in this.comments )
+        {
+            comments[comments.length] = new BCfeedItemCommentClass(
+                this.comments[i]
+            );
+        }
+        
+        this.comments = comments;
+    }
 };

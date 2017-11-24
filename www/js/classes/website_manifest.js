@@ -44,6 +44,11 @@ var BCwebsiteManifestClass = function(source)
      */
     this.services = [];
     
+    /**
+     * @type {BCactionClass[]}
+     */
+    this.actionsRegistry = {};
+    
     if( typeof source === 'undefined' ) return;
     
     // Initialization

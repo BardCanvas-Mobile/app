@@ -247,5 +247,18 @@ var BClanguage = {
     
     about:    'Acerca de',
     from:     'De',
-    comments: 'comentarios'
+    comments: 'comentarios',
+    
+    actionsController: {
+        unregisteredAction: {
+            title:   'Acción no encontrada',
+            message: '<p>La acción que has elegido no se ha encontrado ' + 
+                     '   en el registro de acciones del sitio web. ' + 
+                     '   Posiblemente se ha actualizado el sitio web ' +
+                     '   pero no el manifiesto local.</p>' +
+                     '<p>Por favor elimina el sitio y agrégalo de nuevo. ' +
+                     '   Si el problema persiste, por favor ponte en contacto' +
+                     '   con el staff técnico del sitio web.</p>'
+        }
+    }
 };

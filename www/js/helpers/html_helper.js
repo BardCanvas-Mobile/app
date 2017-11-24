@@ -374,6 +374,10 @@ var BChtmlHelper = {
         var $html    = $(template(context));
         var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         
+        $html.find('.item-data-container').data('website',  website);
+        $html.find('.item-data-container').data('service',  service);
+        $html.find('.item-data-container').data('manifest', manifest);
+        
         $html.find('.convert-to-full-date').each(function()
         {
             var $this   = $(this);

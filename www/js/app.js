@@ -1041,6 +1041,37 @@ var BCapp = {
         $popup.find('iframe').attr('src', URL);
         
         BCapp.framework.popup($popup);
+    },
+    
+    triggerAction: function( trigger )
+    {
+        var $trigger = $(trigger);
+        var tdata    = JSON.parse(decodeURI($trigger.find('.bc-action-data').html()));
+        
+        if( tdata ) tdata = new BCactionTriggerClass(tdata);
+    
+        var $dataContainer = $trigger.closest('.item-data-container');
+        var website        = $dataContainer.data('website');
+        var service        = $dataContainer.data('service');
+        var manifest       = $dataContainer.data('manifest');
+        
+        if( typeof manifest.actionsRegistry[tdata.action_id] === 'undefined' )
+        {
+            BCapp.framework.alert(
+                BClanguage.actionsController.unregisteredAction.message,
+                BClanguage.actionsController.unregisteredAction.title
+            );
+            
+            return;
+        }
+        
+        /**
+         * @type {BCactionClass}
+         */
+        var action = manifest.actionsRegistry[tdata.action_id];
+        
+        console.log( tdata );
+        console.log( action );
     }
 };
 

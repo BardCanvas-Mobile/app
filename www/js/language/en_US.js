@@ -245,5 +245,18 @@ var BClanguage = {
     
     about:    'About',
     from:     'From',
-    comments: 'comments'
+    comments: 'comments',
+    
+    actionsController: {
+        unregisteredAction: {
+            title:   'Action not found',
+            message: '<p>The action you triggered wasn\'t found ' +
+                     '   on the local website actions registry. ' +
+                     '   The website may have been updated but the ' +
+                     '   local manifest hasn\'t.</p>' +
+                     '<p>Please delete the website and add it again. ' +
+                     '   If the problem persists, you may need to contact' +
+                     '   the website support staff.</p>'
+        }
+    }
 };
