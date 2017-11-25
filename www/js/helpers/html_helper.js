@@ -112,8 +112,7 @@ var BChtmlHelper = {
                 }
     
                 var context  = {componentId: componentId, items: sanitizedItems};
-                var markup   = $('#navbar_selector_component').html();
-                var template = Template7.compile(markup);
+                var template = BCapp.getCompiledTemplate('#navbar_selector_component');
                 var html     = template(context);
                 
                 BCapp.framework.popup(html, true);
@@ -256,8 +255,7 @@ var BChtmlHelper = {
                 manifest: manifest
             };
             
-            var markup   = $('body').find(sprintf('template[data-type="%s"]', type)).html();
-            var template = Template7.compile(markup);
+            var template = BCapp.getCompiledTemplate(sprintf('template[data-type="%s"]', type));
             var html     = template(context);
             var $card    = $(html);
             
@@ -363,8 +361,7 @@ var BChtmlHelper = {
         var website  = $card.data('website');
         var service  = $card.data('service');
         var manifest = $card.data('manifest');
-        var markup   = $('body').find('template[data-type="single_item_page"]').html();
-        var template = Template7.compile(markup);
+        var template = BCapp.getCompiledTemplate('template[data-type="single_item_page"]');
         var $html    = $(template(context));
         var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         

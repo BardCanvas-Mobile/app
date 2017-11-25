@@ -98,6 +98,16 @@ var BCapp = {
      */
     currentNestedView: null,
     
+    /**
+     * @private
+     */
+    __compiledTemplates: {},
+    
+    /**
+     * @private
+     */
+    __commonServiceErrorTemplateMarkup : '',
+    
     init: function()
     {
         BCapp.settings = new BCglobalSettingsClass();
@@ -166,6 +176,30 @@ var BCapp = {
         $.get('pages/misc_segments/feed_templates.html', function(html)
         {
             $('body').append(html);
+        });
+        
+        $.get('pages/website_addition/index.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/website_addition/index.html']
+                = Template7.compile(html);
+        });
+        
+        $.get('pages/website_addition/disclaimer.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/website_addition/disclaimer.html']
+                = Template7.compile(html);
+        });
+        
+        $.get('pages/site_templates/single_service_site.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/site_templates/single_service_site.html']
+                = Template7.compile(html);
+        });
+        
+        $.get('pages/site_templates/site_with_service_tabs.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/site_templates/site_with_service_tabs.html']
+                = Template7.compile(html);
         });
     },
     
@@ -371,10 +405,40 @@ var BCapp = {
         });
     },
     
+    getCompiledTemplate: function( identifier )
+    {
+        if( typeof BCapp.__compiledTemplates[identifier] === 'undefined' )
+        {
+            var html = $(identifier).html();
+            BCapp.__compiledTemplates[identifier] = Template7.compile( html );
+        }
+        
+        return BCapp.__compiledTemplates[identifier];
+    },
+    
+    getServiceError: function(title, message, website, service, contextAdditions)
+    {
+        if( BCapp.__commonServiceErrorTemplateMarkup === '' )
+            BCapp.__commonServiceErrorTemplateMarkup = $('#common_service_error_template').html();
+        
+        html = BCapp.__commonServiceErrorTemplateMarkup
+               .replace('{{title}}',   title)
+               .replace('{{content}}', message);
+        
+        var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+        var context  = { website:  website, service: service, manifest: manifest };
+        
+        if( contextAdditions )
+            for(var i in contextAdditions)
+                context[i] = contextAdditions[i];
+        
+        var template = Template7.compile(html);
+        
+        return template(context);
+    },
+    
     renderSiteSelector: function(callback)
     {
-        var sourceHTML = $('#sidebar_sites_selector').html();
-        
         var context = { registeredSites: [] };
         for( var i in BCwebsitesRepository.collection )
         {
@@ -398,7 +462,7 @@ var BCapp = {
         }
         
         // console.log(context);
-        var template = Template7.compile(sourceHTML);
+        var template  = BCapp.getCompiledTemplate('#sidebar_sites_selector');
         var finalHTML = template(context);
         
         $('#left-panel').html(finalHTML);
@@ -428,14 +492,13 @@ var BCapp = {
     renderPage: function(templateFileName, view, params, callback)
     {
         var languageFileName = sprintf('%s.%s.json', templateFileName, BClanguage.iso);
-        $.getJSON(languageFileName, function(pageLanguage) {
-            params.context = pageLanguage;
-            $.get(templateFileName, function(sourceHTML) {
-                params.template = Template7.compile(sourceHTML);
-                view.router.load(params);
-                
-                if( typeof callback === 'function' ) callback();
-            });
+        $.getJSON(languageFileName, function(pageLanguage)
+        {
+            params.context  = pageLanguage;
+            params.template = BCapp.getCompiledTemplate(templateFileName);
+            view.router.load(params);
+            
+            if( typeof callback === 'function' ) callback();
         });
     },
     
@@ -449,111 +512,107 @@ var BCapp = {
     {
         window.tmpAddWebsiteViewCallback = callback;
         
-        var file;
-        
+        var templateIdentifier;
         if( manifest.services.length == 1 )
-            file = 'pages/site_templates/single_service_site.html';
+            templateIdentifier = 'pages/site_templates/single_service_site.html';
         else
-            file = 'pages/site_templates/site_with_service_tabs.html';
+            templateIdentifier = 'pages/site_templates/site_with_service_tabs.html';
         
-        $.get(file, function(sourceHTML)
+        var renderingServices = [];
+        
+        // Prep icons
+        for(var i in manifest.services)
         {
-            var renderingServices = [];
+            var service  = new BCwebsiteServiceDetailsClass(manifest.services[i]);
             
-            // Prep icons
-            for(var i in manifest.services)
+            if( service.requires )
             {
-                var service  = new BCwebsiteServiceDetailsClass(manifest.services[i]);
-                
-                if( service.requires )
+                if( typeof website.meta[service.requires] === 'undefined' )
                 {
-                    if( typeof website.meta[service.requires] === 'undefined' )
-                    {
-                        continue;
-                    }
+                    continue;
                 }
-                
-                service.options.hasNavbar
-                    = typeof service.options.hasNavbar  === 'undefined' ? false : service.options.hasNavbar;
-                
-                service.options.hasToolbar
-                    = typeof service.options.hasToolbar === 'undefined' ? false : service.options.hasToolbar;
-                
-                var serviceClass = '';
-                if(       service.type === 'iframe'           ) serviceClass = 'iframed-service';
-                else if(  service.type === 'html'             ) serviceClass = 'prebuilt-service';
-                else if ( service.type.indexOf('cards:') >= 0 ) serviceClass = 'feed-service';
-                
-                service.meta = {
-                    icon:         BChtmlHelper.convertIcon(service.icon),
-                    tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
-                    tabTarget:    sprintf('%s-%s', websiteMainViewClassName, service.id),
-                    activeTab:    (parseInt(i) === 0 ? 'active' : ''),
-                    pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
-                    markup:       BCapp.__getServiceMarkup(website, service),
-                    serviceClass: serviceClass,
-                    navbarClass:  service.options.hasNavbar  ? 'service-navbar-fixed'  : '',
-                    toolbarClass: service.options.hasToolbar ? 'service-toolbar-fixed' : ''
-                };
-                
-                renderingServices[renderingServices.length] = service;
             }
             
-            var context = {
-                websiteMainViewClassName: websiteMainViewClassName,
-                manifest:                 manifest,
-                username:                 website.userName,
-                services:                 renderingServices,
-                navbarTitle:              website.userDisplayName !== '' ? website.userDisplayName : manifest.shortName,
-                                          // sprintf('%s - %s', manifest.shortName, website.userDisplayName),
-                serviceTabWidth:          (100 / renderingServices.length).toFixed(4) + '%'
+            service.options.hasNavbar
+                = typeof service.options.hasNavbar  === 'undefined' ? false : service.options.hasNavbar;
+            
+            service.options.hasToolbar
+                = typeof service.options.hasToolbar === 'undefined' ? false : service.options.hasToolbar;
+            
+            var serviceClass = '';
+            if(       service.type === 'iframe'           ) serviceClass = 'iframed-service';
+            else if(  service.type === 'html'             ) serviceClass = 'prebuilt-service';
+            else if ( service.type.indexOf('cards:') >= 0 ) serviceClass = 'feed-service';
+            
+            service.meta = {
+                icon:         BChtmlHelper.convertIcon(service.icon),
+                tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
+                tabTarget:    sprintf('%s-%s', websiteMainViewClassName, service.id),
+                activeTab:    (parseInt(i) === 0 ? 'active' : ''),
+                pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
+                markup:       BCapp.__getServiceMarkup(website, service),
+                serviceClass: serviceClass,
+                navbarClass:  service.options.hasNavbar  ? 'service-navbar-fixed'  : '',
+                toolbarClass: service.options.hasToolbar ? 'service-toolbar-fixed' : ''
             };
             
-            // console.log(context);
-            var template = Template7.compile(sourceHTML);
-            var finalHTML = template(context);
-            $('.views').append(finalHTML);
+            renderingServices[renderingServices.length] = service;
+        }
+        
+        var context = {
+            websiteMainViewClassName: websiteMainViewClassName,
+            manifest:                 manifest,
+            username:                 website.userName,
+            services:                 renderingServices,
+            navbarTitle:              website.userDisplayName !== '' ? website.userDisplayName : manifest.shortName,
+                                      // sprintf('%s - %s', manifest.shortName, website.userDisplayName),
+            serviceTabWidth:          (100 / renderingServices.length).toFixed(4) + '%'
+        };
+        
+        // console.log(context);
+        var template  = BCapp.getCompiledTemplate(templateIdentifier);
+        var finalHTML = template(context);
+        $('.views').append(finalHTML);
+        
+        var params = {};
+        switch( BCapp.os ) {
+            case 'ios':
+                params.swipeBackPage = true;
+                params.dynamicNavbar = false;
+                break;
+            case 'android':
+                params.material       = true;
+                params.materialRipple = true;
+                break;
+        }
+        
+        // params.name = websiteMainViewClassName;
+        BCapp.viewsCollection[websiteMainViewClassName]
+            = BCapp.framework.addView('.' + websiteMainViewClassName, params);
+        console.log(sprintf('Website view %s rendered.', websiteMainViewClassName));
+        
+        for( i in renderingServices )
+        {
+            // params.name         = serviceViewName;
+            var serviceViewName = renderingServices[i].meta.tabTarget;
+            console.log(sprintf('Service %s / %s view initialized.', websiteMainViewClassName, serviceViewName));
             
-            var params = {};
-            switch( BCapp.os ) {
-                case 'ios':
-                    params.swipeBackPage = true;
-                    params.dynamicNavbar = false;
-                    break;
-                case 'android':
-                    params.material       = true;
-                    params.materialRipple = true;
-                    break;
-            }
-            
-            // params.name = websiteMainViewClassName;
-            BCapp.viewsCollection[websiteMainViewClassName]
-                = BCapp.framework.addView('.' + websiteMainViewClassName, params);
-            console.log(sprintf('Website view %s rendered.', websiteMainViewClassName));
-            
-            for( i in renderingServices )
+            if( renderingServices.length > 1 )
             {
-                // params.name         = serviceViewName;
-                var serviceViewName = renderingServices[i].meta.tabTarget;
-                console.log(sprintf('Service %s / %s view initialized.', websiteMainViewClassName, serviceViewName));
+                var view  = BCapp.framework.addView('.' + serviceViewName, params);
                 
-                if( renderingServices.length > 1 )
-                {
-                    var view  = BCapp.framework.addView('.' + serviceViewName, params);
-                    
-                    if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
-                        BCapp.nestedViewsCollection[websiteMainViewClassName] = {};
-                    
-                    BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
-                }
+                if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
+                    BCapp.nestedViewsCollection[websiteMainViewClassName] = {};
+                
+                BCapp.nestedViewsCollection[websiteMainViewClassName][serviceViewName] = view;
             }
-            // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
-            
-            BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
-            
-            if( typeof window.tmpAddWebsiteViewCallback === 'function' )
-                window.tmpAddWebsiteViewCallback();
-        });
+        }
+        // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
+        
+        BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
+        
+        if( typeof window.tmpAddWebsiteViewCallback === 'function' )
+            window.tmpAddWebsiteViewCallback();
     },
     
     /**
@@ -565,9 +624,8 @@ var BCapp = {
      */
     __addWebsiteMenu: function(websiteHandler, manifestServices, websiteMainViewClassName)
     {
-        var sourceHTML = $('#sidebar_menu_template').html();
-        var context    = { services: manifestServices, websiteHandler: websiteHandler };
-        var template   = Template7.compile(sourceHTML);
+        var context  = { services: manifestServices, websiteHandler: websiteHandler };
+        var template = BCapp.getCompiledTemplate('#sidebar_menu_template');
         
         BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
         console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
@@ -653,14 +711,12 @@ var BCapp = {
         if( service.type === 'feed/cards:facebook' ) return BCapp.__getCardedServiceMarkup(website, service);
         if( service.type === 'feed/media_list'     ) return BCapp.__getCardedServiceMarkup(website, service);
         
-        var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
-        var html      = $('#common_service_error_template').html()
-                        .replace('{{title}}',   BClanguage.unknownService.title)
-                        .replace('{{content}}', BClanguage.unknownService.message);
-        var context = { website:  website, service: service, manifest: manifest };
-        var template  = Template7.compile(html);
-        
-        return template(context);
+        return BCapp.getServiceError(
+            BClanguage.unknownService.title,
+            BClanguage.unknownService.message,
+            website,
+            service
+        );
     },
     
     /**
@@ -673,11 +729,10 @@ var BCapp = {
      */
     __getIframedServiceMarkup: function(website, service)
     {
-        var url       = BCapp.forgeServiceURL(service, website);
-        var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
-        var html      = $('#iframed_service_template').html();
-        var context   = { website: website, service: service, manifest: manifest, url: url };
-        var template  = Template7.compile(html);
+        var url      = BCapp.forgeServiceURL(service, website);
+        var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+        var context  = { website: website, service: service, manifest: manifest, url: url };
+        var template = BCapp.getCompiledTemplate('#iframed_service_template');
         
         return template(context);
     },
@@ -833,9 +888,9 @@ var BCapp = {
         {
             if( showIndicator ) BCtoolbox.hideFullPageLoader();
             
-            var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
-            var context   = { website: website, service: service, manifest: manifest, url: url };
-            var template  = Template7.compile(html);
+            var manifest = BCmanifestsRepository.getForWebsite(website.URL);
+            var context  = { website: website, service: service, manifest: manifest, url: url };
+            var template = Template7.compile(html);
             $container.html( template(context) );
             $container.attr('data-initialized', 'true');
             
@@ -886,13 +941,13 @@ var BCapp = {
             // BCapp.framework.hideIndicator();
             // BCtoolbox.hideNetworkActivityIndicator();
             
-            var html     = $('#common_service_error_template').html()
-                           .replace('{{title}}',   BClanguage.failedToLoadService.title)
-                           .replace('{{content}}', BClanguage.failedToLoadService.message);
-            var manifest = BCmanifestsRepository.getForWebsite(website.URL);
-            var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
-            var template = Template7.compile(html);
-            $container.html( template(context) );
+            $container.html(BCapp.getServiceError(
+                BClanguage.failedToLoadService.title,
+                BClanguage.failedToLoadService.message,
+                website,
+                service,
+                {url: url, error: error}
+            ));
             
             if( showIndicator ) BCtoolbox.hideFullPageLoader();
         });
@@ -932,13 +987,13 @@ var BCapp = {
             
             if( data.message !== 'OK' )
             {
-                var html     = $('#common_service_error_template').html()
-                               .replace('{{title}}',   BClanguage.feeds.errorReceived.title)
-                               .replace('{{content}}', BClanguage.feeds.errorReceived.message);
-                var manifest = BCmanifestsRepository.getForWebsite(website.URL);
-                var context  = { website: website, service: service, manifest: manifest, url: url, error: data.message };
-                var template = Template7.compile(html);
-                $container.html( template(context) );
+                $container.html(BCapp.getServiceError(
+                    BClanguage.errorReceived.title,
+                    BClanguage.errorReceived.message,
+                    website,
+                    service,
+                    {url: url, error: data.message}
+                ));
                 
                 return;
             }
@@ -951,13 +1006,13 @@ var BCapp = {
             // BCapp.framework.hideIndicator();
             // BCtoolbox.hideNetworkActivityIndicator();
             
-            var html     = $('#common_service_error_template').html()
-                           .replace('{{title}}',   BClanguage.failedToLoadService.title)
-                           .replace('{{content}}', BClanguage.failedToLoadService.message);
-            var manifest = BCmanifestsRepository.getForWebsite(website.URL);
-            var context  = { website: website, service: service, manifest: manifest, url: url, error: error };
-            var template = Template7.compile(html);
-            $container.html( template(context) );
+            $container.html(BCapp.getServiceError(
+                BClanguage.failedToLoadService.title,
+                BClanguage.failedToLoadService.message,
+                website,
+                service,
+                {url: url, error: error}
+            ));
             
             if( showIndicator ) BCtoolbox.hideFullPageLoader();
         });

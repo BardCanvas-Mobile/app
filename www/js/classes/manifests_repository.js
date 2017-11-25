@@ -208,7 +208,7 @@ var BCmanifestsRepository = {
             ? BCwebsitesRepository.__manifest.disclaimer
             : BCwebsitesRepository.__manifest.disclaimer.join(' ');
         
-        var content;
+        var compiled, content;
         
         //
         // Case 3: has disclaimer, no login required
@@ -231,21 +231,18 @@ var BCmanifestsRepository = {
                 };
             }
             
-            $.get('pages/website_addition/disclaimer.html', function(html)
-            {
-                var compiled = Template7.compile(html);
-                content      = compiled({
-                    websiteName:        BCwebsitesRepository.__manifest.shortName,
-                    iconURL:            BCwebsitesRepository.__manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
-                    companyName:        BCwebsitesRepository.__manifest.company,
-                    websiteDescription: BCwebsitesRepository.__manifest.description,
-                    disclaimerContents: disclaimer,
-                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
-                    okButton:           BClanguage.frameworkCaptions.modalButtonOk
-                });
-                BCapp.currentView.router.loadContent(content);
+            compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
+            content  = compiled({
+                websiteName:        BCwebsitesRepository.__manifest.shortName,
+                iconURL:            BCwebsitesRepository.__manifest.icon,
+                websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                companyName:        BCwebsitesRepository.__manifest.company,
+                websiteDescription: BCwebsitesRepository.__manifest.description,
+                disclaimerContents: disclaimer,
+                cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                okButton:           BClanguage.frameworkCaptions.modalButtonOk
             });
+            BCapp.currentView.router.loadContent(content);
             
             return;
         }
@@ -258,22 +255,20 @@ var BCmanifestsRepository = {
         if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 )
         {
             // Missing login credentials
-            $.get('pages/website_addition/disclaimer.html', function(html) {
-                var compiled = Template7.compile(html);
-                content      = compiled({
-                    websiteName:        BCwebsitesRepository.__manifest.shortName,
-                    iconURL:            BCwebsitesRepository.__manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
-                    companyName:        BCwebsitesRepository.__manifest.company,
-                    websiteDescription: BCwebsitesRepository.__manifest.description,
-                    disclaimerContents: disclaimer,
-                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
-                    warningText:        sprintf(
-                        '%s<br>%s', BClanguage.websiteRequiresAuthentication, BClanguage.cancelAndEnterCredentials
-                    )
-                });
-                BCapp.currentView.router.loadContent(content);
+            compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
+            content  = compiled({
+                websiteName:        BCwebsitesRepository.__manifest.shortName,
+                iconURL:            BCwebsitesRepository.__manifest.icon,
+                websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                companyName:        BCwebsitesRepository.__manifest.company,
+                websiteDescription: BCwebsitesRepository.__manifest.description,
+                disclaimerContents: disclaimer,
+                cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                warningText:        sprintf(
+                    '%s<br>%s', BClanguage.websiteRequiresAuthentication, BClanguage.cancelAndEnterCredentials
+                )
             });
+            BCapp.currentView.router.loadContent(content);
         }
         else
         {
@@ -284,21 +279,18 @@ var BCmanifestsRepository = {
                 });
             };
             
-            $.get('pages/website_addition/disclaimer.html', function(html)
-            {
-                var compiled = Template7.compile(html);
-                content      = compiled({
-                    websiteName:        BCwebsitesRepository.__manifest.shortName,
-                    iconURL:            BCwebsitesRepository.__manifest.icon,
-                    websiteFullName:    BCwebsitesRepository.__manifest.fullName,
-                    companyName:        BCwebsitesRepository.__manifest.company,
-                    websiteDescription: BCwebsitesRepository.__manifest.description,
-                    disclaimerContents: disclaimer,
-                    cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
-                    okButton:           BClanguage.frameworkCaptions.modalButtonOk
-                });
-                BCapp.currentView.router.loadContent(content);
+            compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
+            content  = compiled({
+                websiteName:        BCwebsitesRepository.__manifest.shortName,
+                iconURL:            BCwebsitesRepository.__manifest.icon,
+                websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                companyName:        BCwebsitesRepository.__manifest.company,
+                websiteDescription: BCwebsitesRepository.__manifest.description,
+                disclaimerContents: disclaimer,
+                cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                okButton:           BClanguage.frameworkCaptions.modalButtonOk
             });
+            BCapp.currentView.router.loadContent(content);
         }
     },
     
