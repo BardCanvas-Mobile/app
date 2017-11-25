@@ -294,12 +294,6 @@ var BChtmlHelper = {
         
         $container.html('').append($collection);
         
-        // var manifest  = BCmanifestsRepository.getForWebsite(website.URL);
-        // var context   = { website: website, service: service, manifest: manifest, url: url };
-        // var template  = Template7.compile(html);
-        // $container.html( template(context) );
-        // $container.attr('data-initialized', 'true');
-        
         var pageId = '#' + $container.closest('.service-page').attr('id');
         BCapp.framework.initImagesLazyLoad( pageId );
         console.log( 'Lazy load triggered on ' + pageId );
