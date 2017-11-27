@@ -294,6 +294,17 @@
                         {{item.content}}
                     </div>
                     
+                    {{#if item.has_index_actions}}
+                        <div class="content-block-inner item-actions buttons-row">
+                            {{#item.index_action_triggers}}
+                                <a class="button bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
+                                    <i class="fa {{icon}} fa-lg"></i> {{caption}}
+                                    <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
+                                </a>
+                            {{/item.index_action_triggers}}
+                        </div>
+                    {{/if}}
+                    
                     {{#item.extra_content_blocks}}
                         {{#if title}}
                             <div class="content-block-title">{{title}}</div>
