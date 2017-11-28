@@ -1,4 +1,22 @@
 
+<!--                        -->
+<!-- Feed service container -->
+<!--                        -->
+
+<template data-type="feed-service-container">
+    
+    <div class="pull-to-refresh-layer">
+        <div class="preloader"></div>
+        <div class="pull-to-refresh-arrow"></div>
+    </div>
+    <div id="%s" class="bc-service-feed" data-feed-type="%s"></div>
+    
+</template>
+
+<!--                     -->
+<!-- Simple cards markup -->
+<!--                     -->
+
 <template data-type="cards:simple">
     
     <div class="card bc-feed-item item-data-container bc-actions-parent"
@@ -66,6 +84,10 @@
     </div>
     
 </template>
+
+<!--                       -->
+<!-- "Modern" cards markup -->
+<!--                       -->
 
 <template data-type="cards:modern">
     
@@ -140,6 +162,10 @@
     </div>
     
 </template>
+
+<!--                      -->
+<!-- Facebook style cards -->
+<!--                      -->
 
 <template data-type="cards:facebook">
     
@@ -359,13 +385,4 @@
         </div><!-- /.page-content -->
     </div><!-- /.page -->
     
-</template>
-
-<!-- Feed service container -->
-<template data-type="feed-service-container">
-    <div class="pull-to-refresh-layer">
-        <div class="preloader"></div>
-        <div class="pull-to-refresh-arrow"></div>
-    </div>
-    <div id="%s" class="bc-service-feed" data-feed-type="%s"></div>
 </template>
