@@ -2,7 +2,8 @@
 <template data-type="cards:simple">
     
     <div class="card bc-feed-item item-data-container bc-actions-parent"
-         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}"
+         data-publishing-date="{{item.publishing_date}}">
         
         <div class="card-header">
             {{item.title}}
@@ -52,11 +53,11 @@
         </div>
         
         {{#if item.has_index_actions}}
-            <div class="card-footer">
+            <div class="card-footer bc-actions-row">
                 {{#item.index_action_triggers}}
                     <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                        <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
+                        <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                        <i class="fa {{icon}} fa-lg"></i> {{caption}}
                     </a>
                 {{/item.index_action_triggers}}
             </div>
@@ -69,7 +70,8 @@
 <template data-type="cards:modern">
     
     <div class="card modern bc-feed-item item-data-container bc-actions-parent"
-         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}"
+         data-publishing-date="{{item.publishing_date}}">
         
         {{#if item.featured_image_path}}
             <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
@@ -125,11 +127,11 @@
         </div>
         
         {{#if item.has_index_actions}}
-            <div class="card-footer">
+            <div class="card-footer bc-actions-row">
                 {{#item.index_action_triggers}}
                     <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                        <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
+                        <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                        <i class="fa {{icon}} fa-lg"></i> {{caption}}
                     </a>
                 {{/item.index_action_triggers}}
             </div>
@@ -142,7 +144,8 @@
 <template data-type="cards:facebook">
     
     <div class="card facebook bc-feed-item item-data-container bc-actions-parent"
-         data-item-type="{{item.type}}" data-item-id="{{item.id}}">
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}"
+         data-publishing-date="{{item.publishing_date}}">
         
         {{#if service.options.showAuthors}}
             <div class="card-header item-meta">
@@ -202,11 +205,11 @@
         </div>
         
         {{#if item.has_index_actions}}
-            <div class="card-footer">
+            <div class="card-footer bc-actions-row">
                 {{#item.index_action_triggers}}
                     <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                        <i class="fa {{icon}} fa-lg"></i>
-                        <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
+                        <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                        <i class="fa {{icon}} fa-lg"></i> {{caption}}
                     </a>
                 {{/item.index_action_triggers}}
             </div>
@@ -294,17 +297,6 @@
                         {{item.content}}
                     </div>
                     
-                    {{#if item.has_index_actions}}
-                        <div class="content-block-inner item-actions buttons-row">
-                            {{#item.index_action_triggers}}
-                                <a class="button bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                                    <i class="fa {{icon}} fa-lg"></i> {{caption}}
-                                    <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
-                                </a>
-                            {{/item.index_action_triggers}}
-                        </div>
-                    {{/if}}
-                    
                     {{#item.extra_content_blocks}}
                         {{#if title}}
                             <div class="content-block-title">{{title}}</div>
@@ -345,8 +337,8 @@
                                                 <p class="bc-actions-row">
                                                     {{#action_triggers}}
                                                         <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                                                            <i class="fa {{icon}} fa-lg"></i>
-                                                            <span class="bc-action-data">{{js "encodeURI(JSON.stringify(this))"}}</span>
+                                                            <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                                                            <i class="fa {{icon}} fa-lg"></i> {{caption}}
                                                         </a>
                                                     {{/action_triggers}}
                                                 </p>
@@ -367,4 +359,13 @@
         </div><!-- /.page-content -->
     </div><!-- /.page -->
     
+</template>
+
+<!-- Feed service container -->
+<template data-type="feed-service-container">
+    <div class="pull-to-refresh-layer">
+        <div class="preloader"></div>
+        <div class="pull-to-refresh-arrow"></div>
+    </div>
+    <div id="%s" class="bc-service-feed" data-feed-type="%s"></div>
 </template>

@@ -203,20 +203,26 @@ var BChtmlHelper = {
         BCapp.reloadServiceFeed( '#' + containerId );
     },
     
-    renderFeed: function($container, website, service, data)
+    renderFeed: function($container, website, service, data, appendOrPrepend, scrollToTop)
     {
+        if( typeof appendOrPrepend === 'undefined' ) appendOrPrepend = '';
+        if( typeof scrollToTop === 'undefined' ) scrollToTop = false;
+        
         var items = data.data;
         
         if( items.length === 0 )
         {
-            $container.html(
-                '<div class="content-block">' +
-                '    <div class="content-block-inner">' +
-                         BClanguage.feeds.empty +
-                '    </div>' +
-                '</div>'
-            );
-    
+            if( appendOrPrepend !== '' )
+                BCtoolbox.addNotification(BClanguage.feeds.noMoreItemsAvailable);
+            else
+                $container.html(
+                    '<div class="content-block">' +
+                    '    <div class="content-block-inner">' +
+                             BClanguage.feeds.empty +
+                    '    </div>' +
+                    '</div>'
+                );
+            
             return;
         }
         
@@ -227,8 +233,10 @@ var BChtmlHelper = {
         // console.log('Service: ',  service);
         // console.log('Website: ',  website);
         // console.log('Manifest: ', manifest);
-        
-        var $collection = $(sprintf('<div class="feed-contents" data-type="%s"></div>', type));
+    
+        var $collection = appendOrPrepend === ''
+                        ? $(sprintf('<div class="feed-contents" data-type="%s"></div>', type))
+                        : $('<div class="temporary-container"></div>');
         for(var i in items)
         {
             var item = BChtmlHelper.__prepareItem(new BCfeedItemClass(items[i]), website, service, manifest);
@@ -267,7 +275,6 @@ var BChtmlHelper = {
             {
                 BChtmlHelper.renderFeedItemPage( $(this) );
             });
-            
             $card.find('.convert-to-full-date').each(function()
             {
                 var $this   = $(this);
@@ -277,7 +284,6 @@ var BChtmlHelper = {
                             + ' (' + moment(rawDate).fromNow() + ')';
                 $this.text(repl);
             });
-            
             $card.find('.convert-to-timeago-date').each(function()
             {
                 var $this   = $(this);
@@ -290,7 +296,54 @@ var BChtmlHelper = {
             $collection.append($card);
         }
         
-        $container.html('').append($collection);
+        if( appendOrPrepend === 'append' )
+        {
+            $collection.find('.card').each(function() {
+                $container.find('.feed-contents').append( $(this) );
+            });
+        }
+        else if( appendOrPrepend === 'prepend' )
+        {
+            $collection.find('.card').each(function() {
+                $container.find('.feed-contents').prepend( $(this) );
+            });
+        }
+        else
+        {
+            $container.html('').append($collection);
+            $container.closest('.page-content').each(function()
+            {
+                var $this = $(this);
+                var id    = $this.attr('id');
+                
+                if( typeof $this.attr('infinite-scroll-attached') === 'undefined' )
+                    $this.attr('infinite-scroll-attached', 'false');
+                
+                if( $this.attr('infinite-scroll-attached') !== 'true' )
+                {
+                    BCapp.framework.attachInfiniteScroll('#' + id);
+                    $this.on('infinite', function() { BChtmlHelper.__feedPullOldItems($this); });
+                    $this.attr('infinite-scroll-attached', 'true');
+                    console.log('> Infinite scroll attached to #' + id);
+                }
+                
+                if( typeof $this.attr('pull-to-refresh-attached') === 'undefined' )
+                    $this.attr('pull-to-refresh-attached', 'false');
+                
+                if( $this.attr('pull-to-refresh-attached') !== 'true' )
+                {
+                    BCapp.framework.initPullToRefresh('#' + id);
+                    $this.on('ptr:refresh', function() { BChtmlHelper.__feedPullNewItems($this); });
+                    $this.attr('pull-to-refresh-attached', 'true');
+                    console.log('> Pull-to-refresh attached to #' + id);
+                }
+            });
+            
+            $container.data('refreshing', false);
+            $container.data('last_refresh_time', 0);
+        }
+        
+        if( scrollToTop ) $container.closest('.service-content').scrollTo(0, 100);
         
         var pageId = '#' + $container.closest('.service-page').attr('id');
         BCapp.framework.initImagesLazyLoad( pageId );
@@ -415,5 +468,135 @@ var BChtmlHelper = {
         console.log('Successfully rendered item page using the next context:');
         console.log(context);
         view.router.loadContent($html);
+    },
+    
+    __feedPullNewItems: function( $container )
+    {
+        var containerId      = $container.attr('id');
+        var currentTimestamp = new Date().getTime() / 1000;
+        
+        if( typeof $container.data('refreshing') === 'undefined' ) $container.data('refreshing', false);
+        if( $container.data('refreshing') )
+        {
+            BCapp.framework.pullToRefreshDone('#' + containerId);
+            
+            return;
+        }
+        
+        if( typeof $container.data('last_refresh_time') === 'undefined' ) $container.data('last_refresh_time', 0);
+        if( $container.data('last_refresh_time') >= currentTimestamp - 10 )
+        {
+            BCapp.framework.pullToRefreshDone('#' + containerId);
+            
+            return;
+        }
+        
+        $container.data('refreshing', true);
+        console.log('> Pull to refresh triggered on #' + containerId, $container);
+        
+        var $firstCard = $container.find('.feed-contents .card:first');
+        console.log('> First card on screen: ', $firstCard);
+        var firstCardPublishingDate = $firstCard.attr('data-publishing-date');
+        
+        var $feedServiceContainer = $container.find('.bc-service-feed');
+        var feedServiceId         = $feedServiceContainer.attr('id');
+        var feedServiceData       = window.tmpServiceFeeds[feedServiceId];
+        console.log('> Feed service data: ', feedServiceData);
+        
+        BChtmlHelper.__fetchFeedItems(
+            feedServiceData, firstCardPublishingDate, '', currentTimestamp, $container, $feedServiceContainer, 'prepend',
+            function() { BCapp.framework.pullToRefreshDone('#' + containerId); }
+        );
+    },
+    
+    __feedPullOldItems: function( $container )
+    {
+        var containerId      = $container.attr('id');
+        var currentTimestamp = new Date().getTime() / 1000;
+        
+        if( typeof $container.data('refreshing') === 'undefined' ) $container.data('refreshing', false);
+        if( $container.data('refreshing') ) return;
+        
+        if( typeof $container.data('last_refresh_time') === 'undefined' ) $container.data('last_refresh_time', 0);
+        if( $container.data('last_refresh_time') >= currentTimestamp - 10 ) return;
+        
+        $container.data('refreshing', true);
+        console.log('> Infinite scroll triggered on #' + containerId, $container);
+        
+        var $lastCard = $container.find('.feed-contents .card:last');
+        console.log('> Last card on screen: ', $lastCard);
+        var lastCardPublishingDate = $lastCard.attr('data-publishing-date');
+        
+        var $feedServiceContainer = $container.find('.bc-service-feed');
+        var feedServiceId         = $feedServiceContainer.attr('id');
+        var feedServiceData       = window.tmpServiceFeeds[feedServiceId];
+        console.log('> Feed service data: ', feedServiceData);
+        
+        $container.append('<div class="bc-feed-refresher infinite-scroll-preloader" align="center"><div class="preloader"></div></div>');
+        $container.scrollTo('max', 100);
+        
+        BChtmlHelper.__fetchFeedItems(
+            feedServiceData, '', lastCardPublishingDate, currentTimestamp, $container, $feedServiceContainer, 'append',
+            function() { $container.find('.bc-feed-refresher').remove(); }
+        );
+    },
+    
+    __fetchFeedItems: function(
+        feedServiceData, since, until, currentTimestamp, $container, $feedServiceContainer, appendOrPrepend, callback
+    ) {
+        BCtoolbox.showNetworkActivityIndicator();
+        
+        var url     = feedServiceData.url;
+        var params  = feedServiceData.params;
+        var website = feedServiceData.website;
+        var service = feedServiceData.service;
+        
+        params.since = since;
+        params.until = until;
+        
+        console.log(sprintf('Fetching %s...', url));
+        console.log('Params: ', params);
+        
+        $.getJSON(url, params, function(data)
+        {
+            $container.data('last_refresh_time', currentTimestamp);
+            BCtoolbox.hideNetworkActivityIndicator();
+            
+            if( data.message !== 'OK' )
+            {
+                $container.data('refreshing', false);
+                
+                BCtoolbox.addNotification(BCapp.getServiceError(
+                    BClanguage.errorReceived.title,
+                    BClanguage.errorReceived.message,
+                    website,
+                    service,
+                    {url: url, error: data.message}
+                ));
+                
+                if( callback ) callback();
+                
+                return;
+            }
+            
+            BChtmlHelper.renderFeed($feedServiceContainer, website, service, data, appendOrPrepend, false);
+            $container.data('refreshing', false);
+            
+            if( callback ) callback();
+        })
+        .fail(function($xhr, status, error)
+        {
+            $container.data('refreshing', false);
+            
+            BCtoolbox.addNotification(BCapp.getServiceError(
+                BClanguage.failedToLoadService.title,
+                BClanguage.failedToLoadService.message,
+                website,
+                service,
+                {url: url, error: error}
+            ));
+            
+            if( callback ) callback();
+        });
     }
 };

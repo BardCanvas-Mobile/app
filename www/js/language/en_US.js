@@ -234,6 +234,7 @@ var BClanguage = {
             full:   'Published by %s on %s (%s)'
         },
         empty: '<p>There are no entries for this feed.</p>',
+        noMoreItemsAvailable: 'There are no more entries available at the moment.',
         errorReceived: {
             title:   'Error received from feed server',
             message: '<p>Sorry, but the feed server sent an error while fetching the contents:</p>' +

@@ -552,6 +552,8 @@ var BCapp = {
                 pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
                 markup:       BCapp.__getServiceMarkup(website, service),
                 serviceClass: serviceClass,
+                contentClass: serviceClass === 'feed-service' ? 'infinite-scroll pull-to-refresh-content' : '',
+                isFeed:       serviceClass === 'feed-service',
                 navbarClass:  service.options.hasNavbar  ? 'service-navbar-fixed'  : '',
                 toolbarClass: service.options.hasToolbar ? 'service-toolbar-fixed' : ''
             };
@@ -782,12 +784,13 @@ var BCapp = {
         var params = {
             bcm_platform:     BCapp.os,
             bcm_access_token: website.accessToken,
-            offset:           0,
             tzoffset:         0 - (new Date().getTimezoneOffset() / 60),
+            since:            '',
+            until:            '',
             wasuuup:          BCtoolbox.wasuuup()
         };
         
-        var containerId = 'ajax_' + BCtoolbox.wasuuup();
+        var containerId = 'cards_' + BCtoolbox.wasuuup();
         if( typeof window.tmpServiceFeeds === 'undefined' )
             window.tmpServiceFeeds = {};
         
@@ -799,7 +802,8 @@ var BCapp = {
         };
         
         // console.log(service);
-        return sprintf('<div id="%s" class="bc-service-feed" data-feed-type="%s"></div>', containerId, service.type);
+        var html = $('template[data-type="feed-service-container"]').html();
+        return sprintf(html, containerId, service.type);
     },
     
     /**
@@ -978,6 +982,9 @@ var BCapp = {
         var website     = data.website;
         var service     = data.service;
         
+        params.since = '';
+        params.until = '';
+        
         console.log(sprintf('Fetching %s...', url));
         if( showIndicator ) BCtoolbox.showFullPageLoader();
         
@@ -998,7 +1005,7 @@ var BCapp = {
                 return;
             }
             
-            BChtmlHelper.renderFeed($container, website, service, data);
+            BChtmlHelper.renderFeed($container, website, service, data, '', true);
             $container.attr('data-initialized', true);
         })
         .fail(function($xhr, status, error)
@@ -1101,7 +1108,7 @@ var BCapp = {
     triggerAction: function( trigger )
     {
         var $trigger = $(trigger);
-        var tdata    = JSON.parse(decodeURI($trigger.find('.bc-action-data').html()));
+        var tdata    = JSON.parse($trigger.find('.bc-action-data').html());
         
         if( tdata ) tdata = new BCactionTriggerClass(tdata);
     

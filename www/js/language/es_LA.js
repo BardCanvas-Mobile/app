@@ -236,6 +236,7 @@ var BClanguage = {
             full:   'Por %s el %s (%s)'
         },
         empty: '<p>No hay entradas en esta fuente.</p>',
+        noMoreItemsAvailable: 'No hay más entradas disponibles por el momento.',
         errorReceived: {
             title:   'Error al descargar la fuente',
             message: '<p>Disculpa, pero el servidor de la fuente ha enviado un error al descargar el contenido:</p>' +
