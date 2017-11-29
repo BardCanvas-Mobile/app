@@ -171,6 +171,9 @@ html.android .inner-navbar-fixed .navbar             { position: fixed; top: 56p
 html.ios     .inner-navbar-fixed .inner-page-content { padding-top: 44px; }
 html.android .inner-navbar-fixed .inner-page-content { padding-top: 56px; }
 
+html.ios     .bc-nested-views-container .view.feed-service .inner-navbar-fixed .navbar { top: 0; }
+html.android .bc-nested-views-container .view.feed-service .inner-navbar-fixed .navbar { top: 0; }
+
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
