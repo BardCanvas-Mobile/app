@@ -24,7 +24,7 @@
          data-publishing-date="{{item.publishing_date}}">
         
         <div class="card-header">
-            {{item.title}}
+            <div class="title">{{item.title}}</div>
         </div>
         
         <div class="card-content">
@@ -97,11 +97,11 @@
         
         {{#if item.featured_image_path}}
             <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
-                {{item.title}}
+                <div class="title">{{item.title}}</div>
             </div>
         {{else}}
             <div class="card-header no-border no-background" valign="bottom">
-                {{item.title}}
+                <div class="title">{{item.title}}</div>
             </div>
         {{/if}}
         
