@@ -230,7 +230,7 @@ var BCtoolbox = {
         var browser = BCapp.framework.photoBrowser({
             photos:       source,
             theme:        'dark',
-            type:         'popup',
+            type:         'standalone',
             backLinkText: BClanguage.actions.close,
             ofText:       BClanguage.of
         });
