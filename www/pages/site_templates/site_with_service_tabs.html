@@ -46,49 +46,59 @@
             <div class="page-content primary-tab-content tabs bc-nested-views-container">
                 
                 {{#services}}
-                    <div id="{{meta.tabTarget}}" class="view tab {{meta.serviceClass}} {{meta.activeTab}} {{meta.tabTarget}} {{meta.navbarClass}} {{meta.ToolbarClass}}">
-                        
-                        {{#if options.hasNavbar}}
-                            <div class="navbar" id="{{meta.pageHandler}}-navbar">
-                                <div class="navbar-inner">
-                                    <span class="left"></span>
-                                    <span class="center">
-                                        <i class="preloader"></i>
-                                    </span>
-                                    <span class="right"></span>
-                                </div>
-                            </div>
-                        {{/if}}
-                        
-                        {{#if options.hasToolbar}}
-                            <div class="toolbar toolbar-bottom" id="{{meta.pageHandler}}-toolbar">
-                                <div class="toolbar-inner">
-                                    <span class="left"></span>
-                                    <span class="center">
-                                        <i class="preloader"></i>
-                                    </span>
-                                    <span class="right"></span>
-                                </div>
-                            </div>
-                        {{/if}}
+                    <div id="{{meta.tabTarget}}" class="view tab {{meta.serviceClass}} {{meta.activeTab}} {{meta.tabTarget}}">
                         
                         <div class="pages">
-                            
-                            <div data-page="{{meta.pageHandler}}"
-                                 class="page service-page {{meta.pageClass}}"
-                                 id="{{meta.pageHandler}}"
-                                 data-service-title="{{../manifest.shortName}} - {{caption}}"
-                                 data-website-icon="{{../manifest.icon}}">
-                                
-                                <div class="page-content service-content {{meta.contentClass}}"
-                                     id="sc-{{meta.pageHandler}}">
-                                    
-                                    {{meta.markup}}
-                                    
+                            <div class="page">
+                                <div class="page-content">
+                                    <div class="view {{meta.navbarClass}} {{meta.ToolbarClass}}">
+                                        
+                                        {{#if options.hasNavbar}}
+                                            <div class="navbar" id="{{meta.pageHandler}}-navbar">
+                                                <div class="navbar-inner">
+                                                    <span class="left"></span>
+                                                    <span class="center">
+                                                        <i class="preloader"></i>
+                                                    </span>
+                                                    <span class="right"></span>
+                                                </div>
+                                            </div>
+                                        {{/if}}
+                                        
+                                        {{#if options.hasToolbar}}
+                                            <div class="toolbar toolbar-bottom" id="{{meta.pageHandler}}-toolbar">
+                                                <div class="toolbar-inner">
+                                                    <span class="left"></span>
+                                                    <span class="center">
+                                                        <i class="preloader"></i>
+                                                    </span>
+                                                    <span class="right"></span>
+                                                </div>
+                                            </div>
+                                        {{/if}}
+                                        
+                                        <div class="pages">
+                                            <div class="page service-page {{meta.pageClass}}"
+                                                 data-page="{{meta.pageHandler}}"
+                                                 id="{{meta.pageHandler}}"
+                                                 data-service-title="{{../manifest.shortName}} - {{caption}}"
+                                                 data-website-icon="{{../manifest.icon}}">
+
+                                                <div class="page-content service-content {{meta.contentClass}}"
+                                                     id="sc-{{meta.pageHandler}}">
+                                                    
+                                                    {{meta.markup}}
+                                                    
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                                 
                             </div>
-                            
                         </div>
                     </div>
                 {{/services}}

@@ -682,6 +682,14 @@ var BCapp = {
             $('#right-panel').html(BCapp.websiteMenusCollection[menuKey]);
         console.log(sprintf('Injected sidebar menu for %s', menuKey));
         
+        var $activeNestedView = $(selector).find('.view.active');
+        if( $activeNestedView.length > 0 )
+        {
+            var activeNestedViewId = $activeNestedView.attr('id');
+            // console.log('>>>>> Setting active nested view to .' + activeNestedViewId);
+            BCapp.setNestedView(menuKey, activeNestedViewId);
+        }
+        
         if( typeof callback === 'function' ) callback();
     },
     
@@ -1077,6 +1085,7 @@ var BCapp = {
     
     setNestedView: function(mainViewSelector, websiteServiceSelector)
     {
+        console.log('Setting nested view to ' + mainViewSelector, ' / ' + websiteServiceSelector);
         if( mainViewSelector === null )
         {
             BCapp.currentNestedView = null;

@@ -424,7 +424,7 @@ var BChtmlHelper = {
         var manifest = $card.data('manifest');
         var template = BCapp.getCompiledTemplate('template[data-type="single_item_page"]');
         var $html    = $(template(context));
-        // var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+        var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         
         $html.find('.item-data-container').data('website',  website);
         $html.find('.item-data-container').data('service',  service);
@@ -473,9 +473,8 @@ var BChtmlHelper = {
             });
         });
         
-        console.log('Successfully rendered item page using the next context:');
-        console.log(context);
-        BCapp.currentView.router.loadContent($html);
+        console.log('Successfully rendered item page on the next view: ', view);
+        view.router.loadContent($html);
     },
     
     __feedPullNewItems: function( $container )
