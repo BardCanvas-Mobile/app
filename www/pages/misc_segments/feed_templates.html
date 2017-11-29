@@ -5,11 +5,20 @@
 
 <template data-type="feed-service-container">
     
-    <div class="pull-to-refresh-layer">
-        <div class="preloader"></div>
-        <div class="pull-to-refresh-arrow"></div>
+    <div class="feed-cards-wrapper">
+        
+        <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+        </div>
+        
+        <div id="%s" class="bc-service-feed" data-feed-type="%s"></div>
+        
+        <div class="bc-feed-refresher infinite-scroll-preloader" align="center" style="display: none">
+            <div class="preloader"></div>
+        </div>
+        
     </div>
-    <div id="%s" class="bc-service-feed" data-feed-type="%s"></div>
     
 </template>
 

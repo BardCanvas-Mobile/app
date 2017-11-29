@@ -311,33 +311,41 @@ var BChtmlHelper = {
         else
         {
             $container.html('').append($collection);
-            $container.closest('.page-content').each(function()
+            var $pageContent  = $container.closest('.page-content');
+            var pageContentId = $pageContent.attr('id');
+            
+            if( typeof $pageContent.attr('infinite-scroll-attached') === 'undefined' )
+                $pageContent.attr('infinite-scroll-attached', 'false');
+            
+            if( $pageContent.attr('infinite-scroll-attached') !== 'true' )
             {
-                var $this = $(this);
-                var id    = $this.attr('id');
+                if( BCapp.os === 'android' )
+                    $pageContent.find('.bc-feed-refresher .preloader').html(
+                        BCapp.framework.params.materialPreloaderHtml
+                    );
                 
-                if( typeof $this.attr('infinite-scroll-attached') === 'undefined' )
-                    $this.attr('infinite-scroll-attached', 'false');
+                $pageContent.find('.bc-feed-refresher').show();
+                BCapp.framework.attachInfiniteScroll('#' + pageContentId);
+                $pageContent.on('infinite', function() { BChtmlHelper.__feedPullOldItems($pageContent); });
+                $pageContent.attr('infinite-scroll-attached', 'true');
+                console.log('> Infinite scroll attached to #' + pageContentId);
+            }
+            
+            if( typeof $pageContent.attr('pull-to-refresh-attached') === 'undefined' )
+                $pageContent.attr('pull-to-refresh-attached', 'false');
+            
+            if( $pageContent.attr('pull-to-refresh-attached') !== 'true' )
+            {
+                if( BCapp.os === 'android' )
+                    $pageContent.find('.pull-to-refresh-layer .preloader').html(
+                        BCapp.framework.params.materialPreloaderHtml
+                    );
                 
-                if( $this.attr('infinite-scroll-attached') !== 'true' )
-                {
-                    BCapp.framework.attachInfiniteScroll('#' + id);
-                    $this.on('infinite', function() { BChtmlHelper.__feedPullOldItems($this); });
-                    $this.attr('infinite-scroll-attached', 'true');
-                    console.log('> Infinite scroll attached to #' + id);
-                }
-                
-                if( typeof $this.attr('pull-to-refresh-attached') === 'undefined' )
-                    $this.attr('pull-to-refresh-attached', 'false');
-                
-                if( $this.attr('pull-to-refresh-attached') !== 'true' )
-                {
-                    BCapp.framework.initPullToRefresh('#' + id);
-                    $this.on('ptr:refresh', function() { BChtmlHelper.__feedPullNewItems($this); });
-                    $this.attr('pull-to-refresh-attached', 'true');
-                    console.log('> Pull-to-refresh attached to #' + id);
-                }
-            });
+                BCapp.framework.initPullToRefresh('#' + pageContentId);
+                $pageContent.on('ptr:refresh', function() { BChtmlHelper.__feedPullNewItems($pageContent); });
+                $pageContent.attr('pull-to-refresh-attached', 'true');
+                console.log('> Pull-to-refresh attached to #' + pageContentId);
+            }
             
             $container.data('refreshing', false);
             $container.data('last_refresh_time', 0);
@@ -532,12 +540,12 @@ var BChtmlHelper = {
         var feedServiceData       = window.tmpServiceFeeds[feedServiceId];
         console.log('> Feed service data: ', feedServiceData);
         
-        $container.append('<div class="bc-feed-refresher infinite-scroll-preloader" align="center"><div class="preloader"></div></div>');
+        $container.find('.bc-feed-refresher').show();
         $container.scrollTo('max', 100);
         
         BChtmlHelper.__fetchFeedItems(
             feedServiceData, '', lastCardPublishingDate, currentTimestamp, $container, $feedServiceContainer, 'append',
-            function() { $container.find('.bc-feed-refresher').remove(); }
+            function() { $container.find('.bc-feed-refresher').hide(); }
         );
     },
     

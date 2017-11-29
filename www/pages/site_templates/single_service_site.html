@@ -63,14 +63,16 @@
                         <div class="pages">
                             
                             <div data-page="{{meta.pageHandler}}"
-                                 class="page service-page"
+                                 class="page service-page {{meta.pageClass}}"
                                  id="{{meta.pageHandler}}"
                                  data-service-title="{{../manifest.shortName}} - {{caption}}"
                                  data-website-icon="{{../manifest.icon}}">
                                 
                                 <div class="page-content service-content {{meta.contentClass}}"
                                      id="sc-{{meta.pageHandler}}">
+                                    
                                     {{meta.markup}}
+                                    
                                 </div>
                                 
                             </div>

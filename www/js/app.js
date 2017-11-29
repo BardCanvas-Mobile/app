@@ -551,6 +551,7 @@ var BCapp = {
                 activeTab:    (parseInt(i) === 0 ? 'active' : ''),
                 pageHandler:  sprintf('%s-%s-index', websiteMainViewClassName, service.id),
                 markup:       BCapp.__getServiceMarkup(website, service),
+                pageClass:    serviceClass === 'feed-service' ? 'feed-service-page' : '',
                 serviceClass: serviceClass,
                 contentClass: serviceClass === 'feed-service' ? 'infinite-scroll pull-to-refresh-content' : '',
                 isFeed:       serviceClass === 'feed-service',
