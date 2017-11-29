@@ -287,5 +287,5 @@ html.android .page.feed-service-page { margin-top: -48px; height: calc(100% + 48
 
 html.ios     .service-content.pull-to-refresh-content { padding-top: 44px !important;
                                                         margin-top: 44px; height: calc(100% - 44px); }
-html.android .service-content.pull-to-refresh-content { padding-top: 48px !important;
-                                                        margin-top: 48px; height: calc(100% - 48px); }
+html.android .service-content.pull-to-refresh-content { padding-top: 52px !important;
+                                                        margin-top: 52px; height: calc(100% - 52px); }

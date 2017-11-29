@@ -33,7 +33,7 @@
          data-publishing-date="{{item.publishing_date}}">
         
         <div class="card-header">
-            <div class="title">{{item.title}}</div>
+            <a class="title">{{item.title}}</a>
         </div>
         
         <div class="card-content">
@@ -110,7 +110,7 @@
             </div>
         {{else}}
             <div class="card-header no-border no-background" valign="bottom">
-                <div class="title">{{item.title}}</div>
+                <a class="title">{{item.title}}</a>
             </div>
         {{/if}}
         
@@ -204,7 +204,7 @@
                             {{item._mainCategoryCaption}}
                         </span>
                     {{/if}}
-                    {{item.title}}
+                    <a>{{item.title}}</a>
                 </p>
                 
                 {{#if item.featured_image_path}}
