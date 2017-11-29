@@ -311,44 +311,7 @@ var BChtmlHelper = {
         else
         {
             $container.html('').append($collection);
-            var $pageContent  = $container.closest('.page-content');
-            var pageContentId = $pageContent.attr('id');
-            
-            if( typeof $pageContent.attr('infinite-scroll-attached') === 'undefined' )
-                $pageContent.attr('infinite-scroll-attached', 'false');
-            
-            if( $pageContent.attr('infinite-scroll-attached') !== 'true' )
-            {
-                if( BCapp.os === 'android' )
-                    $pageContent.find('.bc-feed-refresher .preloader').html(
-                        BCapp.framework.params.materialPreloaderHtml
-                    );
-                
-                $pageContent.find('.bc-feed-refresher').show();
-                BCapp.framework.attachInfiniteScroll('#' + pageContentId);
-                $pageContent.on('infinite', function() { BChtmlHelper.__feedPullOldItems($pageContent); });
-                $pageContent.attr('infinite-scroll-attached', 'true');
-                console.log('> Infinite scroll attached to #' + pageContentId);
-            }
-            
-            if( typeof $pageContent.attr('pull-to-refresh-attached') === 'undefined' )
-                $pageContent.attr('pull-to-refresh-attached', 'false');
-            
-            if( $pageContent.attr('pull-to-refresh-attached') !== 'true' )
-            {
-                if( BCapp.os === 'android' )
-                    $pageContent.find('.pull-to-refresh-layer .preloader').html(
-                        BCapp.framework.params.materialPreloaderHtml
-                    );
-                
-                BCapp.framework.initPullToRefresh('#' + pageContentId);
-                $pageContent.on('ptr:refresh', function() { BChtmlHelper.__feedPullNewItems($pageContent); });
-                $pageContent.attr('pull-to-refresh-attached', 'true');
-                console.log('> Pull-to-refresh attached to #' + pageContentId);
-            }
-            
-            $container.data('refreshing', false);
-            $container.data('last_refresh_time', 0);
+            BChtmlHelper.__bindFeedRefreshers($container);
         }
         
         if( scrollToTop ) $container.closest('.service-content').scrollTo(0, 100);
@@ -356,6 +319,48 @@ var BChtmlHelper = {
         var pageId = '#' + $container.closest('.service-page').attr('id');
         BCapp.framework.initImagesLazyLoad( pageId );
         console.log( 'Lazy load triggered on ' + pageId );
+    },
+    
+    __bindFeedRefreshers: function( $container )
+    {
+        var $pageContent  = $container.closest('.page-content');
+        var pageContentId = $pageContent.attr('id');
+        
+        if( typeof $pageContent.attr('infinite-scroll-attached') === 'undefined' )
+            $pageContent.attr('infinite-scroll-attached', 'false');
+        
+        if( $pageContent.attr('infinite-scroll-attached') !== 'true' )
+        {
+            if( BCapp.os === 'android' )
+                $pageContent.find('.bc-feed-refresher .preloader').html(
+                    BCapp.framework.params.materialPreloaderHtml
+                );
+            
+            $pageContent.find('.bc-feed-refresher').show();
+            BCapp.framework.attachInfiniteScroll('#' + pageContentId);
+            $pageContent.on('infinite', function() { BChtmlHelper.__feedPullOldItems($pageContent); });
+            $pageContent.attr('infinite-scroll-attached', 'true');
+            console.log('> Infinite scroll attached to #' + pageContentId);
+        }
+        
+        if( typeof $pageContent.attr('pull-to-refresh-attached') === 'undefined' )
+            $pageContent.attr('pull-to-refresh-attached', 'false');
+        
+        if( $pageContent.attr('pull-to-refresh-attached') !== 'true' )
+        {
+            if( BCapp.os === 'android' )
+                $pageContent.find('.pull-to-refresh-layer .preloader').html(
+                    BCapp.framework.params.materialPreloaderHtml
+                );
+            
+            BCapp.framework.initPullToRefresh('#' + pageContentId);
+            $pageContent.on('ptr:refresh', function() { BChtmlHelper.__feedPullNewItems($pageContent); });
+            $pageContent.attr('pull-to-refresh-attached', 'true');
+            console.log('> Pull-to-refresh attached to #' + pageContentId);
+        }
+        
+        $container.data('refreshing', false);
+        $container.data('last_refresh_time', 0);
     },
     
     /**
