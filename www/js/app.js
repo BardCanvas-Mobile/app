@@ -1011,9 +1011,6 @@ var BCapp = {
         })
         .fail(function($xhr, status, error)
         {
-            // BCapp.framework.hideIndicator();
-            // BCtoolbox.hideNetworkActivityIndicator();
-            
             $container.html(BCapp.getServiceError(
                 BClanguage.failedToLoadService.title,
                 BClanguage.failedToLoadService.message,
