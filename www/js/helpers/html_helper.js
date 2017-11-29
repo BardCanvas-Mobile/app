@@ -267,9 +267,9 @@ var BChtmlHelper = {
             var html     = template(context);
             var $card    = $(html);
             
-            $card.data('context', context);
-            $card.data('website', website);
-            $card.data('service', service);
+            $card.data('context',  context);
+            $card.data('website',  website);
+            $card.data('service',  service);
             $card.data('manifest', manifest);
             $card.find('.card-header, .card-content').bind('click', function()
             {
@@ -321,14 +321,18 @@ var BChtmlHelper = {
         console.log( 'Lazy load triggered on ' + pageId );
     },
     
-    __bindFeedRefreshers: function( $container )
+    __bindFeedRefreshers: function( $container, forced )
     {
+        if( typeof forced === 'undefined' ) forced = false;
+        
         var $pageContent  = $container.closest('.page-content');
         var pageContentId = $pageContent.attr('id');
+        console.log('> Binding Feed Refreshers on #' + $container.attr('id'));
         
         if( typeof $pageContent.attr('infinite-scroll-attached') === 'undefined' )
             $pageContent.attr('infinite-scroll-attached', 'false');
         
+        if( forced ) $pageContent.attr('infinite-scroll-attached', 'false');
         if( $pageContent.attr('infinite-scroll-attached') !== 'true' )
         {
             if( BCapp.os === 'android' )
@@ -346,6 +350,7 @@ var BChtmlHelper = {
         if( typeof $pageContent.attr('pull-to-refresh-attached') === 'undefined' )
             $pageContent.attr('pull-to-refresh-attached', 'false');
         
+        if( forced ) $pageContent.attr('pull-to-refresh-attached', 'false');
         if( $pageContent.attr('pull-to-refresh-attached') !== 'true' )
         {
             if( BCapp.os === 'android' )
@@ -422,8 +427,10 @@ var BChtmlHelper = {
     
     renderFeedItemPage: function( $trigger )
     {
-        var $card    = $trigger.closest('.card');
-        var context  = $card.data('context');
+        var $card          = $trigger.closest('.card');
+        var context        = $card.data('context');
+        context.feedPageId = 'feed-item-' + BCtoolbox.wasuuup();
+        
         var website  = $card.data('website');
         var service  = $card.data('service');
         var manifest = $card.data('manifest');
@@ -476,6 +483,31 @@ var BChtmlHelper = {
                 var image = $(this)[0];
                 BCtoolbox.showPhotoBrowser(image);
             });
+        });
+        
+        var feedPageAfterbackTarget = sprintf('.page[data-page="%s"]', context.feedPageId);
+        $(document).on('page:afterback', feedPageAfterbackTarget, function(e)
+        {
+            setTimeout(function()
+            {
+                var $view = $(BCapp.currentView.selector);
+                
+                console.log('>-------------------------------------------------------------------');
+                console.log(sprintf(
+                    '> Got back from feed item page. Re-attaching lost bindings on children of #%s',
+                    $view.attr('id')
+                ));
+                console.log('>-------------------------------------------------------------------');
+                
+                $view.find('.bc-service-feed').each(function()
+                {
+                    var $container = $(this);
+                    if( typeof $container.attr('data-initialized') === 'undefined' ) return;
+                    
+                    BChtmlHelper.__bindFeedRefreshers( $container, true );
+                    console.log('>-------------------------------------------------------------------');
+                });
+            }, 100);
         });
         
         console.log('Successfully rendered item page on the next view: ', view);
