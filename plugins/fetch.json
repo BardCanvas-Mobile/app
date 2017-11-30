@@ -79,14 +79,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-networkactivityindicator": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-networkactivityindicator"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-camera": {
         "source": {
             "type": "registry",

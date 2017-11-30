@@ -7,7 +7,7 @@ console.log('');
 
 // Global helpers
 var f7 = new Framework7({
-    material:                navigator.userAgent.search(/android/i) >= 0
+    material: navigator.userAgent.search(/android/i) >= 0
     // , hideNavbarOnPageScroll:  true
     // , hideToolbarOnPageScroll: true
     // , hideTabbarOnPageScroll:  true

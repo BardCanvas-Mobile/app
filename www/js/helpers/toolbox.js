@@ -78,21 +78,27 @@ var BCtoolbox = {
         return reg.test(url);
     },
     
+    /**
+     * @deprecated
+     */
     showNetworkActivityIndicator: function()
     {
-        if( device.platform === 'browser') return;
-        
-        if( BCapp.os === 'ios' )
-            NetworkActivityIndicator.show();
+        // if( device.platform === 'browser') return;
+        //
+        // if( BCapp.os === 'ios' )
+        //     NetworkActivityIndicator.show();
     },
     
+    /**
+     * @deprecated
+     */
     hideNetworkActivityIndicator: function()
     {
-        if( typeof device === 'undefined' ) return;
-        if( device.platform === 'browser') return;
-        
-        if( BCapp.os === 'ios' )
-            NetworkActivityIndicator.hide();
+        // if( typeof device === 'undefined' ) return;
+        // if( device.platform === 'browser') return;
+        //
+        // if( BCapp.os === 'ios' )
+        //     NetworkActivityIndicator.hide();
     },
     
     wasuuup: function()
