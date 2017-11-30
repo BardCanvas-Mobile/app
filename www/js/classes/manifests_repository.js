@@ -169,10 +169,7 @@ var BCmanifestsRepository = {
             }
             else {
                 // Flow is passed to the login validator
-                BCmanifestsRepository.__validateWebsiteLogin(function()
-                {
-                    callback();
-                });
+                BCmanifestsRepository.__validateWebsiteLogin(function() { callback(); });
             }
             
             return;
@@ -191,10 +188,7 @@ var BCmanifestsRepository = {
             }
             else {
                 // Flow is passed to the login validator
-                BCmanifestsRepository.__validateWebsiteLogin(function()
-                {
-                    callback();
-                });
+                BCmanifestsRepository.__validateWebsiteLogin(function() { callback(); });
             }
             
             return;
@@ -225,9 +219,10 @@ var BCmanifestsRepository = {
             else {
                 // Login provided. Flow is passed to the login validator
                 window.__tempWebsiteAdditionCallback = function() {
-                    BCmanifestsRepository.__validateWebsiteLogin(function() {
-                        callback();
-                    });
+                    BCmanifestsRepository.__validateWebsiteLogin(
+                        function() { callback(); },
+                        function() { BCapp.currentView.router.back(); }
+                    );
                 };
             }
             
@@ -274,9 +269,10 @@ var BCmanifestsRepository = {
         {
             // Login provided. Flow is passed to the login validator
             window.__tempWebsiteAdditionCallback = function() {
-                BCmanifestsRepository.__validateWebsiteLogin(function() {
-                    callback();
-                });
+                BCmanifestsRepository.__validateWebsiteLogin(
+                    function() { callback(); },
+                    function() { BCapp.currentView.router.back(); }
+                );
             };
             
             compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
@@ -300,11 +296,12 @@ var BCmanifestsRepository = {
     },
     
     /**
-     * @param {function} callback
+     * @param {function} success
+     * @param {function} fail
      * 
      * @private
      */
-    __validateWebsiteLogin: function(callback)
+    __validateWebsiteLogin: function(success, fail)
     {
         BCapp.framework.showPreloader(BClanguage.validatingCredentials);
         BCtoolbox.showNetworkActivityIndicator();
@@ -326,6 +323,7 @@ var BCmanifestsRepository = {
             if( data.message !== 'OK' )
             {
                 BCapp.framework.alert(data.message);
+                if( typeof fail === 'function' ) fail();
                 
                 return;
             }
@@ -336,7 +334,7 @@ var BCmanifestsRepository = {
             
             if( data.data.meta ) BCwebsitesRepository.__website.meta = data.data.meta;
             
-            callback();
+            success();
         })
         .fail(function($xhr, status, error)
         {
