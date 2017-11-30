@@ -439,6 +439,8 @@ var BCwebsitesRepository = {
                     else
                         $('#cancel_website_addition_button').hide();
                     
+                    BCapp.renderSiteSelector();
+                    
                     BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });
                 };
                 

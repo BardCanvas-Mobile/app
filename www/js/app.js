@@ -140,7 +140,10 @@ var BCapp = {
         BCwebsitesRepository.loadWebsitesRegistry(function()
         {
             $progress.circleProgress('value', 0.8);
-            BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
+            BCapp.__initViews(function()
+            {
+                $progress.circleProgress('value', 1);
+            });
         });
         
         setInterval(function() { BCapp.updateTimeAgoDates(); }, 30000);
@@ -382,14 +385,10 @@ var BCapp = {
             }
         );
         
-        // TODO: Evaluate what to show on startup
         window.tmpWebsiteToShowInterval = null;
         window.tmpWebsite               = BCwebsitesRepository.collection[0];
         window.tmpWebsiteViewandler     = BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
         window.tmpWebsiteToShowSelector = '.' + window.tmpWebsiteViewandler;
-        
-        console.log('Website to show: ', window.tmpWebsite.URL);
-        console.log('View selector to show: ', window.tmpWebsiteToShowSelector);
         
         console.log('Rendering site selector and adding website views.');
         BCapp.renderSiteSelector(function()
@@ -404,24 +403,43 @@ var BCapp = {
                     
                     clearInterval(window.tmpWebsiteToShowInterval);
                     
-                    console.log(sprintf(
-                        'Rendering first website (here the wall should be rendered). Selector: %s',
-                        window.tmpWebsiteToShowSelector
-                    ));
-                    BCapp.showView(window.tmpWebsiteToShowSelector, null, false);
-                    
-                    var services        = BCmanifestsRepository.getServicesForWebsite(window.tmpWebsite.URL);
-                    var serviceHandler  = window.tmpWebsiteViewandler + '-' + services[0].id;
-                    var serviceSelector = serviceHandler + '-index';
-                    console.log(sprintf('Triggering service %s', serviceSelector));
-                    BCapp.triggerServiceLoad(serviceSelector);
-                    if( services.length > 1 )
-                        BCapp.setNestedView(window.tmpWebsiteViewandler, serviceHandler);
-                    else
-                        BCapp.setNestedView(null);
+                    BCapp.showFirstWebsite();
                 }, 100);
             });
         });
+    },
+    
+    showFirstWebsite: function()
+    {
+        for( var i in BCwebsitesRepository.collection )
+        {
+            window.tmpWebsite = BCwebsitesRepository.collection[i];
+            
+            if( typeof window.tmpWebsite === 'object' ) break;
+        }
+        
+        window.tmpWebsiteViewandler     = BCwebsitesRepository.convertHandlerToViewClassName(window.tmpWebsite.handler);
+        window.tmpWebsiteToShowSelector = '.' + window.tmpWebsiteViewandler;
+        
+        console.log(
+            '%cRendering first website. Selector: %s',
+            'color: teal;',
+            window.tmpWebsiteToShowSelector
+        );
+        BCapp.showView(window.tmpWebsiteToShowSelector, null, false);
+        
+        var services        = BCmanifestsRepository.getServicesForWebsite(window.tmpWebsite.URL);
+        var serviceHandler  = window.tmpWebsiteViewandler + '-' + services[0].id;
+        var serviceSelector = serviceHandler + '-index';
+        
+        console.log('%cTriggering service %s', 'color: teal;', serviceSelector);
+        BCapp.triggerServiceLoad(serviceSelector);
+        
+        if( services.length > 1 )
+            BCapp.setNestedView(window.tmpWebsiteViewandler, serviceHandler);
+        else
+            BCapp.setNestedView(null);
+        
     },
     
     getCompiledTemplate: function( identifier )
@@ -748,7 +766,21 @@ var BCapp = {
     
     cancelWebsiteAddition: function()
     {
-        BCapp.showView(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector);
+        if( typeof window.tmpViewToReturnWhenCancellingWebsiteAddition === 'undefined' )
+        {
+            BCapp.showFirstWebsite();
+            
+            return;
+        }
+        
+        if( $(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector).length > 0 )
+        {
+            BCapp.showView(window.tmpViewToReturnWhenCancellingWebsiteAddition.selector);
+            
+            return;
+        }
+        
+        BCapp.showFirstWebsite();
     },
     
     /**
