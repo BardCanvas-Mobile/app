@@ -360,7 +360,7 @@ var BCapp = {
                         beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                     });
                     window.tmpInitViewsPostRenderingAction();
-                    BCapp.showView('.view-add-site');
+                    BCapp.showView('.view-add-site', null, false);
                 }
             );
             
@@ -408,7 +408,7 @@ var BCapp = {
                         'Rendering first website (here the wall should be rendered). Selector: %s',
                         window.tmpWebsiteToShowSelector
                     ));
-                    BCapp.showView(window.tmpWebsiteToShowSelector);
+                    BCapp.showView(window.tmpWebsiteToShowSelector, null, false);
                     
                     var services        = BCmanifestsRepository.getServicesForWebsite(window.tmpWebsite.URL);
                     var serviceHandler  = window.tmpWebsiteViewandler + '-' + services[0].id;
@@ -653,8 +653,10 @@ var BCapp = {
         console.log(sprintf('Added menu for %s to the menus collection.', websiteMainViewClassName));
     },
     
-    showView: function( selector, callback )
+    showView: function( selector, callback, triggerAutoLoad )
     {
+        if( typeof triggerAutoLoad === 'undefined' ) triggerAutoLoad = true;
+        
         console.log('Actual view: ' + BCapp.currentView.selector);
         
         BCapp.__toggleToolbars();
@@ -703,12 +705,35 @@ var BCapp = {
             $('#right-panel').html(BCapp.websiteMenusCollection[menuKey]);
         console.log(sprintf('Injected sidebar menu for %s', menuKey));
         
+        var $page;
         var $activeNestedView = $(selector).find('.view.active');
-        if( $activeNestedView.length > 0 )
+        if( $activeNestedView.length === 0 )
+        {
+            $page = $(BCapp.currentView.selector).find('.service-page');
+            if( typeof $page.attr('data-initialized') === 'undefined' && triggerAutoLoad )
+            {
+                console.log(
+                    '%c>>> Triggering service load on page [%s]', 'color: green;', $page.attr('data-page')
+                );
+                BCapp.triggerServiceLoad( $page.attr('data-page') );
+            }
+        }
+        else
         {
             var activeNestedViewId = $activeNestedView.attr('id');
-            // console.log('>>>>> Setting active nested view to .' + activeNestedViewId);
             BCapp.setNestedView(menuKey, activeNestedViewId);
+            
+            $page = $(BCapp.currentView.selector).find('.service-page:visible');
+            if( typeof $page.attr('data-initialized') === 'undefined' && triggerAutoLoad )
+            {
+                console.log(
+                    '%c>>> Triggering service load on nested page [%s] of view %s',
+                    'color: green;',
+                    $page.attr('data-page'),
+                    BCapp.currentView.selector
+                );
+                BCapp.triggerServiceLoad( $page.attr('data-page') );
+            }
         }
         
         if( typeof callback === 'function' ) callback();
@@ -877,10 +902,11 @@ var BCapp = {
         
         $target.find('iframe').each(function()
         {
-            if( $(this).attr('data-initialized') ) return;
+            if( $(this).closest('.service-page').attr('data-initialized') ) return;
             
             var src = $(this).attr('data-src');
-            $(this).attr('src', src).attr('data-initialized', 'true');
+            $(this).attr('src', src);
+            $(this).closest('.service-page').attr('data-initialized', 'true');
             
             console.log(sprintf('Iframe for %s initialized.', pageHandler));
             BCtoolbox.showFullPageLoader();
@@ -889,7 +915,7 @@ var BCapp = {
         $target.find('.bc-ajaxified-service').each(function()
         {
             var $container = $(this);
-            if( $container.attr('data-initialized') ) return;
+            if( $container.closest('.service-page').attr('data-initialized') ) return;
             
             BCapp.__loadAjaxifiedService($container, true);
         });
@@ -897,7 +923,7 @@ var BCapp = {
         $target.find('.bc-service-feed').each(function()
         {
             var $container = $(this);
-            if( $container.attr('data-initialized') ) return;
+            if( $container.closest('.service-page').attr('data-initialized') ) return;
             
             BCapp.__loadServiceFeed($container, true);
         });
@@ -926,7 +952,7 @@ var BCapp = {
             var context  = { website: website, service: service, manifest: manifest, url: url };
             var template = Template7.compile(html);
             $container.html( template(context) );
-            $container.attr('data-initialized', 'true');
+            $container.closest('.service-page').attr('data-initialized', 'true');
             
             var pageId = '#' + $container.closest('.service-page').attr('id');
             BCapp.framework.initImagesLazyLoad( pageId );
@@ -1036,7 +1062,7 @@ var BCapp = {
             }
             
             BChtmlHelper.renderFeed($container, website, service, data, '', true);
-            $container.attr('data-initialized', true);
+            $container.closest('.service-page').attr('data-initialized', true);
         })
         .fail(function($xhr, status, error)
         {

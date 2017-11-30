@@ -505,7 +505,7 @@ var BChtmlHelper = {
                 $view.find('.bc-service-feed').each(function()
                 {
                     var $container = $(this);
-                    if( typeof $container.attr('data-initialized') === 'undefined' ) return;
+                    if( typeof $container.closest('.service-page').attr('data-initialized') === 'undefined' ) return;
                     
                     BChtmlHelper.__bindFeedRefreshers( $container, true );
                     console.log('>-------------------------------------------------------------------');
