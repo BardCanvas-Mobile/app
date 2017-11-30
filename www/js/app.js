@@ -674,12 +674,14 @@ var BCapp = {
         
         if( selector === '.view-main' )
         {
-            BCapp.currentView = BCapp.mainView;
+            BCapp.currentView       = BCapp.mainView;
+            BCapp.currentNestedView = null;
         }
         else if( selector === '.view-add-site' )
         {
+            BCapp.currentView       = BCapp.addSiteView;
+            BCapp.currentNestedView = null;
             BCapp.addSiteView.router.back({animatePages: false});
-            BCapp.currentView = BCapp.addSiteView;
         }
         else
         {
