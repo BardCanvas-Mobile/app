@@ -143,7 +143,7 @@ var BCapp = {
             BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
         });
         
-        setInterval('BCapp.updateTimeAgoDates()', 30000);
+        setInterval(function() { BCapp.updateTimeAgoDates(); }, 30000);
     },
     
     updateTimeAgoDates: function()
