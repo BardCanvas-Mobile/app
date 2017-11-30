@@ -488,22 +488,25 @@ var BChtmlHelper = {
             });
         });
         
-        $html.find('video').each(function()
+        if( BCapp.os !== 'ios' )
         {
-            var $this  = $(this);
-            var poster = $this.attr('poster');
-            var src    = $this.find('source:first').attr('src');
-            var html   = sprintf(
-                '<div class="bc-embedded-video" data-video-source="%s"' +
-                '     onclick="BChtmlHelper.playEmbeddedVideo(this)">' +
-                '<img src="%s">' +
-                '</div>',
-                src,
-                poster
-            );
-            
-            $this.replaceWith(html);
-        });
+            $html.find('video').each(function()
+            {
+                var $this  = $(this);
+                var poster = $this.attr('poster');
+                var src    = $this.find('source:first').attr('src');
+                var html   = sprintf(
+                    '<div class="bc-embedded-video" data-video-source="%s"' +
+                    '     onclick="BChtmlHelper.playEmbeddedVideo(this)">' +
+                    '<img src="%s">' +
+                    '</div>',
+                    src,
+                    poster
+                );
+                
+                $this.replaceWith(html);
+            });
+        }
         
         var feedPageAfterbackTarget = sprintf('.page[data-page="%s"]', context.feedPageId);
         $(document).on('page:afterback', feedPageAfterbackTarget, function(e)
