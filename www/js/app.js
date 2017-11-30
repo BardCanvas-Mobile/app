@@ -142,6 +142,25 @@ var BCapp = {
             $progress.circleProgress('value', 0.8);
             BCapp.__initViews(function() { $progress.circleProgress('value', 1); });
         });
+        
+        setInterval('BCapp.updateTimeAgoDates()', 30000);
+    },
+    
+    updateTimeAgoDates: function()
+    {
+        $('.timeago').each(function()
+        {
+            var $this     = $(this);
+            var rawDate   = $this.attr('data-raw-date');
+            var parts     = rawDate.split(' ');
+            var date      = parts[0] + ' ' + parts[1];
+            var timezone  = parts[2];
+            var finalDate = BCtoolbox.convertRemoteDate(date, timezone);
+            var output    = moment(finalDate).fromNow();
+            
+            // console.log(sprintf('Updating date from %s to %s on ', rawDate, output), $this);
+            $this.text(output);
+        });
     },
     
     __preloadSegments: function()

@@ -232,8 +232,8 @@ var BClanguage = {
     
     feeds: {
         publishedCaption: {
-            simple: '%s (%s)',
-            full:   'Por %s el %s (%s)'
+            simple: '%s (<span class="timeago" data-raw-date="%s">%s</span>)',
+            full:   'Por %s el %s (<span class="timeago" data-raw-date="%s">%s</span>)'
         },
         empty: '<p>No hay entradas en esta fuente.</p>',
         noMoreItemsAvailable: 'No hay más entradas disponibles por el momento.',

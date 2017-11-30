@@ -230,8 +230,8 @@ var BClanguage = {
     
     feeds: {
         publishedCaption: {
-            simple: '%s (%s)',
-            full:   'Published by %s on %s (%s)'
+            simple: '%s (<span class="timeago" data-raw-date="%s">%s</span>)',
+            full:   'Published by %s on %s (<span class="timeago" data-raw-date="%s">%s</span>)'
         },
         empty: '<p>There are no entries for this feed.</p>',
         noMoreItemsAvailable: 'There are no more entries available at the moment.',

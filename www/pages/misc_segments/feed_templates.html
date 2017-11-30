@@ -68,7 +68,8 @@
                             {{#item._commentsForIndex}}
                                 <li>
                                     <span class="user-name">{{author_display_name}}</span>
-                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date timeago"
+                                          data-raw-date="{{creation_date}} {{../manifest.timezoneOffset}}">{{creation_date}}</span>
                                     <span class="excerpt">{{excerpt}}</span>
                                 </li>
                             {{/item._commentsForIndex}}
@@ -146,7 +147,8 @@
                             {{#item._commentsForIndex}}
                                 <li>
                                     <span class="user-name">{{author_display_name}}</span>
-                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date timeago"
+                                          data-raw-date="{{creation_date}} {{../manifest.timezoneOffset}}">{{creation_date}}</span>
                                     <span class="excerpt">{{excerpt}}</span>
                                 </li>
                             {{/item._commentsForIndex}}
@@ -228,7 +230,8 @@
                             {{#item._commentsForIndex}}
                                 <li>
                                     <span class="user-name">{{author_display_name}}</span>
-                                    <span class="comment-date bc-bracketed convert-to-timeago-date">{{creation_date}}</span>
+                                    <span class="comment-date bc-bracketed convert-to-timeago-date timeago"
+                                          data-raw-date="{{creation_date}} {{../manifest.timezoneOffset}}">{{creation_date}}</span>
                                     <span class="excerpt">{{excerpt}}</span>
                                 </li>
                             {{/item._commentsForIndex}}

@@ -380,32 +380,35 @@ var BChtmlHelper = {
      */
     __prepareItem: function(item, website, service, manifest)
     {
-        var rawDate;
+        var convertedDate;
         var itemAuthorLevel = parseInt(item.author_level);
         
-        rawDate = BCtoolbox.convertRemoteDate(item.publishing_date, manifest.timezoneOffset);
+        convertedDate = BCtoolbox.convertRemoteDate(item.publishing_date, manifest.timezoneOffset);
         if( service.options.showAuthors )
         {
             item._publishedCaption = sprintf(
                 BClanguage.feeds.publishedCaption.full,
                 item.author_display_name,
-                moment(rawDate).format(BClanguage.dateFormats.short),
-                moment(rawDate).fromNow()
+                moment(convertedDate).format(BClanguage.dateFormats.short),
+                item.publishing_date + ' ' + manifest.timezoneOffset,
+                moment(convertedDate).fromNow()
             );
         }
         else
         {
             item._publishedCaption = sprintf(
                 BClanguage.feeds.publishedCaption.simple,
-                moment(rawDate).format(BClanguage.dateFormats.short),
-                moment(rawDate).fromNow()
+                moment(convertedDate).format(BClanguage.dateFormats.short),
+                item.publishing_date + ' ' + manifest.timezoneOffset,
+                moment(convertedDate).fromNow()
             );
         }
         
         item._altPublishedCaption = sprintf(
             BClanguage.feeds.publishedCaption.simple,
-            moment(rawDate).format(BClanguage.dateFormats.short),
-            moment(rawDate).fromNow()
+            moment(convertedDate).format(BClanguage.dateFormats.short),
+            item.publishing_date + ' ' + manifest.timezoneOffset,
+            moment(convertedDate).fromNow()
         );
         
         item._levelOnlyCaption = manifest.userLevels[itemAuthorLevel];
