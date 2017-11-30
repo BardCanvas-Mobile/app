@@ -126,6 +126,7 @@ html.android .toolbar-inner .icon-container img { height: 24px; }
 html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 .iframed-service .service-content { overflow: hidden; }
 
+/*noinspection CssUnknownProperty*/
 .list-block .item-text.no-clamp { -webkit-line-clamp: none; }
 
 /*html.android .page { background-color: #efeff4; }*/
