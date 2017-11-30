@@ -293,28 +293,29 @@
 <template data-type="single_item_page">
     
     <div class="page" data-page="{{feedPageId}}">
-        <div class="page-content inner-navbar-fixed">
-            
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="left">
-                        <a class="link back">
-                            <i class="bc-ios-icon icon f7-icons">chevron_left</i>
-                            <i class="bc-android-icon fa fa-chevron-left"></i>
-                            {{@global.language.actions.back}}
-                        </a>
-                    </div>
-                    <div class="center">
-                        {{item.title}}
-                    </div>
-                    <div class="right">
-                        <a class="link icon-only" disabled>
-                            <i class="bc-ios-icon icon f7-icons">share</i>
-                            <i class="bc-android-icon fa fa-share"></i>
-                        </a>
-                    </div>
+        
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link back">
+                        <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                        <i class="bc-android-icon fa fa-chevron-left"></i>
+                        {{@global.language.actions.back}}
+                    </a>
+                </div>
+                <div class="center">
+                    {{item.title}}
+                </div>
+                <div class="right">
+                    <a class="link icon-only" disabled>
+                        <i class="bc-ios-icon icon f7-icons">share</i>
+                        <i class="bc-android-icon fa fa-share"></i>
+                    </a>
                 </div>
             </div>
+        </div>
+        
+        <div class="page-content inner-navbar-fixed">
             
             <div class="inner-page-content">
                 <article class="item-data-container">
