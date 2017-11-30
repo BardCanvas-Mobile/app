@@ -627,7 +627,7 @@ var BCapp = {
      */
     __addWebsiteMenu: function(websiteHandler, manifestServices, websiteMainViewClassName)
     {
-        var context  = { services: manifestServices, websiteHandler: websiteHandler };
+        var context  = { services: manifestServices, websiteHandler: websiteHandler, websiteCN: websiteMainViewClassName };
         var template = BCapp.getCompiledTemplate('#sidebar_menu_template');
         
         BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);
