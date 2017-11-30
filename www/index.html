@@ -26,7 +26,7 @@
     <title></title>
     
     <!-- Debugging client URL: http://192.168.1.210:8080/client/#bardcanvas -->
-    <!--<script src="http://192.168.1.210:8080/target/target-script-min.js#bardcanvas"></script>-->
+    <script src="http://192.168.1.210:8080/target/target-script-min.js#bardcanvas"></script>
 </head>
 
 <body data-orientation="portrait">
@@ -136,7 +136,7 @@
                         <i class="fa fa-spinner fa-pulse"></i>
                     </div>
                     <div class="right">
-                        <a class="link icon-only close-popup">
+                        <a class="link icon-only close-popup" onclick="$('iframe.bc-inapp-browser').attr('src', 'about:blank')">
                             <i class="bc-ios-icon icon f7-icons">close_round</i>
                             <i class="bc-android-icon fa fa-times-circle-o"></i>
                         </a>

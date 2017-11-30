@@ -1223,7 +1223,7 @@ var BCapp = {
     }
 };
 
-var windowOpenBackup = window.open;
+window.openFuncitonBackup = window.open;
 window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
 
 document.addEventListener('deviceready', BCapp.init, false);

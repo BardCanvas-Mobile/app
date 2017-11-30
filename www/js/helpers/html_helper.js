@@ -488,6 +488,23 @@ var BChtmlHelper = {
             });
         });
         
+        $html.find('video').each(function()
+        {
+            var $this  = $(this);
+            var poster = $this.attr('poster');
+            var src    = $this.find('source:first').attr('src');
+            var html   = sprintf(
+                '<div class="bc-embedded-video" data-video-source="%s"' +
+                '     onclick="BChtmlHelper.playEmbeddedVideo(this)">' +
+                '<img src="%s">' +
+                '</div>',
+                src,
+                poster
+            );
+            
+            $this.replaceWith(html);
+        });
+        
         var feedPageAfterbackTarget = sprintf('.page[data-page="%s"]', context.feedPageId);
         $(document).on('page:afterback', feedPageAfterbackTarget, function(e)
         {
@@ -515,6 +532,18 @@ var BChtmlHelper = {
         
         console.log('Successfully rendered item page on the next view: ', view);
         view.router.loadContent($html);
+    },
+    
+    playEmbeddedVideo: function( trigger )
+    {
+        var url = $(trigger).attr('data-video-source');
+        console.log('%cTriggered video playing for %s', 'color: purple;', url);
+        
+        // On an iframe it works!
+        window.open(url);
+        
+        // On an external browser also works!
+        // window.openFuncitonBackup(url, '_system');
     },
     
     __feedPullNewItems: function( $container )
