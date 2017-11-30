@@ -129,8 +129,6 @@ html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 /*noinspection CssUnknownProperty*/
 .list-block .item-text.no-clamp { -webkit-line-clamp: none; }
 
-/*html.android .page { background-color: #efeff4; }*/
-
 /* F7 extensions */
 
 body[data-orientation="landscape"] .row .landscape-50 {
