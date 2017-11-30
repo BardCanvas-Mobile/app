@@ -216,6 +216,7 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 .card.modern .card-header.no-background .title { display: block; height: auto; color: inherit; text-shadow: none; }
 
 .card.facebook .card-header        { display: block; padding: 10px; }
+.card.facebook .card-image         { background-color: black; }
 .item-meta     .user-avatar        { display: block; float: left; padding-top: 2px; }
 .item-meta     .user-avatar img    { width: 34px; height: 34px; }
 .item-meta     .user-name          { display: block; margin-left: 44px; font-size: 14px;  font-weight: 500; }
