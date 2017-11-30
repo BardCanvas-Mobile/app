@@ -53,7 +53,7 @@ var BChtmlHelper = {
         var service = data.service;
         
         var url = BCapp.forgeServiceURL(service, website, helper.contentsProvider);
-        var sel = '.' + position;
+        var sel = '.' + position + ' .target';
         
         console.log('Prepping provider fetchig for helper ', helper);
         console.log('Fetching provider data:', url);
@@ -149,7 +149,7 @@ var BChtmlHelper = {
     {
         window.tmpHelpersLoaded++;
         
-        var sel = '.' + position;
+        var sel = '.' + position + ' .target';
         var $a  = $('<a class="link disabled search-trigger icon-only"></a>');
         $a.data('containerId',  containerId);
         $a.bind('click', function()

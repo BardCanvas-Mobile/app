@@ -1138,24 +1138,24 @@ var BCapp = {
         var options     = service.options;
         var helpers     = type === 'navbar' ? options.navbarHelpers : options.toolbarHelpers;
         
-        var alignments = [];
-        if( helpers.length === 1 ) alignments = ['center'];
-        if( helpers.length === 2 ) alignments = ['left', 'right'];
-        if( helpers.length === 3 ) alignments = ['left', 'center', 'right'];
+        var positions = [];
+        if( helpers.length === 1 ) positions = ['right'];
+        if( helpers.length === 2 ) positions = ['left', 'right'];
+        if( helpers.length === 3 ) positions = ['left', 'center', 'right'];
         
         for(var i in helpers)
         {
-            var helper    = helpers[i];
-            var alignment = alignments[i];
+            var helper   = helpers[i];
+            var position = positions[i];
             
             if( helper.type === 'selector' )
             {
-                BChtmlHelper.createNavbarSelector($bar, alignment, helper, containerId);
+                BChtmlHelper.createNavbarSelector($bar, position, helper, containerId);
             }
             
             if( helper.type === 'searchbox' )
             {
-                BChtmlHelper.createNavbarSearchHelper($bar, alignment, helper, containerId);
+                BChtmlHelper.createNavbarSearchHelper($bar, position, helper, containerId);
             }
         }
         
@@ -1213,13 +1213,9 @@ var BCapp = {
             return;
         }
         
-        /**
-         * @type {BCactionClass}
-         */
-        var action = manifest.actionsRegistry[tdata.action_id];
+        var action = new BCactionClass(manifest.actionsRegistry[tdata.action_id]);
         
-        console.log( tdata );
-        console.log( action );
+        console.log('%cTriggering action %o using %o', 'color: blue;', action, tdata);
     }
 };
 

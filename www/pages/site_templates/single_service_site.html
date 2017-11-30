@@ -15,12 +15,6 @@
                 {{navbarTitle}}
             </div>
             <div class="right">
-                {{#services}}
-                    <a class="link icon-only" onclick="BCapp.reloadServiceFeed('#sc-{{meta.pageHandler}}')">
-                        <i class="bc-ios-icon icon f7-icons">reload</i>
-                        <i class="bc-android-icon fa fa-refresh"></i>
-                    </a>
-                {{/services}}
                 <a data-panel="right" class="link icon-only open-panel">
                     <i class="bc-ios-icon icon f7-icons">menu</i>
                     <i class="bc-android-icon fa fa-list-ul fa-fw"></i>
@@ -39,11 +33,21 @@
                         {{#if options.hasNavbar}}
                             <div class="navbar" id="{{meta.pageHandler}}-navbar">
                                 <div class="navbar-inner">
-                                    <span class="left"></span>
-                                    <span class="center">
-                                        <i class="preloader"></i>
+                                    <span class="left">
+                                        <span class="target"></span>
                                     </span>
-                                    <span class="right"></span>
+                                    <span class="center">
+                                        <span class="target">
+                                            <i class="preloader"></i>
+                                        </span>
+                                    </span>
+                                    <span class="right">
+                                        <a class="link icon-only" onclick="BCapp.reloadServiceFeed('#sc-{{meta.pageHandler}}')">
+                                            <i class="bc-ios-icon icon f7-icons">reload</i>
+                                            <i class="bc-android-icon fa fa-refresh"></i>
+                                        </a>
+                                        <span class="target"></span>
+                                    </span>
                                 </div>
                             </div>
                         {{/if}}
