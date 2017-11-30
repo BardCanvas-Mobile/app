@@ -201,17 +201,19 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 /* Feed: card styles */
 
-.card.modern   .card-header             { display: block; height: 25vh; background-size: cover;
-                                          line-height: calc(25vh - 20px);  background-position: center; 
-                                          color: white; background-color: black;
+.card.modern   .card-header             { display: table; width: 100%; height: 25vh; 
+                                          background: black center center no-repeat; background-size: cover; }
+.card.modern .card-header .title        { display: table-cell; width: 100%; height: 25vh; vertical-align: bottom;
+                                          font-size: 1.1em; color: white; 
                                           text-shadow: -1px -1px 10px black
                                                      ,  1px -1px 10px black
                                                      ,  1px  1px 10px black
                                                      , -1px  1px 10px black
                                                      ;
                                         }
-.card.modern .card-header.no-background { height: auto; line-height: normal; background-color: transparent; color: inherit; text-shadow: none; }
-.card.modern .card-header .title        { display: inline-block; line-height: normal; vertical-align: bottom; }
+
+.card.modern .card-header.no-background        { display: block; height: auto; background: transparent; }
+.card.modern .card-header.no-background .title { display: block; height: auto; color: inherit; text-shadow: none; }
 
 .card.facebook .card-header        { display: block; padding: 10px; }
 .item-meta     .user-avatar        { display: block; float: left; padding-top: 2px; }

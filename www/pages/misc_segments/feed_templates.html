@@ -39,8 +39,6 @@
         <div class="card-content">
             <div class="card-content-inner">
                 
-                <p>{{item.excerpt}}</p>
-                
                 <p class="color-gray">
                     <span class="publishing-date">
                         {{item._publishedCaption}}
@@ -52,6 +50,8 @@
                         {{/if}}
                     </span>
                 </p>
+                
+                <p>{{item.excerpt}}</p>
                 
                 {{#item.excerpt_extra_blocks}}
                     {{#if title}}
