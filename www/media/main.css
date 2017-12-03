@@ -283,6 +283,7 @@ html.android .bc-indented-entry .content-block-inner { background-color: white; 
 
 .bc-actions-row { display: flex; flex-flow: row wrap; justify-content: space-between; }
 .bc-action-trigger { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bc-actions-row:not(.card-footer) .bc-action-trigger { margin-top: 5px; margin-bottom: 5px; }
 
 html.ios     .page.feed-service-page { margin-top: -44px; height: calc(100% + 44px); }
 html.android .page.feed-service-page { margin-top: -48px; height: calc(100% + 48px); }

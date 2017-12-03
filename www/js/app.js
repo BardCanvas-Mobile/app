@@ -1194,10 +1194,8 @@ var BCapp = {
     triggerAction: function( trigger )
     {
         var $trigger = $(trigger);
-        var tdata    = JSON.parse($trigger.find('.bc-action-data').html());
+        var tdata    = new BCactionTriggerClass(JSON.parse($trigger.find('.bc-action-data').html()));
         
-        if( tdata ) tdata = new BCactionTriggerClass(tdata);
-    
         var $dataContainer = $trigger.closest('.item-data-container');
         var website        = $dataContainer.data('website');
         var service        = $dataContainer.data('service');
@@ -1214,8 +1212,11 @@ var BCapp = {
         }
         
         var action = new BCactionClass(manifest.actionsRegistry[tdata.action_id]);
+        var url    = action.script_url;
+        var params = tdata.params ? tdata.params : {};
+        params.wasuuup = BCtoolbox.wasuuup();
         
-        console.log('%cTriggering action %o using %o', 'color: blue;', action, tdata);
+        console.log('%cCalling action script %s using %s', 'color: blue;', url, JSON.stringify(params));
     }
 };
 

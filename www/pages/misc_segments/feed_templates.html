@@ -355,6 +355,17 @@
                         </div>
                     {{/item.extra_content_blocks}}
                     
+                    {{#if item.has_index_actions}}
+                        <div class="content-block bc-actions-row">
+                            {{#item.index_action_triggers}}
+                                <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
+                                    <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                                    <i class="fa {{icon}} fa-lg"></i> {{caption}}
+                                </a>
+                            {{/item.index_action_triggers}}
+                        </div>
+                    {{/if}}
+                    
                     {{#if item._hasComments}}
                         <div class="content-block-title">{{item.comments_count}} {{@global.language.comments}}</div>
                         <div class="content-block extra-content bc-indented-list">
