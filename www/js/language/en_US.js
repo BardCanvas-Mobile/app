@@ -249,9 +249,23 @@ var BClanguage = {
     comments: 'comments',
     
     actionsController: {
+        defaultConfirmationPrompt: {
+            title:   'Please confirm',
+            message: 'Do you want to proceed?'
+        },
         unregisteredAction: {
             title:   'Action not found',
             message: '<p>The action you triggered wasn\'t found ' +
+                     '   on the local website actions registry. ' +
+                     '   The website may have been updated but the ' +
+                     '   local manifest hasn\'t.</p>' +
+                     '<p>Please delete the website and add it again. ' +
+                     '   If the problem persists, you may need to contact' +
+                     '   the website support staff.</p>'
+        },
+        invalidCallMethod: {
+            title:   'Invalid call method',
+            message: '<p>The action you triggered has a calling method not present ' +
                      '   on the local website actions registry. ' +
                      '   The website may have been updated but the ' +
                      '   local manifest hasn\'t.</p>' +

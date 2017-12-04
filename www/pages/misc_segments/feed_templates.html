@@ -355,14 +355,14 @@
                         </div>
                     {{/item.extra_content_blocks}}
                     
-                    {{#if item.has_index_actions}}
+                    {{#if item.has_item_actions}}
                         <div class="content-block bc-actions-row">
-                            {{#item.index_action_triggers}}
+                            {{#item.item_action_triggers}}
                                 <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
                                     <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
                                     <i class="fa {{icon}} fa-lg"></i> {{caption}}
                                 </a>
-                            {{/item.index_action_triggers}}
+                            {{/item.item_action_triggers}}
                         </div>
                     {{/if}}
                     

@@ -1212,11 +1212,100 @@ var BCapp = {
         }
         
         var action = new BCactionClass(manifest.actionsRegistry[tdata.action_id]);
+        
+        if( typeof action.options === 'undefined' ) action.options = [];
+        
+        // console.log(action.options);
+        if( tdata.options )
+            for(var i in tdata.options)
+                action.options[i] = tdata.options[i];
+        // console.log(action.options);
+        
         var url    = action.script_url;
         var params = tdata.params ? tdata.params : {};
-        params.wasuuup = BCtoolbox.wasuuup();
         
-        console.log('%cCalling action script %s using %s', 'color: blue;', url, JSON.stringify(params));
+        params.bcm_force_session = 'true';
+        params.bcm_output_type   = 'HTML';
+        params.bcm_access_token  = website.accessToken;
+        params.bcm_platform      = BCapp.os;
+        params.wasuuup           = BCtoolbox.wasuuup();
+        
+        if( action.options.requires_confirmation )
+        {
+            var message = typeof action.options.confirmation_message === 'string'
+                        ? action.options.confirmation_message
+                        : BClanguage.actionsController.defaultConfirmationPrompt.message;
+            
+            BCapp.framework.confirm(
+                message,
+                BClanguage.actionsController.defaultConfirmationPrompt.title,
+                function() {
+                    BCapp.__executeAction($trigger, tdata, website, service, manifest, action, url, params);
+                }
+            );
+            
+            return;
+        }
+        
+        BCapp.__executeAction($trigger, tdata, website, service, manifest, action, url, params);
+    },
+    
+    __executeAction: function($trigger, tdata, website, service, manifest, action, url, params)
+    {
+        console.log('%cCalled action: %s', 'color: blue;', action.id);
+        
+        switch( action.call_method )
+        {
+            case 'frame':
+                
+                if( Object.keys(params).length > 0 )
+                {
+                    if( url.indexOf('?') < 0 ) url = url + '?';
+                    else                       url = url + '&';
+                    url = url + $.param(params);
+                }
+                
+                console.log('%cOpening action script: %s', 'color: blue;', url);
+                BCapp.openURLinPopup(url);
+                break;
+                
+            case 'get':
+                
+                console.log('%cInvoking action script: %s', 'color: blue;', url);
+                console.log('%cParams: %s', 'color: blue;', JSON.stringify(params));
+                BCtoolbox.showFullPageLoader();
+                $.get(url, params, function(response)
+                {
+                    BCtoolbox.hideFullPageLoader();
+                    
+                    if( response !== 'OK' )
+                    {
+                        BCapp.framework.alert(response, manifest.shortName);
+                        return;
+                    }
+                    
+                    if( typeof action.options.success_notification === 'string' )
+                        BCtoolbox.addNotification(action.options.success_notification);
+                    
+                    if( action.options.remove_parent_on_success )
+                        $trigger.closest('.bc-actions-parent').hide('blind', 100, function() { $(this).remove(); });
+                    
+                    if( action.options.go_back_on_success )
+                    {
+                        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+                        view.router.back();
+                    }
+                });
+                break;
+                
+            default:
+                
+                BCapp.framework.alert(
+                    BClanguage.actionsController.invalidCallMethod.message,
+                    BClanguage.actionsController.invalidCallMethod.title
+                );
+                return;
+        }
     }
 };
 
