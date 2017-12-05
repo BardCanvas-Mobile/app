@@ -44,6 +44,12 @@ var BCwebsiteServiceDetailsClass = function(source)
      * 
      * May include the next elements:
      * 
+     * • autoRefreshMinutes:int
+     *   Amount of minutes for automatic refresh (feeds only).
+     * 
+     * • colorTheme:string
+     *   Color theme classes.
+     * 
      * • showsCommentsOnIndex:boolean
      *   Used by the feed/cards:* types, to include comments in the card contents.
      * 
