@@ -695,7 +695,8 @@ var BChtmlHelper = {
         {
             var field = action.options.composer.fields[i];
             field.name  = i;
-            field.value = '';
+            field.value = typeof action.options.composer.fields[i].value !== 'undefined'
+                        ? action.options.composer.fields[i].value : '';
             
             if( typeof params[i] !== 'undefined' )
                 field.value = params[i];
@@ -742,7 +743,7 @@ var BChtmlHelper = {
             BCapp.framework.popup($page, true);
             
             $('.local-form-composer')
-                .on('popup:open', function()
+                .on('popup:opened', function()
                 {
                     var $popup = $('#local_composed_form');
                     $popup.find('.expandible_textarea').expandingTextArea();

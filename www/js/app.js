@@ -641,7 +641,8 @@ var BCapp = {
         }
         
         // params.name = websiteMainViewClassName;
-        params.url = '#' + websiteMainViewClassName;
+        // params.domCache =  renderingServices.length === 1;
+        params.url      = '#' + websiteMainViewClassName;
         BCapp.viewsCollection[websiteMainViewClassName]
             = BCapp.framework.addView('.' + websiteMainViewClassName, params);
         console.log(sprintf('Website view %s rendered.', websiteMainViewClassName));
@@ -654,7 +655,8 @@ var BCapp = {
             
             if( renderingServices.length > 1 )
             {
-                params.url = '#' + serviceViewName;
+                params.url      = '#' + serviceViewName;
+                // params.domCache = true;
                 var view  = BCapp.framework.addView('.' + serviceViewName, params);
                 
                 if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
