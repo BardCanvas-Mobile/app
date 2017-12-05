@@ -533,7 +533,7 @@ var BChtmlHelper = {
             }, 100);
         });
         
-        console.log('Successfully rendered item page on the next view: ', view);
+        console.log('Successfully rendered item page on the next view: ', view.selector);
         view.router.loadContent($html);
     },
     
@@ -676,6 +676,136 @@ var BChtmlHelper = {
             ));
             
             if( callback ) callback();
+        });
+    },
+    
+    /**
+     * @param {BCactionClass}                action
+     * @param {string}                       url
+     * @param {object}                       params
+     * @param {string}                       openAs   popup|page
+     * @param {BCwebsiteClass}               website
+     * @param {BCwebsiteServiceDetailsClass} service
+     * @param {BCwebsiteManifestClass}       manifest
+     */
+    openHTMLformComposer: function(action, url, params, openAs, website, service, manifest)
+    {
+        var fields = [];
+        for(var i in action.options.composer.fields)
+        {
+            var field = action.options.composer.fields[i];
+            field.name  = i;
+            field.value = '';
+            
+            if( typeof params[i] !== 'undefined' )
+                field.value = params[i];
+            
+            if( field.type === 'textarea/tinymce' )
+                field.tinymce_id = 'tinymce-' + BCtoolbox.wasuuup();
+            
+            fields[fields.length] = field;
+        }
+        
+        for(i in params)
+            if( typeof fields[i] === 'undefined' )
+                fields[fields.length] = {
+                    name: i,
+                    type: 'hidden',
+                    value: params[i]
+                };
+    
+        var pageId = 'local-form-composer-page-' + BCtoolbox.wasuuup();
+        
+        var context = {
+            url:      url,
+            title:    action.options.composer.title,
+            pageId:   pageId,
+            fields:   fields,
+            website:  website,
+            service:  service,
+            manifest: manifest,
+            wasuuup:  BCtoolbox.wasuuup()
+        };
+        
+        // console.log(fields);
+        // console.log(params);
+        var template, $page;
+        
+        // Todo: remove this when 'page' works.
+        openAs = 'popup';
+        
+        if(openAs === 'popup')
+        {
+            template  = BCapp.getCompiledTemplate('pages/misc_segments/form_composer_popup.html');
+            $page     = $(template(context));
+            BCtoolbox.ajaxifyForms($page);
+            BCapp.framework.popup($page, true);
+            
+            $('.local-form-composer')
+                .on('popup:open', function()
+                {
+                    var $popup = $('#local_composed_form');
+                    $popup.find('.expandible_textarea').expandingTextArea();
+                    $popup.find('.tinymce').each(function()
+                    {
+                        var id       = $(this).attr('id');
+                        var defaults = BCtoolbox.getTinyMCEconfiguration(website);
+                        tinymce.init(defaults);
+                        tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
+                        console.log('TinyMCE editor #%s added.', id);
+                    });
+                })
+                .on('popup:close', function()
+                {
+                    BChtmlHelper.destroyTinyMCEeditors('#local_composed_form');
+                });
+            
+            return;
+        }
+        
+        //
+        // openAs === 'page'
+        // TODO: make this work. Issue reported on https://github.com/framework7io/Framework7/issues/1985
+        //
+        
+        template = BCapp.getCompiledTemplate('pages/misc_segments/form_composer_page.html');
+        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+        console.log( 'Rendering paged form on view: ', view.selector );
+        var html = $('<div>' + template(context) + '</div>').html();
+
+        BCapp.framework.onPageBeforeAnimation(pageId, function(page)
+        {
+            console.log('Binding stuff on ', page.name);
+            var $page = $(sprintf('.page[data-page="%s"]', page.name));
+            
+            BCtoolbox.ajaxifyForms($page);
+            $page.find('.expandible_textarea').expandingTextArea();
+            $page.find('.tinymce').each(function()
+            {
+                var id       = $(this).attr('id');
+                var defaults = BCtoolbox.getTinyMCEconfiguration(website);
+                tinymce.init(defaults);
+                tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
+                console.log('TinyMCE editor #%s added.', id);
+            });
+        });
+        
+        BCapp.framework.onPageBeforeRemove(pageId, function(page)
+        {
+            console.log('Destroying TinyMCE editors on ', page.name);
+            BChtmlHelper.destroyTinyMCEeditors(sprintf('.page[data-page="%s"]', page.name));
+        });
+        
+        view.router.loadContent(html);
+    },
+    
+    destroyTinyMCEeditors: function( formId )
+    {
+        $(formId).find('.tinymce').each(function()
+        {
+            var id = $(this).attr('id');
+            tinymce.remove( '#' + id );
+            console.log('TinyMCE editor #%s removed.', id)
         });
     }
 };

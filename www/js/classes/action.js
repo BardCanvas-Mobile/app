@@ -10,13 +10,26 @@ var BCactionClass = function(source)
     this.script_url = '';
     
     /**
-     * @type {string} Options: get | frame | post
+     * @type {string}
+     * 
+     * Options:
+     * 
+     * • get: Invokes a remote script with all params specified,
+     *   waiting for an "OK" response or an error to display.
+     * 
+     * • frame: Opens a popup with an iframe to show the specified
+     *   page. No response is received whatsoever, so the iframe must
+     *   show a "close me" caption for the user to close the popup.
+     *   
+     * • posting_form_composer: Opens a locally crafted form using
+     *   the configuration directives set on the options.
      */
     this.call_method = 'get';
     
     /**
      * key:value pairs of action options
-     * Note: options set here override the ones set to the action definition!
+     * 
+     * Note: these ones may be overriden by the trigger.
      *
      * Currently supported options:
      *

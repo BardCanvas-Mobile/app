@@ -97,7 +97,7 @@ a.critical,  .pseudo_link.critical , .critical  { color: red;       text-shadow:
 
 .expandible_textarea {
     overflow-x: auto; overflow-y: hidden; -moz-box-sizing: border-box; resize: none;
-    height: 1em; width: 100%;
+    min-height: 3em; width: 100%;
 }
 
 /* F7 overrides */

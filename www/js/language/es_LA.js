@@ -59,7 +59,8 @@ var BClanguage = {
         disableUser:   'Deshabilitar',
         toTrash:       'A Papelera',
         toDraft:       'A Borrador',
-        toReview:      'A revisión'
+        toReview:      'A revisión',
+        submit:        'Enviar'
     },
     
     userLevelCaption: 'Autor nivel %s (%s)',

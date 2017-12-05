@@ -1,0 +1,87 @@
+
+<div class="page" data-page="{{pageId}}">
+            
+    <div class="navbar">
+        <div class="navbar-inner">
+            <a class="link back">
+                <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                <i class="bc-android-icon fa fa-chevron-left"></i>
+                {{@global.language.actions.back}}
+            </a>
+            <div class="center">
+                {{title}}
+            </div>
+            <div class="right">
+                <a class="link" onclick="$('#local_composed_form').submit()">
+                    {{@global.language.actions.submit}}
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="page-content inner-navbar-fixed">
+        <div class="inner-page-content">
+            
+            <form id="local_composed_form" method="post" action="{{url}}"
+                  onsuccess="BCapp.framework.closeModal()">
+                <input type="hidden" name="sanitize_double_lfs" value="true">
+                
+                {{#fields}}
+                    
+                    {{#js_if "this.type === 'hidden'"}}
+                        <input type="hidden" name="{{name}}" value="{{value}}">
+                    {{/js_if}}
+                    
+                    {{#js_if "this.type === 'text'"}}
+                        {{if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{//if}}
+                        <div class="content-block">
+                            <input type="text" {{attributes}} name="{{name}}" value="{{value}}"
+                                   placeholder="{{placeholder}}" style="width: 100%">
+                        </div>
+                    {{/js_if}}
+                    
+                    {{#js_if "this.type === 'textarea/expandible'"}}
+                        {{if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{//if}}
+                        <div class="content-block">
+                            <textarea class="expandible_textarea" {{attributes}} name="{{name}}" wrap="soft"
+                                      placeholder="{{placeholder}}">{{escape value}}</textarea>
+                        </div>
+                    {{/js_if}}
+                    
+                    {{#js_if "this.type === 'textarea/tinymce'"}}
+                        {{if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{//if}}
+                        <div class="content-block">
+                            <textarea class="tinymce" {{attributes}} name="{{name}}"
+                                      id="{{tinymce_id}}"
+                                      placeholder="{{placeholder}}">{{escape value}}</textarea>
+                        </div>
+                    {{/js_if}}
+                    
+                    {{#js_if "this.type === 'local_image_selector'"}}
+                        {{if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{//if}}
+                        <div class="content-block">
+                            <div class="bc-image-uploader" id="bc-lcform-uploader-{{wasuuup}}">
+                                <div class="photos"></div>
+                                <a class="link bc-image-item bc-selector"
+                                   onclick="BCtoolbox.getPhotoFromLibrary('#bc-lcform-uploader-{{wasuuup}}')">
+                                    <i class="bc-ios-icon icon f7-icons">add_round</i>
+                                    <i class="bc-android-icon fa fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {{/js_if}}
+                
+                {{/fields}}
+            </form>
+            
+        </div>
+    </div>
+</div>

@@ -13,6 +13,7 @@ var BCactionTriggerClass = function(source)
     
     /**
      * key:value pairs of action options
+     * 
      * Note: options set here override the ones set to the action definition!
      * 
      * Currently supported options:

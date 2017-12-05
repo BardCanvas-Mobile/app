@@ -223,6 +223,18 @@ var BCapp = {
             BCapp.__compiledTemplates['pages/site_templates/site_with_service_tabs.html']
                 = Template7.compile(html);
         });
+        
+        $.get('pages/misc_segments/form_composer_popup.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/misc_segments/form_composer_popup.html']
+                = Template7.compile(html);
+        });
+        
+        $.get('pages/misc_segments/form_composer_page.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/misc_segments/form_composer_page.html']
+                = Template7.compile(html);
+        });
     },
     
     __adjustOrientation: function()
@@ -340,9 +352,11 @@ var BCapp = {
                 break;
         }
         
+        params.url        = '#add-site-view';
         BCapp.addSiteView = BCapp.framework.addView('.view-add-site', params);
         
         params.main    = true;
+        params.url     = '#main-view';
         BCapp.mainView = BCapp.framework.addView('.view-main', params);
         
         BCapp.currentView = BCapp.mainView;
@@ -627,6 +641,7 @@ var BCapp = {
         }
         
         // params.name = websiteMainViewClassName;
+        params.url = '#' + websiteMainViewClassName;
         BCapp.viewsCollection[websiteMainViewClassName]
             = BCapp.framework.addView('.' + websiteMainViewClassName, params);
         console.log(sprintf('Website view %s rendered.', websiteMainViewClassName));
@@ -639,6 +654,7 @@ var BCapp = {
             
             if( renderingServices.length > 1 )
             {
+                params.url = '#' + serviceViewName;
                 var view  = BCapp.framework.addView('.' + serviceViewName, params);
                 
                 if( typeof BCapp.nestedViewsCollection[websiteMainViewClassName] === 'undefined' )
@@ -1257,7 +1273,7 @@ var BCapp = {
         switch( action.call_method )
         {
             case 'frame':
-                
+            {
                 if( Object.keys(params).length > 0 )
                 {
                     if( url.indexOf('?') < 0 ) url = url + '?';
@@ -1268,9 +1284,9 @@ var BCapp = {
                 console.log('%cOpening action script: %s', 'color: blue;', url);
                 BCapp.openURLinPopup(url);
                 break;
-                
+            }
             case 'get':
-                
+            {
                 console.log('%cInvoking action script: %s', 'color: blue;', url);
                 console.log('%cParams: %s', 'color: blue;', JSON.stringify(params));
                 BCtoolbox.showFullPageLoader();
@@ -1297,14 +1313,20 @@ var BCapp = {
                     }
                 });
                 break;
-                
+            }
+            case 'posting_form_composer':
+            { 
+                BChtmlHelper.openHTMLformComposer(action, url, params, 'page', website, service, manifest);
+                break;
+            }
             default:
-                
+            {    
                 BCapp.framework.alert(
                     BClanguage.actionsController.invalidCallMethod.message,
                     BClanguage.actionsController.invalidCallMethod.title
                 );
                 return;
+            }
         }
     }
 };

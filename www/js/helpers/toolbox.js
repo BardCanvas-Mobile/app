@@ -132,6 +132,15 @@ var BCtoolbox = {
     ajaxform_beforeSerialize: function($form, options)
     {
         console.log('•> Before serialize internally triggered on ', $form.attr('id'));
+    
+        $form.find('textarea.tinymce').each(function()
+        {
+            var id      = $(this).attr('id');
+            var editor  = tinymce.get(id);
+            var content = editor.getContent();
+            $(this).val( content );
+        });
+        
         if( $form.attr('beforeserialize') ) eval( $form.attr('beforeserialize') );
     },
     
@@ -168,7 +177,7 @@ var BCtoolbox = {
         var silent = $form.attr('silent');
         if(typeof silent === 'undefined') silent = 'false';
         silent = silent === 'true';
-        if( ! silent ) BCtoolbox.addNotification( responseText.replace(/^OK\:?/, '') );
+        if( ! silent ) BCtoolbox.addNotification( responseText.replace(/^OK:?/, '') );
         
         if( $form.attr('onsuccess') ) eval( $form.attr('onsuccess') );
     },
@@ -285,5 +294,93 @@ var BCtoolbox = {
                       + serverTimezoneOffsetString.substring(0, 3) + ":" + serverTimezoneOffsetString.substring(3);
         
         return new Date(formatted);
+    },
+    
+    ajaxifyForms: function( $container )
+    {
+        var $forms = $container.find('form');
+        if( $forms.length === 0 ) return;
+        
+        $forms.each(function()
+        {
+            var $form = $(this);
+            console.log('Binding ajax form ', $form.attr('id'));
+            
+            var targetId = $form.attr('id') + '_target';
+            var options  = {
+                target:          '#' + targetId,
+                beforeSerialize: BCtoolbox.ajaxform_beforeSerialize,
+                beforeSubmit:    BCtoolbox.ajaxform_beforeSubmit,
+                beforeSend:      function(xhr, options)
+                                 {
+                                     BCtoolbox.ajaxform_beforeSend(xhr, options, $form);
+                                 },
+                uploadProgress:  function(event, position, total, percentComplete)
+                                 {
+                                     BCtoolbox.ajaxform_uploadProgress(
+                                         event, position, total, percentComplete, $form
+                                     );
+                                 },
+                success:         BCtoolbox.ajaxform_success,
+                error:           function(xhr, textStatus, errorThrown)
+                                 {
+                                     BCtoolbox.ajaxform_fail(xhr, textStatus, errorThrown, $form);
+                                 }
+            };
+            
+            if( $('#' + targetId).length === 0 )
+                $('body').append(sprintf('<div id="%s" style="display: none"></div>', targetId));
+            
+            $form.ajaxForm(options);
+        });
+    },
+    
+    /**
+     * @param {{BCwebsiteClass}} website
+     * 
+     * @returns {object}
+     */
+    getTinyMCEconfiguration: function(website)
+    {
+        var defaults = {
+            browser_spellcheck:       true,
+            menubar:                  false,
+            statusbar:                false,
+            relative_urls:            false,
+            remove_script_host:       false,
+            convert_urls:             false,
+            selector:                 'NOT-USED-HERE',
+            plugins:                  'placeholder advlist autolink lists link anchor searchreplace paste ' +
+                                      'textcolor fullscreen autoresize image imagetools hr table',
+            toolbar:                  'bold italic underline strikethrough | forecolor backcolor | fontsizeselect removeformat | ' +
+                                      'blockquote outdent indent | hr link unlink | fullscreen',
+            imagetools_toolbar:       'imageoptions',
+            paste_data_images:        true,
+            fontsize_formats:         '10pt 12pt 14pt 18pt 24pt 36pt',
+            content_css:              '',
+            content_style:            'body {overflow-y: hidden !important;}',
+            autoresize_bottom_margin: 0,
+            autoresize_min_height:    100,
+            autoresize_max_height:    300,
+            entity_encoding:          'raw',
+            formats : {
+                alignleft:   {selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes : 'alignleft'},
+                aligncenter: {selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes : 'aligncenter'},
+                alignright:  {selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes : 'alignright'}
+            }
+        };
+        
+        if( website.meta !== null )
+            if( website.meta.user_level >= BCuserLevels.Editor )
+                defaults.extended_valid_elements = 'script[type|src|async],iframe[src|style|width|height|scrolling|' +
+                                                   'marginwidth|marginheight|frameborder]';
+        
+        if( BClanguage.iso != "en_US" )
+        {
+            defaults.language     = BClanguage.iso;
+            defaults.language_url = '/lib/tinymce/langs/' + BClanguage.iso + '.js';
+        }
+        
+        return defaults;
     }
 };
