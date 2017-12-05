@@ -35,6 +35,8 @@ var BCfeedItemClass = function(source)
     
     this.parent_category_title = '';
     
+    this.permalink = '';
+    
     this.title = '';
     
     this.excerpt = '';

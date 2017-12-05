@@ -307,7 +307,9 @@
                     {{item.title}}
                 </div>
                 <div class="right">
-                    <a class="link icon-only" disabled>
+                    <a class="link icon-only" onclick="BCtoolbox.share(this)"
+                       data-webshort-name="{{manifest.shortName}}" data-website-name="{{manifest.fullName}}"
+                       title="{{escape item.title}}" data-url="{{item.permalink}}">
                         <i class="bc-ios-icon icon f7-icons">share</i>
                         <i class="bc-android-icon fa fa-share"></i>
                     </a>

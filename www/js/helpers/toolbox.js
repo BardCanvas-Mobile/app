@@ -383,5 +383,39 @@ var BCtoolbox = {
         }
         
         return defaults;
+    },
+    
+    /**
+     * @param {object} trigger
+     * 
+     * @see https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin
+     */
+    share: function( trigger )
+    {
+        var $trigger     = $(trigger);
+        var url          = $trigger.attr('data-url');
+        var websiteName  = $('<div/>').text($trigger.attr('data-website-name')).html();
+        var webShortName = $('<div/>').text($trigger.attr('data-webshort-name')).html();
+        var itemTitle    = $('<div/>').text($trigger.attr('title')).html();
+        console.log('%cInvoked social sharing plugin for %s', 'color: fucsia', url);
+        
+        var options = {
+            message:      sprintf('%s: %s', webShortName, itemTitle),
+            subject:      sprintf('%s: %s', webShortName, itemTitle),
+            url:          url,
+            chooserTitle: BClanguage.sharing.title
+        };
+        
+        window.plugins.socialsharing.shareWithOptions(
+            options,
+            function(result)
+            {
+                console.log('URL "%s" successfully sent to %s', url, result.app)
+            },
+            function(msg)
+            {
+                BCapp.framework.alert(sprintf(BClanguage.sharing.error, msg), webShortName);
+            }
+        );
     }
 };

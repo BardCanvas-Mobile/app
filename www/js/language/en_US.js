@@ -274,5 +274,11 @@ var BClanguage = {
                      '   If the problem persists, you may need to contact' +
                      '   the website support staff.</p>'
         }
+    },
+    
+    sharing: {
+        title:   'Select an app',
+        error:   'Error trying to share the item:<br><br>' +
+                 '<span class="color-red">%s</span>'
     }
 };

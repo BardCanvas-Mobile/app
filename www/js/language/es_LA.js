@@ -276,5 +276,11 @@ var BClanguage = {
                      '   Si el problema persiste, por favor ponte en contacto' +
                      '   con el staff técnico del sitio web.</p>'
         }
+    },
+    
+    sharing: {
+        title:   'Selecciona aplicación',
+        error:   'Error al intentar compartir el elemento:<br><br>' +
+                 '<span class="color-red">%s</span>'
     }
 };
