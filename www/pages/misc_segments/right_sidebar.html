@@ -1,5 +1,16 @@
 
-<div class="page bg-black">
+<div class="page toolbar-fixed bg-black">
+    
+    <div class="toolbar toolbar-bottom color-white bg-gray">
+        <div class="toolbar-inner">
+            <a class="link color-white" disabled>
+                {{@global.language.options}}
+            </a>
+            <a class="link" onclick="BCwebsitesRepository.deleteWebsite('{{websiteHandler}}')">
+                <span class="color-red">{{@global.language.actions.deleteWebsite}}</span>
+            </a>
+        </div>
+    </div>
     
     <div class="page-content">
         
@@ -9,7 +20,7 @@
                 <ul>
                     {{#services}}
                     <li data-service-id="{{id}}">
-                        <a href="#" class="item-link item-content close-panel"
+                        <a class="item-link item-content close-panel"
                            onclick="BCapp.triggerServiceLoad('{{meta.pageHandler}}'); BCapp.setNestedView('{{../websiteCN}}', '{{meta.tabTarget}}'); BCapp.framework.showTab('{{meta.tabLink}}');">
                             <div class="item-media">{{meta.icon}}</div>
                             <div class="item-inner">
@@ -22,26 +33,6 @@
                     {{/services}}
                 </ul>
             </div>
-        </div>
-        
-        <div class="content-block-title color-gray">{{@global.language.options}}</div>
-        <div class="list-block media-list bc-no-margin bg-white">
-            <ul>
-                <li>
-                    <a href="#" class="item-link item-content"
-                       onclick="BCwebsitesRepository.deleteWebsite('{{websiteHandler}}')">
-                        <div class="item-media color-red">
-                            <i class="bc-ios-icon icon f7-icons">trash_fill</i>
-                            <i class="bc-android-icon icon fa fa-trash"></i>
-                        </div>
-                        <div class="item-inner">
-                            <div class="item-title-row">
-                                <div class="item-title color-red">{{@global.language.actions.deleteWebsite}}</div>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
         </div>
         
     </div>
