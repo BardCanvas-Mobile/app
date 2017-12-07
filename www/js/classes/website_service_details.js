@@ -37,6 +37,15 @@ var BCwebsiteServiceDetailsClass = function(source)
     
     this.icon = '';
     
+    /**
+     * If string, it is checked for existence within the website meta.
+     * 
+     * If object, it should be provided as {meta_name: [value_option, value_option]}
+     * so if the website meta name exists, value of the meta is checked to be inside
+     * the values array.
+     * 
+     * @type {null|string|object}
+     */
     this.requires = null;
     
     /**
@@ -78,8 +87,19 @@ var BCwebsiteServiceDetailsClass = function(source)
      *     
      *   ○ showAuthors:boolean
      *     Specifies if author details are shown everywhere.
+     *     
+     *   ○ showFloatingActionButton:boolean
+     *     Specifies if a floating action trigger should be shown.
+     *     
+     *   ○ floatingActionButtonUserLevelsAllowed:Array
+     *     List of user levels allowed to use the action.
+     *     
+     *   ○ floatingActionButtonTrigger:object
+     *     BCactionTriggerClass instance.
      */
     this.options = {};
+    
+    this.vars = {};
     
     if( typeof source === 'undefined' ) return;
     

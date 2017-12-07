@@ -578,9 +578,37 @@ var BCapp = {
             
             if( service.requires )
             {
-                if( typeof website.meta[service.requires] === 'undefined' )
+                if( typeof website.meta === 'undefined' ) continue;
+                if( website.meta == null ) continue;
+                
+                if( typeof service.requires === 'string' )
                 {
-                    continue;
+                    if( typeof website.meta[service.requires] === 'undefined' )
+                    {
+                        continue;
+                    }
+                }
+                
+                if( typeof service.requires === 'object' )
+                {
+                    var req_meta = Object.keys(service.requires)[0];
+                    var req_opts = service.requires[req_meta];
+                    
+                    if( typeof website.meta[req_meta] === 'undefined' ) continue;
+                    
+                    var found = false;
+                    for(i in req_opts)
+                    {
+                        var value = req_opts[i];
+                        if( website.meta[req_meta] === value )
+                        {
+                            found = true;
+                            
+                            break;
+                        }
+                    }
+                    
+                    if( ! found ) continue;
                 }
             }
             
@@ -596,6 +624,7 @@ var BCapp = {
             else if ( service.type.indexOf('cards:') >= 0 ) serviceClass = 'feed-service';
             
             service.meta = {
+                websiteHandler: website.handler,
                 icon:         BChtmlHelper.convertIcon(service.icon),
                 tabLink:      sprintf('#%s-%s', websiteMainViewClassName, service.id),
                 tabTarget:    sprintf('%s-%s', websiteMainViewClassName, service.id),
@@ -609,6 +638,22 @@ var BCapp = {
                 navbarClass:  service.options.hasNavbar  ? 'service-navbar-fixed'  : '',
                 toolbarClass: service.options.hasToolbar ? 'service-toolbar-fixed' : ''
             };
+            
+            service.meta.floatingActionButtonTriggerClass         = '';
+            service.meta.floatingActionButtonTriggerString        = '';
+            service.meta.floatingActionButtonTriggerProcessedIcon = '';
+            
+            if( service.options.showFloatingActionButton )
+            {
+                service.meta.floatingActionButtonTriggerClass
+                    = service.options.floatingActionButtonTrigger.class;
+                
+                service.meta.floatingActionButtonTriggerString
+                    = JSON.stringify(service.options.floatingActionButtonTrigger);
+                
+                service.meta.floatingActionButtonTriggerProcessedIcon
+                    = BChtmlHelper.convertIcon(service.options.floatingActionButtonTrigger.icon);
+            }
             
             renderingServices[renderingServices.length] = service;
         }
@@ -1209,15 +1254,29 @@ var BCapp = {
         BCapp.framework.popup($popup);
     },
     
-    triggerAction: function( trigger )
+    triggerAction: function( trigger, websiteHandler, serviceId )
     {
         var $trigger = $(trigger);
         var tdata    = new BCactionTriggerClass(JSON.parse($trigger.find('.bc-action-data').html()));
         
+        if( typeof websiteHandler === 'undefined' ) websiteHandler = '';
+        if( typeof serviceId      === 'undefined' ) serviceId      = '';
+        
+        var website, service, manifest;
+        
         var $dataContainer = $trigger.closest('.item-data-container');
-        var website        = $dataContainer.data('website');
-        var service        = $dataContainer.data('service');
-        var manifest       = $dataContainer.data('manifest');
+        if( $dataContainer.length > 0 )
+        {
+            website  = $dataContainer.data('website');
+            service  = $dataContainer.data('service');
+            manifest = $dataContainer.data('manifest');
+        }
+        else
+        {
+            website  = BCwebsitesRepository.getByHandler(websiteHandler);
+            manifest = BCmanifestsRepository.getForWebsite(website.URL);
+            service  = BCmanifestsRepository.getService(website.URL, serviceId);
+        }
         
         if( typeof manifest.actionsRegistry[tdata.action_id] === 'undefined' )
         {
@@ -1327,13 +1386,23 @@ var BCapp = {
                     BClanguage.actionsController.invalidCallMethod.message,
                     BClanguage.actionsController.invalidCallMethod.title
                 );
-                return;
+                break;
             }
         }
+    },
+    
+    eventManager: function(e)
+    {
+        console.log('%cEvent triggered: %o', 'color: white; background-color: blue;', e);
     }
 };
 
 window.openFuncitonBackup = window.open;
 window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
+
+var eventMethod  = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer      = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+eventer(messageEvent,function(e) { BCapp.eventManager(e); }, false);
 
 document.addEventListener('deviceready', BCapp.init, false);

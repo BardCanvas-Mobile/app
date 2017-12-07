@@ -50,6 +50,7 @@ var BClanguage = {
     },
     
     actions: {
+        search:        'Search',
         select:        'Select',
         cancel:        'Cancel',
         deleteWebsite: 'Delete website',
@@ -280,5 +281,9 @@ var BClanguage = {
         title:   'Select an app',
         error:   'Error trying to share the item:<br><br>' +
                  '<span class="color-red">%s</span>'
-    }
+    },
+    
+    noneSelected: 'None selected',
+    
+    remoteListLoadError: 'Cannot download options list for "%s": %s.'
 };

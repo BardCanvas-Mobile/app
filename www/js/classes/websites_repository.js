@@ -482,5 +482,19 @@ var BCwebsitesRepository = {
                 BCapp.framework.closePanel();
             }
         )
+    },
+    
+    /**
+     * 
+     * @param handler
+     * @returns {BCwebsiteClass|null}
+     */
+    getByHandler: function(handler)
+    {
+        for(var i in BCwebsitesRepository.collection)
+            if( BCwebsitesRepository.collection[i].handler === handler )
+                return BCwebsitesRepository.collection[i];
+        
+        return null;
     }
 };

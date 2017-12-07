@@ -714,18 +714,24 @@ var BChtmlHelper = {
                     type: 'hidden',
                     value: params[i]
                 };
-    
+        
         var pageId = 'local-form-composer-page-' + BCtoolbox.wasuuup();
         
         var context = {
-            url:      url,
-            title:    action.options.composer.title,
-            pageId:   pageId,
-            fields:   fields,
-            website:  website,
-            service:  service,
-            manifest: manifest,
-            wasuuup:  BCtoolbox.wasuuup()
+            url:       url,
+            title:     action.options.composer.title,
+            pageId:    pageId,
+            fields:    fields,
+            onsuccess: typeof action.options.composer.success_notification === 'undefined'
+                       ? 'BCapp.framework.closeModal();'
+                       : sprintf(
+                           "BCapp.framework.closeModal(); BCtoolbox.addNotification(decodeURI('%s'));",
+                           encodeURI(action.options.composer.success_notification)
+                         ),
+            website:   website,
+            service:   service,
+            manifest:  manifest,
+            wasuuup:   BCtoolbox.wasuuup()
         };
         
         // console.log(fields);
@@ -745,9 +751,21 @@ var BChtmlHelper = {
             $('.local-form-composer')
                 .on('popup:opened', function()
                 {
-                    var $popup = $('#local_composed_form');
-                    $popup.find('.expandible_textarea').expandingTextArea();
-                    $popup.find('.tinymce').each(function()
+                    console.log('Binding stuff on popped up form');
+                    
+                    var $form = $('#local_composed_form');
+                    $form.data('website',  website);
+                    $form.data('service',  service);
+                    $form.data('manifest', manifest);
+                    
+                    $form.find('.expandible_textarea').expandingTextArea();
+                    
+                    $form.find('select[data-remotely-filled="true"]').each(function()
+                    {
+                        BChtmlHelper.__fillRemoteSourcedSelect( $(this) );
+                    });
+                    
+                    $form.find('.tinymce').each(function()
                     {
                         var id       = $(this).attr('id');
                         var defaults = BCtoolbox.getTinyMCEconfiguration(website);
@@ -758,7 +776,7 @@ var BChtmlHelper = {
                 })
                 .on('popup:close', function()
                 {
-                    BChtmlHelper.destroyTinyMCEeditors('#local_composed_form');
+                    BChtmlHelper.__destroyTinyMCEeditors('#local_composed_form');
                 });
             
             return;
@@ -773,14 +791,25 @@ var BChtmlHelper = {
         var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         console.log( 'Rendering paged form on view: ', view.selector );
         var html = $('<div>' + template(context) + '</div>').html();
-
+        
         BCapp.framework.onPageBeforeAnimation(pageId, function(page)
         {
             console.log('Binding stuff on ', page.name);
             var $page = $(sprintf('.page[data-page="%s"]', page.name));
+            var $form = $page.find('form');
             
+            $form.data('website',  website);
+            $form.data('service',  service);
+            $form.data('manifest', manifest);
             BCtoolbox.ajaxifyForms($page);
+            
             $page.find('.expandible_textarea').expandingTextArea();
+            
+            $page.find('select[data-remotely-filled="true"]').each(function()
+            {
+                BChtmlHelper.__fillRemoteSourcedSelect( $(this) );
+            });
+            
             $page.find('.tinymce').each(function()
             {
                 var id       = $(this).attr('id');
@@ -794,19 +823,80 @@ var BChtmlHelper = {
         BCapp.framework.onPageBeforeRemove(pageId, function(page)
         {
             console.log('Destroying TinyMCE editors on ', page.name);
-            BChtmlHelper.destroyTinyMCEeditors(sprintf('.page[data-page="%s"]', page.name));
+            BChtmlHelper.__destroyTinyMCEeditors(sprintf('.page[data-page="%s"]', page.name));
         });
         
         view.router.loadContent(html);
     },
     
-    destroyTinyMCEeditors: function( formId )
+    __destroyTinyMCEeditors: function( formId )
     {
         $(formId).find('.tinymce').each(function()
         {
             var id = $(this).attr('id');
             tinymce.remove( '#' + id );
             console.log('TinyMCE editor #%s removed.', id)
+        });
+    },
+    
+    __fillRemoteSourcedSelect: function( $select )
+    {
+        var src      = $select.attr('data-options-src');
+        var name     = $select.attr('name');
+        var $form    = $select.closest('form');
+        var website  = $form.data('website');
+        var service  = $form.data('service');
+        var manifest = $form.data('manifest');
+        
+        var context = {
+            website:  website,
+            service:  service,
+            manifest: manifest
+        };
+        var tpl = Template7.compile(src);
+        var url = tpl(context);
+        console.log(src);
+        
+        if( $select.prop('multiple') && name.indexOf('[]') < 0 )
+            $select.attr('name', name + '[]');
+        
+        var params = {
+            bcm_platform:     BCapp.os,
+            bcm_access_token: website.accessToken
+        };
+        BCtoolbox.showFullPageLoader();
+        $.getJSON(url, params, function(data)
+        {
+            BCtoolbox.hideFullPageLoader();
+            
+            if( data.message != 'OK' )
+            {
+                $select.closest('.select_container').html(sprintf(
+                    '<div class="framed_content inlined state_ko"><i class="fa fa-warning"></i> %s</div>',
+                    sprintf(BClanguage.remoteListLoadError, name, error)
+                ));
+                
+                return;
+            }
+            
+            for(var i in data.data)
+            {
+                var $option = $('<option/>');
+                $option.val(data.data[i].id);
+                $option.text(data.data[i].caption);
+                if( data.data[i].image ) $option.attr('data-option-image', data.data[i].image);
+                
+                $select.append($option);
+            }
+        })
+        .fail(function($xhr, status, error)
+        {
+            BCtoolbox.hideFullPageLoader();
+            
+            $select.closest('.select_container').replaceWith(sprintf(
+                '<div class="framed_content inlined state_ko"><i class="fa fa-warning"></i> %s</div>',
+                sprintf(BClanguage.remoteListLoadError, name, error)
+            ));
         });
     }
 };

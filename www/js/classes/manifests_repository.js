@@ -528,5 +528,24 @@ var BCmanifestsRepository = {
         var manifest = BCmanifestsRepository.getForWebsite(websiteURL);
         
         return manifest.services;
+    },
+    
+    /**
+     * @param {string} websiteURL
+     * @param {string} serviceId
+     * @returns {BCwebsiteServiceDetailsClass|null}
+     */
+    getService: function(websiteURL, serviceId)
+    {
+        var manifest = BCmanifestsRepository.getForWebsite(websiteURL);
+        var services = manifest.services;
+        
+        for(var i in services)
+        {
+            var service = services[i];
+            if( service.id === serviceId ) return service;
+        }
+        
+        return null;
     }
 };

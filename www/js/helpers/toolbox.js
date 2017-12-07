@@ -202,7 +202,7 @@ var BCtoolbox = {
             var $view;
             if( BCapp.currentNestedView ) $view = $(BCapp.currentNestedView.selector);
             else                          $view = $(BCapp.currentView.selector);
-        
+            
             var $page     = $view.find('.service-page');
             options.title = $page.attr('data-service-title');
             options.media = sprintf('<img src="%s">', $page.attr('data-website-icon'));
@@ -255,8 +255,9 @@ var BCtoolbox = {
     
     /**
      * @param {string|jQuery} $container
+     * @param {bool}          includeVideos
      */
-    getPhotoFromLibrary: function($container)
+    getPhotoFromLibrary: function($container, includeVideos)
     {
         if( typeof $container === 'string' ) $container = $($container);
         
@@ -278,7 +279,9 @@ var BCtoolbox = {
             {
                 destinationType: navigator.camera.DestinationType.FILE_URI,
                 sourceType:      navigator.camera.PictureSourceType.PHOTOLIBRARY,
-                mediaType:       navigator.camera.MediaType.PICTURE
+                mediaType:       includeVideos
+                                 ? navigator.camera.MediaType.ALLMEDIA
+                                 : navigator.camera.MediaType.PICTURE
             }
         );
     },

@@ -64,6 +64,20 @@
                             </div>
                         {{/if}}
                         
+                        {{#if options.showFloatingActionButton}}
+                            <a class="floating-button">
+                                <i class="icon icon-plus"></i>
+                            </a>
+                        {{/if}}
+                        
+                        {{#if options.showFloatingActionButton}}
+                            <a class="floating-button bc-action-trigger {{meta.floatingActionButtonTriggerClass}}"
+                               onclick="BCapp.triggerAction(this, '{{meta.websiteHandler}}', '{{id}}')">
+                                {{meta.floatingActionButtonTriggerProcessedIcon}}
+                                <template class="bc-action-data">{{meta.floatingActionButtonTriggerString}}</template>
+                            </a>
+                        {{/if}}
+                        
                         <div class="pages">
                             
                             <div data-page="{{meta.pageHandler}}"
