@@ -712,7 +712,7 @@ var BCapp = {
         }
         // console.log('Nested views collection: ', BCapp.nestedViewsCollection);
         
-        BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName);
+        BCapp.__addWebsiteMenu(website.handler, renderingServices, websiteMainViewClassName, manifest);
         
         if( typeof window.tmpAddWebsiteViewCallback === 'function' )
             window.tmpAddWebsiteViewCallback();
@@ -720,14 +720,20 @@ var BCapp = {
     
     /**
      * Manifest should have services with metadata already forged!
-     * 
+     *
      * @param {string}                       websiteHandler
      * @param {BCwebsiteServiceDetailsClass} manifestServices
      * @param {string}                       websiteMainViewClassName
+     * @param {BCwebsiteManifestClass}       manifest
      */
-    __addWebsiteMenu: function(websiteHandler, manifestServices, websiteMainViewClassName)
+    __addWebsiteMenu: function(websiteHandler, manifestServices, websiteMainViewClassName, manifest)
     {
-        var context  = { services: manifestServices, websiteHandler: websiteHandler, websiteCN: websiteMainViewClassName };
+        var context = {
+            services:       manifestServices,
+            websiteHandler: websiteHandler,
+            websiteCN:      websiteMainViewClassName,
+            manifest:       manifest
+        };
         var template = BCapp.getCompiledTemplate('#sidebar_menu_template');
         
         BCapp.websiteMenusCollection[websiteMainViewClassName] = template(context);

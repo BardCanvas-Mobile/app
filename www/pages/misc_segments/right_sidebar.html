@@ -6,6 +6,7 @@
             <a class="link color-white" disabled>
                 {{@global.language.options}}
             </a>
+            
             <a class="link" onclick="BCwebsitesRepository.deleteWebsite('{{websiteHandler}}')">
                 <span class="color-red">{{@global.language.actions.deleteWebsite}}</span>
             </a>
@@ -34,6 +35,26 @@
                 </ul>
             </div>
         </div>
+        
+        {{#if manifest.documentLinks}}
+            <div class="content-block-title color-gray">{{@global.language.documents}}</div>
+            <div class="list-block media-list bc-no-margin bg-white">
+                <ul>
+                    {{#manifest.documentLinks}}
+                    <li>
+                        <a class="item-link item-content close-panel"
+                           onclick="BCapp.openURLinPopup('{{url}}')">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{caption}}</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{/manifest.documentLinks}}
+                </ul>
+            </div>
+        {{/if}}
         
     </div>
     

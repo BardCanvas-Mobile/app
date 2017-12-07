@@ -202,6 +202,17 @@ var BCmanifestsRepository = {
             ? BCwebsitesRepository.__manifest.disclaimer
             : BCwebsitesRepository.__manifest.disclaimer.join(' ');
         
+        // Links reforging to popup
+        $sanitizedDisclaimer = $('<div>' + disclaimer + '</div>');
+        $sanitizedDisclaimer.find('a').each(function()
+        {
+            var $this = $(this);
+            var href = $this.attr('href').replace('"', '&quot;').replace("'", '\'');
+            $this.attr('href', null);
+            $this.attr('onclick', sprintf("BCapp.openURLinPopup('%s')", href));
+        });
+        disclaimer = $sanitizedDisclaimer.html();
+        
         var compiled, content;
         
         //

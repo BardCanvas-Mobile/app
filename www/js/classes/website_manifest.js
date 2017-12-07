@@ -29,6 +29,8 @@ var BCwebsiteManifestClass = function(source)
      */
     this.disclaimer = '';
     
+    this.documentLinks = [];
+    
     this.icon = '';
     
     this.loginRequired = '';

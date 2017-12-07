@@ -287,5 +287,7 @@ var BClanguage = {
     
     noneSelected: 'Sin selección',
     
-    remoteListLoadError: 'No se ha podido descargar la lista de opciones para "%s": %s.' 
+    remoteListLoadError: 'No se ha podido descargar la lista de opciones para "%s": %s.',
+    
+    documents: 'Documentos' 
 };
