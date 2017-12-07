@@ -82,6 +82,8 @@ var BCfeedItemClass = function(source)
     
     this.allow_new_comments = false;
     
+    this.add_comment_action = null;
+    
     this.comments_limit_for_index = 10;
     
     // Locally computed

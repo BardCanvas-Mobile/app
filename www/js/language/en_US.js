@@ -61,7 +61,9 @@ var BClanguage = {
         toTrash:       'To trash',
         toDraft:       'To draft',
         toReview:      'To review',
-        submit:        'Submit'
+        submit:        'Submit',
+        sendAcomment:  'Send a comment',
+        comment:       'Comment'
     },
     
     userLevelCaption: 'Author level %s (%s)',

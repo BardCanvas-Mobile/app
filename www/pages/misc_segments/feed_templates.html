@@ -401,8 +401,29 @@
                         </div>
                     {{/if}}
                     
-                    {{#if item._hasComments}}
-                        <div class="content-block-title">{{item.comments_count}} {{@global.language.comments}}</div>
+                    {{#if item._noComments}}
+                        {{#if item.allow_new_comments}}
+                            <div class="content-block bc-actions-parent">
+                                <div class="content-block-inner">
+                                    <a class="link color-green bc-action-trigger" onclick="BCapp.triggerAction(this)">
+                                        {{@global.language.actions.sendAcomment}}
+                                        <template class="bc-action-data">{{js "JSON.stringify(this.item.add_comment_action)"}}</template>
+                                    </a>
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{else}}
+                        <div class="content-block-title">
+                            {{item.comments_count}} {{@global.language.comments}}
+                            {{#if item.allow_new_comments}}
+                                <div class="pull-right bc-actions-parent">
+                                    <a class="link color-green bc-action-trigger" onclick="BCapp.triggerAction(this)">
+                                        {{@global.language.actions.comment}}
+                                        <template class="bc-action-data">{{js "JSON.stringify(this.item.add_comment_action)"}}</template>
+                                    </a>
+                                </div>
+                            {{/if}}
+                        </div>
                         <div class="content-block extra-content bc-indented-list">
                             
                             {{#item.comments}}

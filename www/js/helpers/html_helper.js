@@ -421,6 +421,7 @@ var BChtmlHelper = {
             item._mainCategoryCaption = item.parent_category_title + '/' + item._mainCategoryCaption;
         
         item._hasComments = item.comments_count > 0;
+        item._noComments  = item.comments_count === 0;
         
         if( item._hasComments )
             item._commentsForIndex = item.comments.slice(0 - item.comments_limit_for_index);
