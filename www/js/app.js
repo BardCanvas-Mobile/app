@@ -645,14 +645,34 @@ var BCapp = {
             
             if( service.options.showFloatingActionButton )
             {
-                service.meta.floatingActionButtonTriggerClass
-                    = service.options.floatingActionButtonTrigger.class;
+                if( service.options.floatingActionButtonUserLevelsAllowed.length > 0 )
+                {
+                    service.options.showFloatingActionButton = false;
+                    
+                    for( var i2 in service.options.floatingActionButtonUserLevelsAllowed )
+                    {
+                        var allowed_level = parseInt(service.options.floatingActionButtonUserLevelsAllowed[i2]);
+                        
+                        if( parseInt(website.meta.user_level) === allowed_level )
+                        {
+                            service.options.showFloatingActionButton = true;
+                            
+                            break;
+                        }
+                    }
+                }
                 
-                service.meta.floatingActionButtonTriggerString
-                    = JSON.stringify(service.options.floatingActionButtonTrigger);
-                
-                service.meta.floatingActionButtonTriggerProcessedIcon
-                    = BChtmlHelper.convertIcon(service.options.floatingActionButtonTrigger.icon);
+                if( service.options.showFloatingActionButton )
+                {
+                    service.meta.floatingActionButtonTriggerClass
+                        = service.options.floatingActionButtonTrigger.class;
+                    
+                    service.meta.floatingActionButtonTriggerString
+                        = JSON.stringify(service.options.floatingActionButtonTrigger);
+                    
+                    service.meta.floatingActionButtonTriggerProcessedIcon
+                        = BChtmlHelper.convertIcon(service.options.floatingActionButtonTrigger.icon);
+                }
             }
             
             renderingServices[renderingServices.length] = service;

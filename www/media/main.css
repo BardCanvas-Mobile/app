@@ -181,7 +181,7 @@ html.android .bc-nested-views-container .view.feed-service .inner-navbar-fixed .
 html.ios     #sidebar-services-list .media-list .item-media img { height: 29px; }
 html.android #sidebar-services-list .media-list .item-media img { height: 25px; margin-left: 8px; }
 
-html.ios .service-navbar-fixed .floating-button { bottom: 15px; }
+html.ios .floating-button { bottom: 15px; }
 .floating-button .bc-android-icon { font-size: 25px; }
 
 .smart-select-popup  .list-block .item-media img ,
