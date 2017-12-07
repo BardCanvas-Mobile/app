@@ -208,6 +208,8 @@ var BCmanifestsRepository = {
         {
             var $this = $(this);
             var href = $this.attr('href').replace('"', '&quot;').replace("'", '\'');
+            if( href.indexOf('?') < 0 ) href = href + '?bcm_minimalistic_mode_enforced=true';
+            else                        href = href + '&bcm_minimalistic_mode_enforced=true';
             $this.attr('href', null);
             $this.attr('onclick', sprintf("BCapp.openURLinPopup('%s')", href));
         });
