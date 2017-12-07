@@ -53,6 +53,14 @@
                 
                 <p>{{item.excerpt}}</p>
                 
+                {{#if item.tags_list}}
+                    <div class="tags">
+                        {{#item.tags_list}}
+                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        {{/item.tags_list}}
+                    </div>
+                {{/if}}
+                
                 {{#item.excerpt_extra_blocks}}
                     {{#if title}}
                         <div class="content-block-title">{{title}}</div>
@@ -131,6 +139,14 @@
                 </p>
                 
                 <p>{{item.excerpt}}</p>
+                
+                {{#if item.tags_list}}
+                    <div class="tags">
+                        {{#item.tags_list}}
+                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        {{/item.tags_list}}
+                    </div>
+                {{/if}}
                 
                 {{#item.excerpt_extra_blocks}}
                     {{#if title}}
@@ -214,6 +230,14 @@
                 {{/if}}
                 
                 <p>{{item.excerpt}}</p>
+                
+                {{#if item.tags_list}}
+                    <div class="tags">
+                        {{#item.tags_list}}
+                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        {{/item.tags_list}}
+                    </div>
+                {{/if}}
                 
                 {{#item.excerpt_extra_blocks}}
                     {{#if title}}
@@ -341,6 +365,15 @@
                         <div class="content-block">
                             <h1>{{item.title}}</h1>
                             <span class="publishing-date">{{item._altPublishedCaption}}</span>
+                            
+                        </div>
+                    {{/if}}
+                    
+                    {{#if item.tags_list}}
+                        <div class="content-block tags">
+                            {{#item.tags_list}}
+                            <div class="chip"><div class="chip-label">{{this}}</div></div>
+                            {{/item.tags_list}}
                         </div>
                     {{/if}}
                     

@@ -43,6 +43,8 @@ var BCfeedItemClass = function(source)
     
     this.content = '';
     
+    this.tags_list = [];
+    
     /**
      * @type {BCContentBlockClass[]}
      */
