@@ -4,8 +4,8 @@ tinymce.PluginManager.add('giphy_for_bardcanvas', function(ed, url)
     var $strings = window.$giphyForTinyMCELanguageStrings;
     var _title    = $strings.find('title').text();
     
-    var page_url   = '/lib/tinymce-imports/giphy/giphypress/html/giphy.html';
-    var plugin_url = '/lib/tinymce-imports/giphygiphypress';
+    var page_url   = 'lib/tinymce-imports/giphy/giphypress/html/giphy.html';
+    var plugin_url = 'lib/tinymce-imports/giphygiphypress';
     
     ed.addCommand('giphy_for_bardcanvas', function()
     {
@@ -33,7 +33,7 @@ tinymce.PluginManager.add('giphy_for_bardcanvas', function(ed, url)
     ed.addButton('giphy_for_bardcanvas', {
         title: _title,
         cmd:   'giphy_for_bardcanvas',
-        image: '/lib/tinymce-imports/giphy/icon_64x64.png'
+        image: 'lib/tinymce-imports/giphy/icon_64x64.png'
     });
 });
 
@@ -42,7 +42,7 @@ tinymce.PluginManager.add('giphy_for_bardcanvas', function(ed, url)
 
 BCtinyMCEdefaults.plugins = BCtinyMCEdefaults.plugins + ' giphy_for_bardcanvas';
 
-BCtinyMCEdefaults.content_css[BCtinyMCEdefaults.content_css.length] = '/lib/tinymce-imports/giphy/styles.css';
+BCtinyMCEdefaults.content_css[BCtinyMCEdefaults.content_css.length] = 'lib/tinymce-imports/giphy/styles.css';
 
 BCtinyMCEdefaults.toolbar = BCtinyMCEdefaults.toolbar + ' giphy_for_bardcanvas';
 
@@ -51,7 +51,7 @@ if( _lang.length > 2 ) _lang = _lang.substring(0, 2);
 if( _lang === 'es' ) _lang = 'es_LA';
 else                 _lang = 'en_US';
 
-var _path = sprintf('/lib/tinymce-imports/giphy/language/%s.xml', _lang);
+var _path = sprintf('lib/tinymce-imports/giphy/language/%s.xml', _lang);
 $.get(_path, function(xml) { window.$giphyForTinyMCELanguageStrings = $(xml); });
 
 //=========

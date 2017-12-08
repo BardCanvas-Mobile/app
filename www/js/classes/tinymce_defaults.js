@@ -7,7 +7,7 @@ var BCtinyMCEdefaults =
     relative_urls:            false,
     remove_script_host:       false,
     convert_urls:             false,
-    selector:                 'NOT-USED-HERE',
+    selector:                 '.NOT-USED-HERE',
     plugins:                  'placeholder advlist autolink lists link anchor searchreplace paste ' +
                               'textcolor fullscreen autoresize image imagetools hr table',
     toolbar:                  'bold italic underline strikethrough | forecolor backcolor | fontsizeselect removeformat | ' +

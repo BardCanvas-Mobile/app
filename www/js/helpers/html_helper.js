@@ -770,9 +770,13 @@ var BChtmlHelper = {
                     {
                         var id       = $(this).attr('id');
                         var defaults = BCtoolbox.getTinyMCEconfiguration(website);
+                        
                         tinymce.init(defaults);
                         tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
+                        var editor  = tinymce.get(id);
+                        
                         console.log('TinyMCE editor #%s added.', id);
+                        console.log('Editor instance: ', editor);
                     });
                 })
                 .on('popup:close', function()
@@ -816,7 +820,7 @@ var BChtmlHelper = {
                 var id       = $(this).attr('id');
                 var defaults = BCtoolbox.getTinyMCEconfiguration(website);
                 tinymce.init(defaults);
-                tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
+                tinymce.EditorManager.execCommand('mceAddEditor', true, id);
                 console.log('TinyMCE editor #%s added.', id);
             });
         });

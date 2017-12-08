@@ -356,11 +356,12 @@ var BCtoolbox = {
         if( BClanguage.iso != "en_US" )
         {
             defaults.language     = BClanguage.iso;
-            defaults.language_url = '/lib/tinymce/langs/' + BClanguage.iso + '.js';
+            defaults.language_url = 'lib/tinymce/langs/' + BClanguage.iso + '.js';
         }
         
-        var prefix = defaults.toolbar.search(/\|$/) < 0 ? ' |' : '';
-        defaults.toolbar = defaults.toolbar + prefix + ' fullscreen';
+        // Note: full screen doesn't fit well with navbars/toolbars.
+        // var prefix = defaults.toolbar.search(/\|$/) < 0 ? ' |' : '';
+        // defaults.toolbar = defaults.toolbar + prefix + ' fullscreen';
         
         return defaults;
     },

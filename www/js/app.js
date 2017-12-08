@@ -643,6 +643,11 @@ var BCapp = {
             service.meta.floatingActionButtonTriggerString        = '';
             service.meta.floatingActionButtonTriggerProcessedIcon = '';
             
+            var meta_user_level = 0;
+            if( website.meta )
+                if( website.meta.user_level )
+                    meta_user_level = website.meta.user_level;
+            
             if( service.options.showFloatingActionButton )
             {
                 if( service.options.floatingActionButtonUserLevelsAllowed.length > 0 )
@@ -653,7 +658,7 @@ var BCapp = {
                     {
                         var allowed_level = parseInt(service.options.floatingActionButtonUserLevelsAllowed[i2]);
                         
-                        if( parseInt(website.meta.user_level) === allowed_level )
+                        if( parseInt(meta_user_level) === allowed_level )
                         {
                             service.options.showFloatingActionButton = true;
                             
@@ -1422,6 +1427,7 @@ var BCapp = {
         console.log('%cEvent triggered: %o', 'color: white; background-color: blue;', e);
     }
 };
+
 
 window.openFuncitonBackup = window.open;
 window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };

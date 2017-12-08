@@ -37,7 +37,7 @@ tinymce.PluginManager.add('youtube_for_bardcanvas', function(ed)
     ed.addButton('youtube_for_bardcanvas', {
         title: _title,
         cmd:   'youtube_for_bardcanvas',
-        image: '/lib/tinymce-imports/youtube/editor_icon.png'
+        image: 'lib/tinymce-imports/youtube/editor_icon.png'
     });
 });
 
@@ -46,7 +46,7 @@ tinymce.PluginManager.add('youtube_for_bardcanvas', function(ed)
 
 BCtinyMCEdefaults.plugins = BCtinyMCEdefaults.plugins + ' youtube_for_bardcanvas';
 
-BCtinyMCEdefaults.content_css[BCtinyMCEdefaults.content_css.length] = '/lib/tinymce-imports/youtube/styles.css';
+BCtinyMCEdefaults.content_css[BCtinyMCEdefaults.content_css.length] = 'lib/tinymce-imports/youtube/styles.css';
 
 BCtinyMCEdefaults.toolbar = BCtinyMCEdefaults.toolbar + ' youtube_for_bardcanvas';
 
@@ -55,9 +55,9 @@ if( _lang.length > 2 ) _lang = _lang.substring(0, 2);
 if( _lang === 'es' ) _lang = 'es_LA';
 else                 _lang = 'en_US';
 
-var _path = sprintf('/lib/tinymce-imports/youtube/language/%s.xml', _lang);
+var _path = sprintf('lib/tinymce-imports/youtube/language/%s.xml', _lang);
 $.get(_path, function(xml) { window.$youtubeForTinyMCELanguageStrings = $(xml); });
-$('head').append('<link rel="stylesheet" href="/lib/tinymce-imports/youtube/styles.css">');
+$('head').append('<link rel="stylesheet" href="lib/tinymce-imports/youtube/styles.css">');
 
 //=========
 //endregion
