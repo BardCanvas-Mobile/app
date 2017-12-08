@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language>
+    
+    <tinymce_strings>
+        <title>Insertar video de YouTube</title>
+        <caption>Pegar vínculo de video en YouTube</caption>
+        <invalid_link>La dirección introducida es inválida</invalid_link>
+    </tinymce_strings>
+
+</language>

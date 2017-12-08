@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language>
+    
+    <tinymce_strings>
+        <title>Embed YouTube link</title>
+        <caption>Paste YouTube video URL</caption>
+        <invalid_link>The link you entered is invalid</invalid_link>
+    </tinymce_strings>
+
+</language>
