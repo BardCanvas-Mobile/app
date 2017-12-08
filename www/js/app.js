@@ -1277,12 +1277,31 @@ var BCapp = {
     
     openURLinPopup: function(URL, name, specs, replace)
     {
-        var $popup = $('#window_open_override_template');
-        $popup.find('.navbar .title').text(URL);
-        BCtoolbox.showFullPageLoader();
-        $popup.find('iframe').attr('src', URL);
+        if( device.platform === 'browser' )
+        {
+            var $popup = $('#window_open_override_template');
+            $popup.find('.navbar .title').text(URL);
+            BCtoolbox.showFullPageLoader();
+            $popup.find('iframe').attr('src', URL);
+            BCapp.framework.popup($popup);
+            
+            return;
+        }
         
-        BCapp.framework.popup($popup);
+        var options = [
+            'location=yes'
+            , 'clearcache=yes'
+            , 'clearsessioncache=yes'
+            , 'toolbar=yes'
+            , 'enableViewportScale=yes'
+            , 'hardwareback=yes'
+            , 'mediaPlaybackRequiresUserAction=yes'
+            , 'allowInlineMediaPlayback=yes'
+            , 'toolbarposition=top'
+            , 'closebuttoncaption=' + BClanguage.actions.close
+        ];
+        
+        var ref = cordova.InAppBrowser.open(URL, '_blank', options.join(','));
     },
     
     triggerAction: function( trigger, websiteHandler, serviceId )
@@ -1429,12 +1448,12 @@ var BCapp = {
 };
 
 
-window.openFuncitonBackup = window.open;
-window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
+// window.openFuncitonBackup = window.open;
+// window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
 
-var eventMethod  = window.addEventListener ? "addEventListener" : "attachEvent";
-var eventer      = window[eventMethod];
-var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-eventer(messageEvent,function(e) { BCapp.eventManager(e); }, false);
+// var eventMethod  = window.addEventListener ? "addEventListener" : "attachEvent";
+// var eventer      = window[eventMethod];
+// var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+// eventer(messageEvent,function(e) { BCapp.eventManager(e); }, false);
 
 document.addEventListener('deviceready', BCapp.init, false);

@@ -205,6 +205,18 @@ html.ios .floating-button { bottom: 15px; }
 }
 html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
+.youtube_container .trigger {
+    display: inline-block; position: relative;
+}
+
+.youtube_container .trigger:before {
+    display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    content: ' '; background: url('yt_icon_rgb.png') center center no-repeat;
+    background-size: auto 33%; z-index: 1;
+}
+
+.youtube_container img { max-width: 100%; height: auto; }
+
 /* Feed: card styles */
 
 .card.modern   .card-header             { display: table; width: 100%; height: 25vh; 

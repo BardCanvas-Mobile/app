@@ -488,6 +488,27 @@ var BChtmlHelper = {
                 BCtoolbox.showPhotoBrowser(image);
             });
         });
+    
+        if( BCapp.os === 'ios' && device.platform !== 'browser' )
+        {
+            $html.find('iframe.youtube_video').each(function()
+            {
+                var $this = $(this);
+                var id    = $this.attr('data-video-id');
+                var src   = $this.attr('src');
+                var $img  = $(sprintf('<span class="trigger" data-youtube-url="%s">' +
+                                      '<img src="http://i.ytimg.com/vi/%s/maxresdefault.jpg">' +
+                                      '</span>', src, id));
+                
+                $img.click(function()
+                {
+                    var url = $(this).attr('data-youtube-url');
+                    cordova.InAppBrowser.open(url, '_system');  
+                });
+                
+                $this.replaceWith($img);
+            });
+        }
         
         if( BCapp.os !== 'ios' )
         {
@@ -544,7 +565,8 @@ var BChtmlHelper = {
         console.log('%cTriggered video playing for %s', 'color: purple;', url);
         
         // On an iframe it works!
-        window.open(url);
+        BCapp.openURLinPopup(url);
+        // window.open(url);
         
         // On an external browser also works!
         // window.openFuncitonBackup(url, '_system');
