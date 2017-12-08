@@ -856,7 +856,6 @@ var BChtmlHelper = {
         };
         var tpl = Template7.compile(src);
         var url = tpl(context);
-        console.log(src);
         
         if( $select.prop('multiple') && name.indexOf('[]') < 0 )
             $select.attr('name', name + '[]');
@@ -866,6 +865,7 @@ var BChtmlHelper = {
             bcm_access_token: website.accessToken
         };
         BCtoolbox.showFullPageLoader();
+        console.log(url);
         $.getJSON(url, params, function(data)
         {
             BCtoolbox.hideFullPageLoader();
