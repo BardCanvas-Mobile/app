@@ -174,7 +174,7 @@ var BCapp = {
                  + html
                  + '</script>';
             
-            $('body').append(html);
+            $('#static_templates').append(html);
         });
         
         $.get('pages/misc_segments/sites_selector.html', function(html)
@@ -183,7 +183,7 @@ var BCapp = {
                  + html
                  + '</script>';
             
-            $('body').append(html);
+            $('#static_templates').append(html);
         });
         
         $.get('pages/misc_segments/navbar_selector_component.html', function(html)
@@ -192,17 +192,17 @@ var BCapp = {
                  + html
                  + '</script>';
             
-            $('body').append(html);
+            $('#static_templates').append(html);
         });
         
         $.get('pages/misc_segments/feed_templates.html', function(html)
         {
-            $('body').append(html);
+            $('#static_templates').append(html);
         });
         
         $.get('pages/misc_segments/single_feed_item.html', function(html)
         {
-            $('body').append(html);
+            $('#static_templates').append(html);
         });
         
         $.get('pages/website_addition/index.html', function(html)
