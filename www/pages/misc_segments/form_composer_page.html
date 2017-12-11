@@ -43,7 +43,7 @@
                     {{/js_if}}
                     
                     {{#js_if "this.type === 'select'"}}
-                        <div class="content-block">
+                        <div class="content-block select_container">
                             <select name="{{name}}" {{attributes}} style="width: 100%">
                             {{#options}}
                                 <option value="{{value}}">{{caption}}</option>
@@ -51,19 +51,20 @@
                             </select>
                         </div>
                     {{/js_if}}
-                        
+                    
                     {{#js_if "this.type === 'smart_media_select'"}}
-                        <div class="list-block">
+                        <div class="list-block inset select_container">
                             <ul>
                                 <li>
                                     <a id="ss_{{../../website.accessToken}}_{{name}}"
                                        class="item-link smart-select"
+                                       data-virtual-list="true"
                                        data-searchbar="true"
                                        data-open-in="picker"
                                        data-page-title="{{title}}"
                                        data-searchbar-placeholder="{{@global.language.actions.search}}"
                                        data-searchbar-cancel="{{@global.language.actions.cancel}}">
-                                        <select name="{{name}}" {{attributes}}>
+                                        <select name="{{name}}" {{attributes}} style="display: none">
                                             {{#options}}
                                                 <option value="{{value}}" data-option-image="{{image}}">{{caption}}</option>
                                             {{/options}}
@@ -110,10 +111,10 @@
                     
                     {{#js_if "this.type === 'local_media_selector'"}}
                         <div class="content-block">
-                            <div class="bc-image-uploader" id="bc-lcform-muploader-{{wasuuup}}">
+                            <div class="bc-image-uploader" id="bc-lmform-muploader-{{wasuuup}}">
                                 <div class="photos"></div>
                                 <a class="link bc-image-item bc-selector"
-                                   onclick="BCtoolbox.getPhotoFromLibrary('#bc-lcform-muploader-{{wasuuup}}', true)">
+                                   onclick="BCtoolbox.getPhotoFromLibrary('#bc-lmform-muploader-{{wasuuup}}', true)">
                                     <i class="bc-ios-icon icon f7-icons">add_round</i>
                                     <i class="bc-android-icon fa fa-plus-circle"></i>
                                 </a>

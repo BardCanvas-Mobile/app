@@ -45,7 +45,7 @@
                             {{/js_if}}
                             
                             {{#js_if "this.type === 'select'"}}
-                                <div class="content-block" class="select_container">
+                                <div class="content-block select_container">
                                     <select name="{{name}}" {{attributes}} style="width: 100%">
                                     {{#options}}
                                         <option value="{{value}}">{{caption}}</option>
@@ -60,6 +60,7 @@
                                         <li>
                                             <a id="ss_{{../../website.accessToken}}_{{name}}"
                                                class="item-link smart-select"
+                                               data-virtual-list="true"
                                                data-searchbar="true"
                                                data-open-in="picker"
                                                data-page-title="{{title}}"
@@ -112,7 +113,7 @@
                             
                             {{#js_if "this.type === 'local_media_selector'"}}
                                 <div class="content-block">
-                                    <div class="bc-image-uploader" id="bc-lcform-muploader-{{wasuuup}}">
+                                    <div class="bc-image-uploader" id="bc-lmform-muploader-{{wasuuup}}">
                                         <div class="photos"></div>
                                         <a class="link bc-image-item bc-selector"
                                            onclick="BCtoolbox.getPhotoFromLibrary('#bc-lmform-muploader-{{wasuuup}}', true)">
