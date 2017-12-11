@@ -200,6 +200,11 @@ var BCapp = {
             $('body').append(html);
         });
         
+        $.get('pages/misc_segments/single_feed_item.html', function(html)
+        {
+            $('body').append(html);
+        });
+        
         $.get('pages/website_addition/index.html', function(html)
         {
             BCapp.__compiledTemplates['pages/website_addition/index.html']

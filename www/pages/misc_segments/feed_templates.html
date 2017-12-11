@@ -1,8 +1,5 @@
 
-<!--                        -->
 <!-- Feed service container -->
-<!--                        -->
-
 <template data-type="feed-service-container">
     
     <div class="feed-cards-wrapper">
@@ -22,10 +19,7 @@
     
 </template>
 
-<!--                     -->
 <!-- Simple cards markup -->
-<!--                     -->
-
 <template data-type="cards:simple">
     
     <div class="card bc-feed-item item-data-container bc-actions-parent"
@@ -103,10 +97,7 @@
     
 </template>
 
-<!--                       -->
 <!-- "Modern" cards markup -->
-<!--                       -->
-
 <template data-type="cards:modern">
     
     <div class="card modern bc-feed-item item-data-container bc-actions-parent"
@@ -190,10 +181,7 @@
     
 </template>
 
-<!--                      -->
 <!-- Facebook style cards -->
-<!--                      -->
-
 <template data-type="cards:facebook">
     
     <div class="card facebook bc-feed-item item-data-container bc-actions-parent"
@@ -281,10 +269,7 @@
     
 </template>
 
-<!--                -->
 <!-- Todo: this one -->
-<!--                -->
-
 <template data-type="media_list">
     
     <li>
@@ -302,177 +287,8 @@
     
 </template>
 
-<!--                -->
 <!-- Todo: This one -->
-<!--                -->
-
 <template data-type="card reddit">
     
 </template>
 
-<!--                  -->
-<!-- Single item page -->
-<!--                  -->
-
-<template data-type="single_item_page">
-    
-    <div class="page" data-page="{{feedPageId}}">
-        
-        <div class="navbar">
-            <div class="navbar-inner">
-                <div class="left">
-                    <a class="link back">
-                        <i class="bc-ios-icon icon f7-icons">chevron_left</i>
-                        <i class="bc-android-icon fa fa-chevron-left"></i>
-                        {{@global.language.actions.back}}
-                    </a>
-                </div>
-                <div class="center">
-                    {{item.title}}
-                </div>
-                <div class="right">
-                    <a class="link icon-only" onclick="BCtoolbox.share(this)"
-                       data-webshort-name="{{manifest.shortName}}" data-website-name="{{manifest.fullName}}"
-                       title="{{escape item.title}}" data-url="{{item.permalink}}">
-                        <i class="bc-ios-icon icon f7-icons">share</i>
-                        <i class="bc-android-icon fa fa-share"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="page-content inner-navbar-fixed">
-            
-            <div class="inner-page-content">
-                <article class="item-data-container">
-                    
-                    {{#if item.has_featured_image}}
-                        {{#if item.featured_image_not_in_contents}}
-                            <div class="featured_image" style="background-image: url('{{item.featured_image_thumbnail}}')"></div>
-                        {{/if}}
-                    {{/if}}
-                    
-                    {{#if service.options.showAuthors}}
-                        <div class="content-block">
-                            <h1>{{item.title}}</h1>
-                            <div class="item-meta">
-                                <span class="user-avatar"><img src="{{item.author_avatar}}"></span>
-                                <span class="user-name">{{item.author_display_name}} ({{item._levelOnlyCaption}})</span>
-                                <span class="publishing-date">{{item._altPublishedCaption}}</span>
-                            </div>
-                        </div>
-                    {{else}}
-                        <div class="content-block">
-                            <h1>{{item.title}}</h1>
-                            <span class="publishing-date">{{item._altPublishedCaption}}</span>
-                            
-                        </div>
-                    {{/if}}
-                    
-                    {{#if item.tags_list}}
-                        <div class="content-block tags">
-                            {{#item.tags_list}}
-                            <div class="chip"><div class="chip-label">{{this}}</div></div>
-                            {{/item.tags_list}}
-                        </div>
-                    {{/if}}
-                    
-                    <div class="content-block main-content">
-                        {{item.content}}
-                    </div>
-                    
-                    {{#item.extra_content_blocks}}
-                        {{#if title}}
-                            <div class="content-block-title">{{title}}</div>
-                        {{/if}}
-                        <div class="content-block extra-content {{class}}">
-                            {{contents}}
-                        </div>
-                    {{/item.extra_content_blocks}}
-                    
-                    {{#if item.has_item_actions}}
-                        <div class="content-block bc-actions-row">
-                            {{#item.item_action_triggers}}
-                                <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                                    <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
-                                    <i class="fa {{icon}} fa-lg"></i> {{caption}}
-                                </a>
-                            {{/item.item_action_triggers}}
-                        </div>
-                    {{/if}}
-                    
-                    {{#if item._noComments}}
-                        {{#if item.allow_new_comments}}
-                            <div class="content-block bc-actions-parent">
-                                <div class="content-block-inner">
-                                    <a class="link color-green bc-action-trigger" onclick="BCapp.triggerAction(this)">
-                                        {{@global.language.actions.sendAcomment}}
-                                        <template class="bc-action-data">{{js "JSON.stringify(this.item.add_comment_action)"}}</template>
-                                    </a>
-                                </div>
-                            </div>
-                        {{/if}}
-                    {{else}}
-                        <div class="content-block-title">
-                            {{item.comments_count}} {{@global.language.comments}}
-                            {{#if item.allow_new_comments}}
-                                <div class="pull-right bc-actions-parent">
-                                    <a class="link color-green bc-action-trigger" onclick="BCapp.triggerAction(this)">
-                                        {{@global.language.actions.comment}}
-                                        <template class="bc-action-data">{{js "JSON.stringify(this.item.add_comment_action)"}}</template>
-                                    </a>
-                                </div>
-                            {{/if}}
-                        </div>
-                        <div class="content-block extra-content bc-indented-list">
-                            
-                            {{#item.comments}}
-                                <div class="bc-indented-entry indent-{{indent_level}} bc-item-comment bc-actions-parent"
-                                     data-parent-item-type="{{../type}}" data-parent-item-id="{{../id}}" data-comment-id="{{id}}">
-                                    
-                                    <div class="content-block-inner comment-entry">
-                                        <div class="item-meta">
-                                            <span class="user-avatar"><img src="{{author_avatar}}"></span>
-                                            <span class="user-name">{{comment_reply_path}}</span>
-                                            <span class="publishing-date convert-to-full-date">{{creation_date}}</span>
-                                        </div>
-                                        <div class="item-content">
-                                            
-                                            {{content}}
-                                            
-                                            {{#extra_content_blocks}}
-                                                {{#if title}}
-                                                    <div class="content-block-title">{{title}}</div>
-                                                {{/if}}
-                                                <div class="content-block extra-content {{class}}">
-                                                    {{contents}}
-                                                </div>
-                                            {{/extra_content_blocks}}
-                                            
-                                            {{#if has_actions}}
-                                                <p class="bc-actions-row">
-                                                    {{#action_triggers}}
-                                                        <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
-                                                            <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
-                                                            <i class="fa {{icon}} fa-lg"></i> {{caption}}
-                                                        </a>
-                                                    {{/action_triggers}}
-                                                </p>
-                                            {{/if}}
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            {{/item.comments}}
-                            
-                        </div>
-                    {{/if}}
-                    
-                </article>
-            </div>
-            
-        </div><!-- /.page-content -->
-    </div><!-- /.page -->
-    
-</template>
