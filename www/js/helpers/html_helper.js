@@ -435,6 +435,31 @@ var BChtmlHelper = {
         var context        = $card.data('context');
         context.feedPageId = 'feed-item-' + BCtoolbox.wasuuup();
         
+        var feedPageAfterbackTarget = sprintf('.page[data-page="%s"]', context.feedPageId);
+        $(document).on('page:afterback', feedPageAfterbackTarget, function(e)
+        {
+            setTimeout(function()
+            {
+                var $view = $(BCapp.currentView.selector);
+                
+                console.log('>-------------------------------------------------------------------');
+                console.log(sprintf(
+                    '> Got back from feed item page. Re-attaching lost bindings on children of #%s',
+                    $view.attr('id')
+                ));
+                console.log('>-------------------------------------------------------------------');
+                
+                $view.find('.bc-service-feed').each(function()
+                {
+                    var $container = $(this);
+                    if( typeof $container.closest('.service-page').attr('data-initialized') === 'undefined' ) return;
+                    
+                    BChtmlHelper.__bindFeedRefreshers( $container, true );
+                    console.log('>-------------------------------------------------------------------');
+                });
+            }, 100);
+        });
+        
         var website  = $card.data('website');
         var service  = $card.data('service');
         var manifest = $card.data('manifest');
@@ -442,10 +467,21 @@ var BChtmlHelper = {
         var $html    = $(template(context));
         var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         
+        $html.find('.item-data-container').attr('data-item-id', context.item.id);
+        $html.find('.item-data-container').data('item',     context.item);
         $html.find('.item-data-container').data('website',  website);
         $html.find('.item-data-container').data('service',  service);
         $html.find('.item-data-container').data('manifest', manifest);
         
+        BChtmlHelper.__processHTMLelements($html, service, website, manifest);
+        
+        console.log('Successfully rendered item page on the next view: ', view.selector);
+        view.router.loadContent($html);
+        BChtmlHelper.__bindFeedItemReloader(context.feedPageId);
+    },
+    
+    __processHTMLelements: function($html, service, website, manifest)
+    {
         $html.find('.convert-to-full-date').each(function()
         {
             var $this   = $(this);
@@ -530,33 +566,57 @@ var BChtmlHelper = {
             });
         }
         
-        var feedPageAfterbackTarget = sprintf('.page[data-page="%s"]', context.feedPageId);
-        $(document).on('page:afterback', feedPageAfterbackTarget, function(e)
-        {
-            setTimeout(function()
-            {
-                var $view = $(BCapp.currentView.selector);
-                
-                console.log('>-------------------------------------------------------------------');
-                console.log(sprintf(
-                    '> Got back from feed item page. Re-attaching lost bindings on children of #%s',
-                    $view.attr('id')
-                ));
-                console.log('>-------------------------------------------------------------------');
-                
-                $view.find('.bc-service-feed').each(function()
-                {
-                    var $container = $(this);
-                    if( typeof $container.closest('.service-page').attr('data-initialized') === 'undefined' ) return;
-                    
-                    BChtmlHelper.__bindFeedRefreshers( $container, true );
-                    console.log('>-------------------------------------------------------------------');
-                });
-            }, 100);
-        });
+    },
+    
+    __bindFeedItemReloader: function(feedItemPageId, forced)
+    {
+        if( typeof forced === 'undefined' ) forced = false;
         
-        console.log('Successfully rendered item page on the next view: ', view.selector);
-        view.router.loadContent($html);
+        var $page         = $(sprintf('.page[data-page="%s"]', feedItemPageId));
+        var $pageContent  = $page.find('.page-content');
+        var pageContentId = $pageContent.attr('id');
+        
+        if( typeof $pageContent.attr('pull-to-refresh-attached') === 'undefined' )
+            $pageContent.attr('pull-to-refresh-attached', 'false');
+        
+        if( forced ) $pageContent.attr('pull-to-refresh-attached', 'false');
+        if( $pageContent.attr('pull-to-refresh-attached') !== 'true' )
+        {
+            if( BCapp.os === 'android' )
+                $pageContent.find('.pull-to-refresh-layer .preloader').html(
+                    BCapp.framework.params.materialPreloaderHtml
+                );
+            
+            BCapp.framework.initPullToRefresh('#' + pageContentId);
+            $pageContent.on('ptr:refresh', function() { BChtmlHelper.__reloadFeedItemPage(feedItemPageId); });
+            $pageContent.attr('pull-to-refresh-attached', 'true');
+            console.log('> Pull-to-refresh attached to #' + pageContentId);
+        }
+    },
+    
+    __reloadFeedItemPage: function(feedItemPageId)
+    {
+        var $page       = $(sprintf('.page[data-page="%s"]', feedItemPageId));
+        var $container  = $page.find('.page-content');
+        var containerId = $container.attr('id');
+        
+        if( typeof $container.data('refreshing') === 'undefined' ) $container.data('refreshing', false);
+        if( $container.data('refreshing') )
+        {
+            BCapp.framework.pullToRefreshDone('#' + containerId);
+            
+            return;
+        }
+        
+        $container.data('refreshing', true);
+        console.log('> Pull to refresh triggered on #' + containerId);
+        
+        var $feedServiceContainer = $container.find('.bc-service-feed');
+        var feedServiceId         = $feedServiceContainer.attr('id');
+        var feedServiceData       = window.tmpServiceFeeds[feedServiceId];
+        console.log('> Feed service data: ', feedServiceData);
+        
+        BChtmlHelper.fetchAndRenderSingleFeedItem($page);
     },
     
     playEmbeddedVideo: function( trigger )
@@ -698,6 +758,91 @@ var BChtmlHelper = {
                 {url: url, error: error}
             ));
             
+            if( callback ) callback();
+        });
+    },
+    
+    fetchAndRenderSingleFeedItem: function($page, callback)
+    {
+        var $container = $page.find('.page-content');
+        var itemId     = $container.find('.item-data-container').attr('data-item-id');
+        var website    = $container.find('.item-data-container').data('website');
+        var service    = $container.find('.item-data-container').data('service');
+        var manifest   = $container.find('.item-data-container').data('manifest');
+        var url        = service.options.singleItemFetcherURL;
+        var params     = {
+            id:               itemId,
+            bcm_access_token: website.accessToken,
+            bcm_platform:     BCapp.os,
+            tzoffset:         0 - (new Date().getTimezoneOffset() / 60),
+            wasuuup:          BCtoolbox.wasuuup()
+        };
+        
+        console.log(sprintf('Fetching %s using %s...', url, JSON.stringify(params)));
+        BCtoolbox.showFullPageLoader();
+        $.getJSON(url, params, function(data)
+        {
+            if( data.message !== 'OK' )
+            {
+                $container.data('refreshing', false);
+                
+                BCtoolbox.addNotification(BCapp.getServiceError(
+                    BClanguage.errorReceived.title,
+                    BClanguage.errorReceived.message,
+                    website,
+                    service,
+                    {url: url, error: data.message}
+                ));
+                
+                BCtoolbox.hideFullPageLoader();
+                if( callback ) callback();
+                
+                return;
+            }
+            
+            var item    = BChtmlHelper.__prepareItem(new BCfeedItemClass(data.data), website, service, manifest);
+            var context = {
+                item:       item,
+                service:    service,
+                website:    website,
+                manifest:   manifest,
+                feedPageId: $page.attr('data-page')
+            };
+            
+            var template = BCapp.getCompiledTemplate('template[data-type="single_item_page"]');
+            var $html    = $(template(context));
+            var view     = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+            
+            $html.find('.item-data-container').attr('data-item-id', context.item.id);
+            $html.find('.item-data-container').data('item',     context.item);
+            $html.find('.item-data-container').data('website',  website);
+            $html.find('.item-data-container').data('service',  service);
+            $html.find('.item-data-container').data('manifest', manifest);
+            
+            BChtmlHelper.__processHTMLelements($html, service, website, manifest);
+            
+            console.log('Successfully rendered item page on the next view: ', view.selector);
+            view.router.load({content: $html, reload: true});
+            BChtmlHelper.__bindFeedItemReloader(context.feedPageId);
+            
+            $container.data('refreshing', false);
+            
+            BCtoolbox.hideFullPageLoader();
+            if( callback ) callback();
+        })
+        .fail(function($xhr, status, error)
+        {
+            $container.data('refreshing', false);
+            
+            BCtoolbox.addNotification(BCapp.getServiceError(
+                BClanguage.failedToLoadService.title,
+                BClanguage.failedToLoadService.message,
+                website,
+                service,
+                {url: url, error: error}
+            ));
+            
+            BCtoolbox.hideFullPageLoader();
             if( callback ) callback();
         });
     },

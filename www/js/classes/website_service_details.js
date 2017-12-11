@@ -96,6 +96,9 @@ var BCwebsiteServiceDetailsClass = function(source)
      *     
      *   ○ floatingActionButtonTrigger:object
      *     BCactionTriggerClass instance.
+     *     
+     *   ○ singleItemFetcherURL:string
+     *     Absolute path to single item fetcher URL.
      */
     this.options = {};
     

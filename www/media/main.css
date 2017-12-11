@@ -311,10 +311,12 @@ html.android .page.feed-service-page { margin-top: -48px; height: calc(100% + 96
 html.ios     .view.service-navbar-fixed .page.feed-service-page { height: calc(100% + 44px); }
 html.android .view.service-navbar-fixed .page.feed-service-page { height: calc(100% + 48px); }
 
-html.ios .service-content.pull-to-refresh-content {
+html.ios .service-content.pull-to-refresh-content ,
+html.ios .page-content.pull-to-refresh-content {
     padding-top: 44px !important;
     margin-top: 0; height: calc(100% - 44px);
 }
+html.android .page-content.pull-to-refresh-content    ,
 html.android .service-content.pull-to-refresh-content {
     padding-top: 52px !important;
     margin-top: 0; height: calc(100% - 52px);
@@ -325,6 +327,10 @@ html.ios .view.service-navbar-fixed .service-content.pull-to-refresh-content {
 html.android .view.service-navbar-fixed .service-content.pull-to-refresh-content {
     margin-top: 52px;
 }
+html.ios     .feed-item-page .page-content .inner-page-content { padding-top: 0; }
+html.android .feed-item-page .page-content .inner-page-content { padding-top: 0; }
+html.ios     .feed-item-page .page-content                     { height: 100%; }
+html.android .feed-item-page .page-content                     { height: 100%; }
 
 .video_container { position: relative; display: inline-block; white-space: nowrap; overflow: hidden; line-height: normal; }
 .bc-embedded-video { position: relative; display: inline-block; white-space: nowrap; }

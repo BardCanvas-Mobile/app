@@ -2,7 +2,7 @@
 <!-- Single item page -->
 <template data-type="single_item_page">
     
-    <div class="page" data-page="{{feedPageId}}">
+    <div class="page feed-item-page" data-page="{{feedPageId}}">
         
         <div class="navbar">
             <div class="navbar-inner">
@@ -17,6 +17,10 @@
                     {{item.title}}
                 </div>
                 <div class="right">
+                    <a class="link icon-only" onclick="BChtmlHelper.fetchAndRenderSingleFeedItem( $(this).closest('.page') );">
+                        <i class="bc-ios-icon icon f7-icons">reload</i>
+                        <i class="bc-android-icon fa fa-refresh"></i>
+                    </a>
                     <a class="link icon-only" onclick="BCtoolbox.share(this)"
                        data-webshort-name="{{manifest.shortName}}" data-website-name="{{manifest.fullName}}"
                        title="{{escape item.title}}" data-url="{{item.permalink}}">
@@ -27,7 +31,12 @@
             </div>
         </div>
         
-        <div class="page-content inner-navbar-fixed">
+        <div class="page-content inner-navbar-fixed pull-to-refresh-content" id="{{feedPageId}}-content">
+            
+            <div class="pull-to-refresh-layer">
+                <div class="preloader"></div>
+                <div class="pull-to-refresh-arrow"></div>
+            </div>
             
             <div class="inner-page-content">
                 <article class="item-data-container">
