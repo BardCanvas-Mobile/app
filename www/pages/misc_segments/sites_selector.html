@@ -19,9 +19,11 @@
             <a class="link color-white" disabled>
                 {{@global.language.appConfiguration.caption}}
             </a>
-            <a class="link color-white" onclick="navigator.app.exitApp();">
-                {{@global.language.exit.caption}}
-            </a>
+            {{#if @global.isAndroid}}
+                <a class="link color-white" onclick="navigator.app.exitApp();">
+                    {{@global.language.exit.caption}}
+                </a>
+            {{/if}}
         </div>
     </div>
     
