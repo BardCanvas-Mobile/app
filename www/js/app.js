@@ -1306,7 +1306,13 @@ var BCapp = {
             , 'closebuttoncaption=' + BClanguage.actions.close
         ];
         
-        var ref = cordova.InAppBrowser.open(URL, '_blank', options.join(','));
+        window.tmpOpenedInAppBrowser = cordova.InAppBrowser.open(URL, '_blank', options.join(','));
+    
+        window.tmpOpenedInAppBrowser.addEventListener('loadstop', function(event)
+        {
+            if (event.url.match("/BCM/CLOSE_FRAME"))
+                window.tmpOpenedInAppBrowser.close();
+        });
     },
     
     triggerAction: function( trigger, websiteHandler, serviceId )
@@ -1446,19 +1452,24 @@ var BCapp = {
         }
     },
     
-    eventManager: function(e)
+    iframeEventManager: function(e)
     {
-        console.log('%cEvent triggered: %o', 'color: white; background-color: blue;', e);
+        if( device.platform !== 'browser' ) return;
+        
+        console.log('%cBrowser iframe event triggered: %s', 'color: white; background-color: blue;', e.data);
+        
+        if( e.data == 'BCM:CLOSE_FRAME' )
+        {
+            var $popup = $('#window_open_override_template');
+            $popup.find('iframe').attr('src', 'about:blank');
+            BCapp.framework.closeModal();
+        }
     }
 };
 
-
-// window.openFuncitonBackup = window.open;
-// window.open = function (URL, name, specs, replace) { BCapp.openURLinPopup(URL, name, specs, replace); };
-
-// var eventMethod  = window.addEventListener ? "addEventListener" : "attachEvent";
-// var eventer      = window[eventMethod];
-// var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-// eventer(messageEvent,function(e) { BCapp.eventManager(e); }, false);
+var eventMethod  = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer      = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+eventer(messageEvent,function(e) { BCapp.iframeEventManager(e); }, false);
 
 document.addEventListener('deviceready', BCapp.init, false);
