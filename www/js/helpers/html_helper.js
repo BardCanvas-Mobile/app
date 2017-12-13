@@ -244,12 +244,14 @@ var BChtmlHelper = {
             var itemAuthorUserName = item.author_user_name;
             var currentUserLevel   = 0;
             var currentUserName    = '';
+            var currentUserIsAdmin = false;
             if( website.meta !== null )
             {
-                currentUserLevel = parseInt(website.meta.user_level);
-                currentUserName  = website.userName;
+                currentUserLevel   = parseInt(website.meta.user_level);
+                currentUserName    = website.userName;
+                currentUserIsAdmin = currentUserLevel >= BCuserLevels.Editor;
             }
-    
+            
             item._showCategoryLabel = true;
             if( service.options.showsMultipleCategories )
                 if( data.extras )
@@ -257,10 +259,11 @@ var BChtmlHelper = {
                         item._showCategoryLabel = false;
             
             var context   = {
-                item:     item,
-                service:  service,
-                website:  website,
-                manifest: manifest
+                currentUser: {level: currentUserLevel, userName: currentUserName, isAdmin: currentUserIsAdmin},
+                item:        item,
+                service:     service,
+                website:     website,
+                manifest:    manifest
             };
             
             var template = BCapp.getCompiledTemplate(sprintf('template[data-type="%s"]', type));
@@ -384,6 +387,9 @@ var BChtmlHelper = {
         var itemAuthorLevel = parseInt(item.author_level);
         
         convertedDate = BCtoolbox.convertRemoteDate(item.publishing_date, manifest.timezoneOffset);
+        
+        item._publishedAgo = moment(convertedDate).fromNow();
+        
         if( service.options.showAuthors )
         {
             item._publishedCaption = sprintf(

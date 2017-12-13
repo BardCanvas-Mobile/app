@@ -48,11 +48,11 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if item.tags_list}}
-                    <div class="tags">
+                    <p class="tags">
                         {{#item.tags_list}}
-                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        <span class="chip"><span class="chip-label">{{this}}</span></span>
                         {{/item.tags_list}}
-                    </div>
+                    </p>
                 {{/if}}
                 
                 {{#item.excerpt_extra_blocks}}
@@ -104,8 +104,8 @@
          data-item-type="{{item.type}}" data-item-id="{{item.id}}"
          data-publishing-date="{{item.publishing_date}}">
         
-        {{#if item.featured_image_path}}
-            <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_path}}')">
+        {{#if item.featured_image_thumbnail}}
+            <div class="card-header no-border" valign="bottom" style="background-image: url('{{item.featured_image_thumbnail}}')">
                 <div class="title">{{item.title}}</div>
             </div>
         {{else}}
@@ -132,11 +132,11 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if item.tags_list}}
-                    <div class="tags">
+                    <p class="tags">
                         {{#item.tags_list}}
-                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        <span class="chip"><span class="chip-label">{{this}}</span></span>
                         {{/item.tags_list}}
-                    </div>
+                    </p>
                 {{/if}}
                 
                 {{#item.excerpt_extra_blocks}}
@@ -220,11 +220,11 @@
                 <p>{{item.excerpt}}</p>
                 
                 {{#if item.tags_list}}
-                    <div class="tags">
+                    <p class="tags">
                         {{#item.tags_list}}
-                        <div class="chip"><div class="chip-label">{{this}}</div></div>
+                        <span class="chip"><span class="chip-label">{{this}}</span></span>
                         {{/item.tags_list}}
-                    </div>
+                    </p>
                 {{/if}}
                 
                 {{#item.excerpt_extra_blocks}}
@@ -269,26 +269,77 @@
     
 </template>
 
-<!-- Todo: this one -->
-<template data-type="media_list">
+<template data-type="cards:reddit">
     
-    <li>
-        <a class="item-link item-content">
-            <div class="item-inner">
-                <div class="item-title-row">
-                    <div class="item-title">Facebook</div>
-                    <div class="item-after">17:14</div>
+    <div class="card reddit bc-feed-item item-data-container bc-actions-parent"
+         data-item-type="{{item.type}}" data-item-id="{{item.id}}"
+         data-publishing-date="{{item.publishing_date}}">
+        
+        <div class="card-header">
+            <div class="info color-gray">
+                <div class="meta">
+                    {{#if item._showCategoryLabel}}
+                        <span class="main-category-title nowrap">
+                            <span class="fa fa-folder"></span>
+                            {{item._mainCategoryCaption}}
+                        </span>
+                        &bull;
+                    {{/if}}
+                    
+                    {{item._publishedAgo}}
                 </div>
-                <div class="item-subtitle">New messages from John Doe</div>
-                <div class="item-text">Lorem ipsum dolor sit amet...</div>
+                <p class="title">
+                    <a>{{item.title}}</a>
+                </p>
+                <p class="author-display-name color-gray">
+                    {{item.author_display_name}}
+                    {{if item._hasComments}}
+                        &bull; <i class="fa fa-comments-o"></i> {{item.comments_count}}
+                    {{/if}}
+                    {{#if item.tags_list}}
+                        &bull; #{{join item.tags_list delimiter=" &bull; #"}}
+                    {{/if}}
+                </p>
             </div>
-        </a>
-    </li>
-    
-</template>
-
-<!-- Todo: This one -->
-<template data-type="card reddit">
+            {{#if item.featured_image_thumbnail}}
+                <div class="card-image">
+                    <div class="card-thumb"
+                         style="background-image: url('{{item.featured_image_thumbnail}}');"></div>
+                </div>
+            {{/if}}
+        </div>
+        
+        {{#if currentUser.isAdmin}}
+            <div class="card-content">
+                <div class="card-content-inner">
+                    
+                    <p class="excerpt color-gray">{{item.excerpt}}</p>
+                    
+                    {{#item.excerpt_extra_blocks}}
+                        {{#if title}}
+                            <div class="content-block-title">{{title}}</div>
+                        {{/if}}
+                        <div class="extra-content {{class}}">
+                            {{contents}}
+                        </div>
+                    {{/item.excerpt_extra_blocks}}
+                    
+                </div>
+            </div>
+        {{/if}}
+        
+        {{#if item.has_index_actions}}
+            <div class="card-footer bc-actions-row">
+                {{#item.index_action_triggers}}
+                    <a class="link bc-action-trigger {{class}}" onclick="BCapp.triggerAction(this)">
+                        <template class="bc-action-data">{{js "JSON.stringify(this)"}}</template>
+                        <i class="fa {{icon}} fa-lg"></i> {{caption}}
+                    </a>
+                {{/item.index_action_triggers}}
+            </div>
+        {{/if}}
+        
+    </div>
     
 </template>
 

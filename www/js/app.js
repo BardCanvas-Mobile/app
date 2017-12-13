@@ -897,7 +897,7 @@ var BCapp = {
         if( service.type === 'feed/cards:simple'   ) return BCapp.__getCardedServiceMarkup(website, service);
         if( service.type === 'feed/cards:modern'   ) return BCapp.__getCardedServiceMarkup(website, service);
         if( service.type === 'feed/cards:facebook' ) return BCapp.__getCardedServiceMarkup(website, service);
-        if( service.type === 'feed/media_list'     ) return BCapp.__getCardedServiceMarkup(website, service);
+        if( service.type === 'feed/cards:reddit'   ) return BCapp.__getCardedServiceMarkup(website, service);
         
         return BCapp.getServiceError(
             BClanguage.unknownService.title,
