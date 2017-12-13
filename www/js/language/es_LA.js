@@ -291,5 +291,9 @@ var BClanguage = {
     
     remoteListLoadError: 'No se ha podido descargar la lista de opciones para "%s": %s.',
     
-    documents: 'Documentos' 
+    documents: 'Documentos',
+    
+    extras: 'Extras',
+    
+    openWebsiteInBrowser: 'Abrir sitio web en navegador'
 };

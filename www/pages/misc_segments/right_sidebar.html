@@ -56,6 +56,21 @@
             </div>
         {{/if}}
         
+        <div class="content-block-title color-gray">{{@global.language.extras}}</div>
+        <div class="list-block media-list bc-no-margin bg-white">
+            <ul>
+                <li>
+                    <a class="item-link item-content close-panel"
+                       onclick="BCapp.openURLinPopup('{{manifest.rootURL}}', '_system')">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{{@global.language.openWebsiteInBrowser}}</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     
 </div>

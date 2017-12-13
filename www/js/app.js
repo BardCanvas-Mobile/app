@@ -1306,7 +1306,9 @@ var BCapp = {
             , 'closebuttoncaption=' + BClanguage.actions.close
         ];
         
-        window.tmpOpenedInAppBrowser = cordova.InAppBrowser.open(URL, '_blank', options.join(','));
+        if( typeof name === 'undefined' ) name = '_blank';
+        
+        window.tmpOpenedInAppBrowser = cordova.InAppBrowser.open(URL, name, options.join(','));
     
         window.tmpOpenedInAppBrowser.addEventListener('loadstop', function(event)
         {

@@ -289,5 +289,9 @@ var BClanguage = {
     
     remoteListLoadError: 'Cannot download options list for "%s": %s.',
     
-    documents: 'Documents'
+    documents: 'Documents',
+    
+    extras: 'Extras',
+    
+    openWebsiteInBrowser: 'Open website in web browser'
 };
