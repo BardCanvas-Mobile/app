@@ -6919,7 +6919,7 @@ hooks.defineLocale('eo', {
 //! moment.js locale configuration
 //! locale : Spanish (Dominican Republic) [es-do]
 
-var monthsShortDot = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic.'.split('_');
+var monthsShortDot = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 var monthsShort$1 = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 
 hooks.defineLocale('es-do', {
@@ -6991,7 +6991,7 @@ hooks.defineLocale('es-do', {
 //! locale : Spanish [es]
 //! author : Julio Napurí : https://github.com/julionc
 
-var monthsShortDot$1 = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic.'.split('_');
+var monthsShortDot$1 = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 var monthsShort$2 = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 
 hooks.defineLocale('es', {
