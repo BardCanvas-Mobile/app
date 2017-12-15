@@ -348,7 +348,7 @@ var BCtoolbox = {
         var website  = $form.data('website');
         var service  = $form.data('service');
         var manifest = $form.data('manifest');
-        var SERVER   = manifest.rootURL + '/mobile_controller/scripts/receive_attachment.php';
+        var SERVER   = manifest.attachmentsReceiverURL;
         
         $items.each(function()
         {

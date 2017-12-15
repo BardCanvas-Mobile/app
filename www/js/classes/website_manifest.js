@@ -14,6 +14,8 @@ var BCwebsiteManifestClass = function(source)
     
     this.rootURL = '';
     
+    this.attachmentsReceiverURL = '';
+    
     this.contactEmail = '';
     
     this.language = '';
