@@ -132,7 +132,7 @@ var BCtoolbox = {
     ajaxform_beforeSerialize: function($form, options)
     {
         console.log('•> Before serialize internally triggered on ', $form.attr('id'));
-    
+        
         $form.find('textarea.tinymce').each(function()
         {
             var id      = $(this).attr('id');
@@ -152,9 +152,36 @@ var BCtoolbox = {
     ajaxform_beforeSubmit: function(formData, $form, options)
     {
         console.log('•> Before submit internally triggered on ', $form.attr('id'));
-        if( $form.attr('beforesubmit') ) eval( $form.attr('beforesubmit') );
-        
         BCtoolbox.showFullPageLoader();
+        
+        // Item data-uploading-status flags: none, uploading, uploaded
+        var all       = $form.find('.photos .bc-image-item').length;
+        var none      = $form.find('.photos .bc-image-item[data-uploading-status="none"]').length;
+        var uploading = $form.find('.photos .bc-image-item[data-uploading-status="uploading"]').length;
+        console.log('Media items to process ~ all:%s none:%s uploading:%s', all, none, uploading);
+        
+        if( all > 0 )
+        {
+            if( none === all )
+            {
+                console.log('Starting upload of %s items in the background.', all);
+                BCtoolbox.__uploadPhotoObjects($form);
+                setTimeout(function() { $form.submit(); }, 5000);
+                
+                return false;
+            }
+            
+            if( uploading > 0 )
+            {
+                console.log('Still waiting for %s items to upload.', uploading);
+                BCtoolbox.hideFullPageLoader();
+                BCtoolbox.addNotification(BClanguage.photoUploader.working);
+                
+                return false;
+            }
+        }
+        
+        if( $form.attr('beforesubmit') ) eval( $form.attr('beforesubmit') );
     },
     
     ajaxform_uploadProgress: function(event, position, total, percentComplete, $form)
@@ -254,36 +281,230 @@ var BCtoolbox = {
     },
     
     /**
-     * @param {string|jQuery} $container
-     * @param {bool}          includeVideos
+     * @param {object} trigger
+     * @param {bool}   includeVideos
      */
-    getPhotoFromLibrary: function($container, includeVideos)
+    getPhotoFromLibrary: function(trigger, includeVideos)
     {
-        if( typeof $container === 'string' ) $container = $($container);
+        var $container = $(trigger).closest('.bc-image-uploader');
+        var $form      = $('#local_composed_form');
+        var website    = $form.data('website');
+        var $target    = $container.find('.photos');
         
-        var $target = $container.find('.photos');
-        navigator.camera.getPicture(
-            function( fileURI )
+        var success = function( fileURI )
+        {
+            if( fileURI.indexOf('file://') < 0 ) fileURI = 'file://' + fileURI;
+            console.log('Got file URI: ', fileURI);
+            
+            var fname   = fileURI.split('/').pop().replace(/[;"']/g, '');
+            var ext     = fname.split('.').pop().toLowerCase();
+            var type    = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
+            var thumb   = type === 'image' ? fileURI : 'media/Video-300.png';
+            var token   = website.accessToken === '' ? 'guest-' + BCtoolbox.wasuuup() : website.accessToken;
+            var mime    = sprintf('%s/%s', type, ext);
+            var tmpName = sprintf('%s-%s-%s', token, BCtoolbox.wasuuup(), fname);
+            var specs   = sprintf('%s;%s;%s;%s', type, fname, mime, tmpName);
+            var html    = '<div class="bc-image-item" data-uri="%s" data-tmp-name="%s" data-uploading-status="none">' +
+                          '<img src="%s">' +
+                          '<input type="hidden" name="embedded_attachments[]" value="%s">' +
+                          '</div>';
+            $target.append(sprintf(html, fileURI, tmpName, thumb, specs));
+            console.log('Successfully added embedded attachment with specs ', specs);
+        };
+        
+        var fail = function( error )
+        {
+            if( error.search(/cancel/i) >= 0 ) return;
+            
+            BCapp.framework.alert(
+                sprintf(BClanguage.photoRetriever.message, error),
+                BClanguage.photoRetriever.title
+            );
+        };
+        
+        var options = {
+            destinationType: navigator.camera.DestinationType.FILE_URI,
+            sourceType:      navigator.camera.PictureSourceType.PHOTOLIBRARY,
+            mediaType:       includeVideos ? navigator.camera.MediaType.ALLMEDIA : navigator.camera.MediaType.PICTURE
+        };
+        
+        navigator.camera.getPicture(success, fail, options);
+    },
+    
+    __uploadPhotoObjects: function($form)
+    {
+        var $items = $form.find('.photos .bc-image-item');
+        if( $items.length === 0 ) return;
+        
+        var website  = $form.data('website');
+        var service  = $form.data('service');
+        var manifest = $form.data('manifest');
+        var SERVER   = manifest.rootURL + '/mobile_controller/scripts/receive_attachment.php';
+        
+        $items.each(function()
+        {
+            var $item   = $(this);
+            var status  = $item.attr('data-uploading-status');
+            var tmpName = $item.attr('data-tmp-name');
+            if( status !== 'none' ) return;
+            
+            $item.attr('data-uploading-status', 'uploading');
+            var fileURI = $item.attr('data-uri');
+            
+            /**
+             * @param {FileEntry} fileEntry
+             */
+            var success = function (fileEntry)
             {
-                $target.append(sprintf( '<div class="bc-image-item"><img src="%s"></div>', fileURI ));
-            },
-            function( error )
-            {
-                if( error.search(/cancel/i) >= 0 ) return;
+                console.log("Got file entry: ", fileEntry);
                 
-                BCapp.framework.alert(
-                    sprintf(BClanguage.photoRetriever.message, error),
-                    BClanguage.photoRetriever.title
-                );
-            },
+                var fileURL = fileEntry.toURL();
+                
+                /**
+                 * @param {FileUploadResult} r
+                 */
+                var success = function (r)
+                {
+                    console.log("Successful upload. response: " + r.response);
+                    
+                    if(r.response !== 'OK')
+                    {
+                        BCtoolbox.addNotification(
+                            sprintf(BClanguage.photoUploader.message, r.response)
+                        );
+                        
+                        $item.attr('data-uploading-status', 'none');
+                        
+                        return;
+                    }
+                    
+                    $item.attr('data-uploading-status', 'uploaded');
+                };
+                
+                /**
+                 * @param {FileTransferError} error
+                 */
+                var fail = function (error)
+                {
+                    BCtoolbox.addNotification(
+                        sprintf(BClanguage.photoUploader.message, BClanguage.fileTransferErrors[error.code])
+                    );
+                    
+                    $item.fadeOut('fast', function() { $(this).remove(); });
+                };
+                
+                var fname = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+                var ext   = fname.split('.').pop().toLowerCase();
+                var type  = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
+                
+                var options      = new FileUploadOptions();
+                options.fileKey  = "file";
+                options.fileName = fname;
+                options.mimeType = sprintf('%s/%s', type, ext);
+                options.params   = {
+                    target_name:      tmpName,
+                    bcm_platform:     BCapp.os,
+                    bcm_access_token: website.accessToken,
+                    wasuuup:          BCtoolbox.wasuuup()
+                };
+                
+                var ft = new FileTransfer();
+                
+                /**
+                 * @param {ProgressEvent} progressEvent
+                 */
+                ft.onprogress = function(progressEvent)
+                {
+                    if (progressEvent.lengthComputable)
+                        console.log('Uploaded %s of %s', progressEvent.loaded, progressEvent.total);
+                    else
+                        console.log('Uploading...');
+                };
+                
+                console.log('Starting upload of %s as %s to %s...', tmpName, fname, SERVER);
+                ft.upload(fileURL, encodeURI(SERVER), success, fail, options);
+            };
+            
+            /**
+             * @param {FileError} error
+             */
+            var fail = function(error)
             {
-                destinationType: navigator.camera.DestinationType.FILE_URI,
-                sourceType:      navigator.camera.PictureSourceType.PHOTOLIBRARY,
-                mediaType:       includeVideos
-                                 ? navigator.camera.MediaType.ALLMEDIA
-                                 : navigator.camera.MediaType.PICTURE
-            }
-        );
+                BCtoolbox.addNotification(
+                    sprintf(BClanguage.photoRetriever.message, BClanguage.fileErrors[error.code])
+                );
+                
+                $item.fadeOut('fast', function() { $(this).remove(); });
+            };
+            
+            window.resolveLocalFileSystemURL(fileURI, success, fail);
+        });
+    },
+    
+    /**
+     * Array Buffer to Base64 string converter
+     * Copyright 2011 Jon Leighton
+     * @see   https://gist.github.com/jonleighton/958841
+     * 
+     * @param {Array} arrayBuffer
+     * 
+     * @returns {string}
+     */
+    base64ArrayBuffer: function(arrayBuffer)
+    {
+        var base64    = '';
+        var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        
+        var bytes         = new Uint8Array(arrayBuffer);
+        var byteLength    = bytes.byteLength;
+        var byteRemainder = byteLength % 3;
+        var mainLength    = byteLength - byteRemainder;
+        
+        var a, b, c, d;
+        var chunk;
+        
+        // Main loop deals with bytes in chunks of 3
+        for (var i = 0; i < mainLength; i = i + 3)
+        {
+            // Combine the three bytes into a single integer
+            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+            
+            // Use bitmasks to extract 6-bit segments from the triplet
+            a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
+            b = (chunk & 258048)   >> 12; // 258048   = (2^6 - 1) << 12
+            c = (chunk & 4032)     >>  6; // 4032     = (2^6 - 1) << 6
+            d = chunk & 63;               // 63       = 2^6 - 1
+            
+            // Convert the raw binary segments to the appropriate ASCII encoding
+            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d]
+        }
+        
+        // Deal with the remaining bytes and padding
+        if (byteRemainder == 1)
+        {
+            chunk = bytes[mainLength];
+            
+            a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
+            
+            // Set the 4 least significant bits to zero
+            b = (chunk & 3)   << 4; // 3   = 2^2 - 1
+            
+            base64 += encodings[a] + encodings[b] + '=='
+        }
+        else if (byteRemainder == 2)
+        {
+            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
+            
+            a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
+            b = (chunk & 1008)  >>  4; // 1008  = (2^6 - 1) << 4
+            
+            // Set the 2 least significant bits to zero
+            c = (chunk & 15)    <<  2; // 15    = 2^4 - 1
+            
+            base64 += encodings[a] + encodings[b] + encodings[c] + '=';
+        }
+        
+        return base64;
     },
     
     convertRemoteDate: function(dateString, serverTimezoneOffsetString)

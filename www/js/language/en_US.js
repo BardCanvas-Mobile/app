@@ -43,10 +43,18 @@ var BClanguage = {
     },
     
     photoRetriever: {
-        title:   'Unable to read photo',
-        message: 'The next error was received while trying to read the photo:<br><br>'
+        title:   'Unable to read media item',
+        message: 'The next error was received while trying to read the photo/video:<br><br>'
                  + '<span class="color-red">%s</span><br><br>'
                  + 'Please try again.'
+    },
+    
+    photoUploader: {
+        title:   'Unable to upload media item',
+        message: 'The next error was received while trying to upload the photo/video:<br><br>'
+                 + '<span class="color-red">%s</span><br><br>'
+                 + 'Please try again.',
+        working: 'Please wait for all attachment uploads to finish and try again.'
     },
     
     actions: {

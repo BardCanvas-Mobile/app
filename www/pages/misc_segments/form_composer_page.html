@@ -23,7 +23,7 @@
         <div class="inner-page-content">
             
             <form id="local_composed_form" method="post" action="{{url}}"
-                  onsuccess="{{onsuccess}}">
+                  onsuccess="{{onsuccess}}" data-show-progress="true">
                 
                 {{#fields}}
                     
@@ -98,10 +98,10 @@
                     
                     {{#js_if "this.type === 'local_image_selector'"}}
                         <div class="content-block">
-                            <div class="bc-image-uploader" id="bc-lcform-uploader-{{wasuuup}}">
+                            <div class="bc-image-uploader">
                                 <div class="photos"></div>
                                 <a class="link bc-image-item bc-selector"
-                                   onclick="BCtoolbox.getPhotoFromLibrary('#bc-lcform-uploader-{{wasuuup}}')">
+                                   onclick="BCtoolbox.getPhotoFromLibrary(this)">
                                     <i class="bc-ios-icon icon f7-icons">add_round</i>
                                     <i class="bc-android-icon fa fa-plus-circle"></i>
                                 </a>
@@ -111,10 +111,10 @@
                     
                     {{#js_if "this.type === 'local_media_selector'"}}
                         <div class="content-block">
-                            <div class="bc-image-uploader" id="bc-lmform-muploader-{{wasuuup}}">
+                            <div class="bc-image-uploader">
                                 <div class="photos"></div>
                                 <a class="link bc-image-item bc-selector"
-                                   onclick="BCtoolbox.getPhotoFromLibrary('#bc-lmform-muploader-{{wasuuup}}', true)">
+                                   onclick="BCtoolbox.getPhotoFromLibrary(this, true)">
                                     <i class="bc-ios-icon icon f7-icons">add_round</i>
                                     <i class="bc-android-icon fa fa-plus-circle"></i>
                                 </a>

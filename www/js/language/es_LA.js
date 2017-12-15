@@ -43,10 +43,18 @@ var BClanguage = {
     },
     
     photoRetriever: {
-        title:   'Imposible leer foto',
-        message: 'Se detectó el siguiente problema al tratar de leer la imagen:<br><br>'
+        title:   'Imposible leer medio',
+        message: 'Se detectó el siguiente problema al tratar de leer la imagen/video:<br><br>'
                  + '<span class="color-red">%s</span><br><br>'
                  + 'Por favor intenta de nuevo.'
+    },
+    
+    photoUploader: {
+        title:   'Imposible subir medio',
+        message: 'Se detectó el siguiente problema al tratar de subir la imagen/video:<br><br>'
+                 + '<span class="color-red">%s</span><br><br>'
+                 + 'Por favor intenta de nuevo.',
+        working: 'Por favor espera a que terminen de subir todos los medios anexos e intenta de nuevo.'
     },
     
     actions: {
