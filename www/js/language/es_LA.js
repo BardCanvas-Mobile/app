@@ -303,5 +303,8 @@ var BClanguage = {
     
     extras: 'Extras',
     
-    openWebsiteInBrowser: 'Abrir sitio web en navegador'
+    openWebsiteInBrowser: 'Abrir sitio web en navegador',
+    
+    cannotDetectFileType: 'Disculpa, pero no se puede detectar el tipo de archivo que has seleccionado. ' +
+                          'Por favor selecciona otro.'
 };
