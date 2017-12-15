@@ -297,6 +297,8 @@ var BCtoolbox = {
             console.log('Got file URI: ', fileURI);
             
             var fname   = fileURI.split('/').pop().replace(/[;"']/g, '');
+            if( fname.indexOf('?') > 0 ) fname = fname.substr(0, fname.indexOf('?'));
+            
             var ext     = fname.split('.').pop().toLowerCase();
             var type    = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
             var thumb   = type === 'image' ? fileURI : 'media/Video-300.png';
