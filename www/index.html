@@ -27,7 +27,7 @@
     <title></title>
     
     <!-- Debugging client URL: http://red-xiii:8080/client/#bardcanvas -->
-    <!--<script src="http://192.168.1.210:8080/target/target-script-min.js#bardcanvas"></script>-->
+    <script src="http://192.168.1.210:8080/target/target-script-min.js#bardcanvas"></script>
 </head>
 
 <body data-orientation="portrait">
@@ -138,6 +138,20 @@
             </div>
         </div>
     </script>
+    
+    <template id="uploadable_media_item_template">
+        <div class="bc-image-item" data-uri="%s" data-tmp-name="%s" data-uploading-status="none">
+            <div class="progress-bar-group">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-size="80" data-value="0" data-thickness="4"
+                         data-start-angle="0" data-fill='{"color": "#00FF00"}' data-animation="true"></div>
+                    <div class="progress-icon"><i class="fa fa-progress fa-pulse"></i></div>
+                </div>
+            </div>
+            <img class="thumbnail" src="%s">
+            <input type="hidden" name="embedded_attachments[]" value="%s">
+        </div>
+    </template>
     
     <!-- window.open override template -->
     <div class="popup" id="window_open_override_template">

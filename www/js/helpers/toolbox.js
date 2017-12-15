@@ -152,7 +152,6 @@ var BCtoolbox = {
     ajaxform_beforeSubmit: function(formData, $form, options)
     {
         console.log('•> Before submit internally triggered on ', $form.attr('id'));
-        BCtoolbox.showFullPageLoader();
         
         // Item data-uploading-status flags: none, uploading, uploaded
         var all       = $form.find('.photos .bc-image-item').length;
@@ -166,7 +165,7 @@ var BCtoolbox = {
             {
                 console.log('Starting upload of %s items in the background.', all);
                 BCtoolbox.__uploadPhotoObjects($form);
-                setTimeout(function() { $form.submit(); }, 5000);
+                setTimeout(function() { $form.submit(); }, 2000);
                 
                 return false;
             }
@@ -174,13 +173,13 @@ var BCtoolbox = {
             if( uploading > 0 )
             {
                 console.log('Still waiting for %s items to upload.', uploading);
-                BCtoolbox.hideFullPageLoader();
                 BCtoolbox.addNotification(BClanguage.photoUploader.working);
                 
                 return false;
             }
         }
         
+        BCtoolbox.showFullPageLoader();
         if( $form.attr('beforesubmit') ) eval( $form.attr('beforesubmit') );
     },
     
@@ -283,9 +282,12 @@ var BCtoolbox = {
     /**
      * @param {object} trigger
      * @param {bool}   includeVideos
+     * @param {bool}   preventAutoUpload false by default
      */
-    getPhotoFromLibrary: function(trigger, includeVideos)
+    getPhotoFromLibrary: function(trigger, includeVideos, preventAutoUpload)
     {
+        if( typeof preventAutoUpload === 'undefined' ) preventAutoUpload = false;
+        
         var $container = $(trigger).closest('.bc-image-uploader');
         var $form      = $('#local_composed_form');
         var website    = $form.data('website');
@@ -313,12 +315,11 @@ var BCtoolbox = {
             var mime    = sprintf('%s/%s', type, ext);
             var tmpName = sprintf('%s-%s-%s', token, BCtoolbox.wasuuup(), fname);
             var specs   = sprintf('%s;%s;%s;%s', type, fname, mime, tmpName);
-            var html    = '<div class="bc-image-item" data-uri="%s" data-tmp-name="%s" data-uploading-status="none">' +
-                          '<img src="%s">' +
-                          '<input type="hidden" name="embedded_attachments[]" value="%s">' +
-                          '</div>';
+            var html    = $('#uploadable_media_item_template').html();
             $target.append(sprintf(html, fileURI, tmpName, thumb, specs));
             console.log('Successfully added embedded attachment with specs ', specs);
+            
+            if( ! preventAutoUpload ) BCtoolbox.__uploadPhotoObjects($form);
         };
         
         var fail = function( error )
@@ -383,11 +384,15 @@ var BCtoolbox = {
                         );
                         
                         $item.attr('data-uploading-status', 'none');
+                        $item.find('.progress-bar').circleProgress('value', 0);
+                        $item.find('.progress-icon').text('');
                         
                         return;
                     }
                     
                     $item.attr('data-uploading-status', 'uploaded');
+                    $item.find('.progress-bar').circleProgress('value', 1);
+                    $item.find('.progress-icon').html('<i class="fa fa-check"></i>');
                 };
                 
                 /**
@@ -419,15 +424,25 @@ var BCtoolbox = {
                 
                 var ft = new FileTransfer();
                 
+                $item.find('.progress-bar').circleProgress();
+                $item.find('.progress-icon').html('<i class="fa fa-spinner fa-pulse"></i>');
                 /**
                  * @param {ProgressEvent} progressEvent
                  */
                 ft.onprogress = function(progressEvent)
                 {
-                    if (progressEvent.lengthComputable)
-                        console.log('Uploaded %s of %s', progressEvent.loaded, progressEvent.total);
-                    else
-                        console.log('Uploading...');
+                    if( progressEvent.lengthComputable )
+                    {
+                        var total  = progressEvent.total;
+                        var loaded = progressEvent.loaded;
+                        var pct    = loaded / total;
+                        var val    = 0;
+                        $item.find('.progress-bar').circleProgress('value', pct);
+                        
+                        if( total > 1000000 ) val = (loaded / 1000000).toFixed(1) + 'm';
+                        else if(total > 1000) val = (loaded / 1000).toFixed(1) + 'k';
+                        $item.find('.progress-icon').text(val);
+                    }
                 };
                 
                 console.log('Starting upload of %s as %s to %s...', tmpName, fname, SERVER);
