@@ -303,6 +303,9 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 
 /* Feed: single item page */
 
+html.ios     .single-page-service-view .feed-item-navbar { top: 40px; }
+html.android .single-page-service-view .feed-item-navbar { top: 56px; }
+
 video { max-width: 100%; max-height: 50vh; }
 
 img.emojione, .emojione_image { height: 1em; vertical-align: middle; }

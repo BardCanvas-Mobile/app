@@ -124,6 +124,8 @@ var BCmanifestsRepository = {
     {
         BCapp.framework.showPreloader(BClanguage.checkingWebsite);
         BCtoolbox.showNetworkActivityIndicator();
+    
+        BCwebsitesRepository.__manifest = null;
         
         var url = BCwebsitesRepository.__website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
         $.getJSON(url, function(data)
@@ -161,15 +163,27 @@ var BCmanifestsRepository = {
         //         '--> Validate if credentials are provided or add the site immmediately
         //
         
-        if( BCwebsitesRepository.__manifest.disclaimer.length === 0 && ! BCwebsitesRepository.__manifest.loginRequired )
+        var websiteHasDisclaimer        = BCwebsitesRepository.__manifest.disclaimer.length > 0;
+        var userWantsFacebookLogin      = $('#add_website_form').find('input[name="use_facebook_login"]').val() === 'true';
+        var userProvidesAuthCredentials = BCwebsitesRepository.__website.userName.length > 0 &&
+                                          BCwebsitesRepository.__website.password.length > 0;
+        
+        if( ! websiteHasDisclaimer && ! BCwebsitesRepository.__manifest.loginRequired )
         {
-            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 ) {
+            if( userWantsFacebookLogin )
+            {
+                // Flow is passed to Facebook login helper
+                BCmanifestsRepository.__doFacebookAuthentication(callback);
+            }
+            else if( ! userProvidesAuthCredentials )
+            {
                 // No login credentials provided
                 callback();
             }
-            else {
-                // Flow is passed to the login validator
-                BCmanifestsRepository.__validateWebsiteLogin(function() { callback(); });
+            else
+            {
+                // Flow is passed to the login validator with standard credentials
+                BCmanifestsRepository.__validateWebsiteLogin(callback);
             }
             
             return;
@@ -180,15 +194,22 @@ var BCmanifestsRepository = {
         //         '--> Alert login requirement message and abort if no credentials have been provided
         //
         
-        if( BCwebsitesRepository.__manifest.disclaimer.length === 0 && BCwebsitesRepository.__manifest.loginRequired )
+        if( ! websiteHasDisclaimer && BCwebsitesRepository.__manifest.loginRequired )
         {
-            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 ) {
+            if( userWantsFacebookLogin )
+            {
+                // Flow is passed to Facebook login helper
+                BCmanifestsRepository.__doFacebookAuthentication(callback);
+            }
+            else if( ! userProvidesAuthCredentials )
+            {
                 // No login credentials provided
                 BCapp.framework.alert(BClanguage.websiteRequiresAuthentication);
             }
-            else {
-                // Flow is passed to the login validator
-                BCmanifestsRepository.__validateWebsiteLogin(function() { callback(); });
+            else
+            {
+                // Flow is passed to the login validator with credentials
+                BCmanifestsRepository.__validateWebsiteLogin(callback);
             }
             
             return;
@@ -200,7 +221,7 @@ var BCmanifestsRepository = {
         
         var disclaimer = typeof BCwebsitesRepository.__manifest.disclaimer === 'string'
             ? BCwebsitesRepository.__manifest.disclaimer
-            : BCwebsitesRepository.__manifest.disclaimer.join(' ');
+            : BCwebsitesRepository.__manifest.disclaimer.join('\n');
         
         // Links reforging to popup
         $sanitizedDisclaimer = $('<div>' + disclaimer + '</div>');
@@ -222,18 +243,26 @@ var BCmanifestsRepository = {
         //         '--> Show disclaimer and "proceed" button
         //
         
-        if( BCwebsitesRepository.__manifest.disclaimer.length > 0 && ! BCwebsitesRepository.__manifest.loginRequired )
+        if( ! BCwebsitesRepository.__manifest.loginRequired )
         {
-            if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 )
+            if( userWantsFacebookLogin )
+            {
+                // Flow is passed to the Facebook Login Helper
+                window.__tempWebsiteAdditionCallback = function() {
+                    BCmanifestsRepository.__doFacebookAuthentication(callback, true);
+                };
+            }
+            else if( ! userProvidesAuthCredentials )
             {
                 // Flow is passed to the callback
-                window.__tempWebsiteAdditionCallback = function() { callback(); };
+                window.__tempWebsiteAdditionCallback = callback;
             }
-            else {
+            else
+            {
                 // Login provided. Flow is passed to the login validator
                 window.__tempWebsiteAdditionCallback = function() {
                     BCmanifestsRepository.__validateWebsiteLogin(
-                        function() { callback(); },
+                        callback,
                         function() { BCapp.currentView.router.back(); }
                     );
                 };
@@ -260,7 +289,31 @@ var BCmanifestsRepository = {
         //         '--> Show disclaimer and embed login requirement message if no credentials have been provided
         //
         
-        if( BCwebsitesRepository.__website.userName.length === 0 || BCwebsitesRepository.__website.password.length === 0 )
+        if( userWantsFacebookLogin )
+        {
+            // Login provided. Flow is passed to the Facebook Login helper
+            window.__tempWebsiteAdditionCallback = function()
+            {
+                BCmanifestsRepository.__doFacebookAuthentication(callback, true);
+            };
+            
+            compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
+            content  = compiled({
+                websiteName:        BCwebsitesRepository.__manifest.shortName,
+                iconURL:            BCwebsitesRepository.__manifest.icon,
+                websiteFullName:    BCwebsitesRepository.__manifest.fullName,
+                companyName:        BCwebsitesRepository.__manifest.company,
+                websiteDescription: BCwebsitesRepository.__manifest.description,
+                disclaimerContents: disclaimer,
+                cancelButton:       BClanguage.frameworkCaptions.modalButtonCancel,
+                okButton:           BClanguage.frameworkCaptions.modalButtonOk
+            });
+            BCapp.currentView.router.loadContent(content);
+            
+            return;
+        }
+        
+        if( ! userProvidesAuthCredentials )
         {
             // Missing login credentials
             compiled = BCapp.getCompiledTemplate('pages/website_addition/disclaimer.html');
@@ -281,9 +334,10 @@ var BCmanifestsRepository = {
         else
         {
             // Login provided. Flow is passed to the login validator
-            window.__tempWebsiteAdditionCallback = function() {
+            window.__tempWebsiteAdditionCallback = function()
+            {
                 BCmanifestsRepository.__validateWebsiteLogin(
-                    function() { callback(); },
+                    callback,
                     function() { BCapp.currentView.router.back(); }
                 );
             };
@@ -560,5 +614,110 @@ var BCmanifestsRepository = {
         }
         
         return null;
+    },
+    
+    __doFacebookAuthentication: function(callback, closeDisclaimerOnCancel)
+    {
+        if( typeof closeDisclaimerOnCancel === 'undefined' ) closeDisclaimerOnCancel = false;
+        
+        console.log('%cFacebook auth goes here!', 'color: white; background-color: blue;');
+        
+        var confirm = function()
+        {
+            var rawToken = Date.now() + ':' + parseInt(Math.random() * 1000000000000000).toString();
+            
+            window.tmpFacebookAuthCheckerToken = CryptoJS.MD5(rawToken).toString();
+            window.tmpFacebookAuthCheckerXHR   = null;
+            window.tmpFacebookAuthCanceller    = function()
+            {
+                clearInterval( window.tmpFacebookAuthCheckerInterval );
+                BCapp.framework.hidePreloader();
+                if( closeDisclaimerOnCancel ) BCapp.currentView.router.back();
+                
+                console.log('%cShutting down remote Facebook authentication listener.', 'color: blue');
+                
+                if( window.tmpFacebookAuthCheckerXHR ) window.tmpFacebookAuthCheckerXHR.abort();
+            };
+            
+            var element = BCapp.framework.showPreloader(BClanguage.facebookLoginHelper.preloaderCaption);
+            $(element).click(function() { window.tmpFacebookAuthCanceller(); });
+    
+            window.tmpFacebookAuthCheckerRunning  = false;
+            window.tmpFacebookAuthCheckerFunction = function(callback)
+            {
+                if( window.tmpFacebookAuthCheckerRunning ) return;
+                
+                var url    = BCwebsitesRepository.__manifest.facebookLoginChecker;
+                var params = {
+                    mode:    'background_check',
+                    token:   window.tmpFacebookAuthCheckerToken,
+                    wasuuup: BCtoolbox.wasuuup()
+                };
+                
+                window.tmpFacebookAuthCheckerRunning = true;
+                console.log('%cFetching %s with %s...', 'color: blue', url, JSON.stringify(params));
+                window.tmpFacebookAuthCheckerXHR = $.getJSON(url, params, function(data)
+                {
+                    window.tmpFacebookAuthCheckerRunning = false;
+                    if( data.message === 'ERROR:FILE_NOT_FOUND' ) return;
+                    
+                    if( data.message !== 'OK' )
+                    {
+                        window.tmpFacebookAuthCanceller();
+                        
+                        BCapp.framework.alert(sprintf(BClanguage.facebookLoginHelper.incomingError, data.message));
+                        
+                        return;
+                    }
+                    
+                    BCwebsitesRepository.__website.accessToken     = data.data.access_token;
+                    BCwebsitesRepository.__website.userName        = data.data.user_name;
+                    BCwebsitesRepository.__website.userDisplayName = data.data.display_name;
+                    
+                    if( data.data.meta ) BCwebsitesRepository.__website.meta = data.data.meta;
+                    
+                    window.tmpFacebookAuthCanceller();
+                    if( callback ) callback();
+                })
+                .fail(function($xhr, satus, error)
+                {
+                    window.tmpFacebookAuthCheckerRunning = false;
+                    console.log('%cCan\'t get JSON data: %s', 'color: blue', status);
+                    
+                    window.tmpFacebookAuthCanceller();
+                    
+                    BCapp.framework.alert(sprintf(BClanguage.facebookLoginHelper.ajaxError, data.message));
+                });
+                // if( typeof callback === 'function' ) callback();
+            };
+            
+            window.tmpFacebookAuthCheckerInterval = setInterval(
+                function() { window.tmpFacebookAuthCheckerFunction(callback); },
+                3000
+            );
+            
+            var url = BCwebsitesRepository.__manifest.facebookLoginChecker;
+            if( url.indexOf('?') < 0 ) url = url + '?';
+            else                       url = url + '&';
+            
+            url = url + 'token='    + window.tmpFacebookAuthCheckerToken;
+            url = url + '&wasuuup=' + BCtoolbox.wasuuup();
+            url = url + '&device='  + encodeURI(BCapp.userAgent);
+            console.log('%cLaunching native browser window to %s', 'color: blue', url);
+            window.open(url, '_system');
+        };
+        
+        var cancel = function()
+        {
+            if( closeDisclaimerOnCancel )
+                BCapp.currentView.router.back();
+        };
+        
+        BCapp.framework.confirm(
+            BClanguage.facebookLoginHelper.info,
+            BClanguage.facebookLoginHelper.title,
+            confirm,
+            cancel
+        );
     }
 };

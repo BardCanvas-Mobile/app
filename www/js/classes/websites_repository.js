@@ -130,7 +130,7 @@ var BCwebsitesRepository = {
                         var $page = BCtoolbox.getCurrentPageContentArea();
                         BCapp.framework.closeModal();
                         $page.scrollTo(0, 'fast');
-                        $('#add_website_form').submit();
+                        // $('#add_website_form').submit();
                     }
                 }
             ],
@@ -147,7 +147,7 @@ var BCwebsitesRepository = {
         BCapp.framework.actions(buttons);
     },
     
-    websiteAdditionSubmission: function(data)
+    websiteAdditionSubmission: function(data, $form)
     {
         if( data[0].value.length === 0 )
         {
@@ -159,6 +159,14 @@ var BCwebsitesRepository = {
         var url      = $.trim(data[0].value);
         var userName = $.trim(data[1].value);
         var password = data[2].value;
+        
+        if( $form.find('input[name="use_facebook_login"]').val() === 'true' )
+        {
+            $form.find('input[name="user_name"]').val('');
+            $form.find('input[name="password"]').val('');
+            userName = '';
+            password = '';
+        }
         
         if( url.search(/http/i) < 0 ) url = 'http://' + url;
         console.log('URL of website to add: ' + url);
@@ -189,6 +197,16 @@ var BCwebsitesRepository = {
         
         BCmanifestsRepository.fetchManifest(function()
         {
+            if( $('#add_website_form').find('input[name="use_facebook_login"]').val() === 'true' )
+            {
+                if( ! BCwebsitesRepository.__manifest.hasFacebookLogin )
+                {
+                    BCapp.framework.alert( BClanguage.facebookLoginUnavailable);
+                    
+                    return;
+                }
+            }
+            
             BCmanifestsRepository.checkManifest(function()
             {
                 var rootURL = BCwebsitesRepository.__manifest.rootURL;
@@ -196,7 +214,7 @@ var BCwebsitesRepository = {
                 
                 BCwebsitesRepository.__website.manifestFileHandler = handler;
                 
-                if( BCwebsitesRepository.__website.userName != '' )
+                if( BCwebsitesRepository.__website.userName !== '' )
                     handler = handler + '-' + BCwebsitesRepository.__website.userName;
                 
                 BCwebsitesRepository.__website.handler = handler;

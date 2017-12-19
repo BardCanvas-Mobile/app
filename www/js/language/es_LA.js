@@ -124,6 +124,25 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Por favor revisa que tu dispositivo esté conectado a internet '
                                      + 'e intenta de nuevo. Si el problema persiste, intenta más tarde.',
+    facebookLoginUnavailable:        'Lo sentimos, pero el sitio web no provee autenticación vía Facebook.',
+    
+    facebookLoginHelper: {
+        title:            'Usando autenticación remota',
+        info:             'Para poder registrar el sitio web en la app usando tu cuenta de Facebook, ' +
+                          'es necesario que abras sesión en el sitio web usando tu cuenta de Facebook ' +
+                          'en el navegador de tu dispositivo móvil.<br><br>' +
+                          'Una vez que se reciba el token de la sesión, se te regresará a la app y ' +
+                          'se añadirá el sitio web.',
+        preloaderCaption: 'Esperando autenticación.<br>Toca aquí para cancelar.',
+        incomingError:    'Lo sentimos, pero ha habido un error en el servidor remoto:<br><br>' +
+                          '<span class="color-red">%s</span><br><br>' +
+                          'Intenta de nuevo. Si el problema persiste, por favor ponte en contacto ' +
+                          'con el staff de soporte del sitio web.',
+        ajaxError:        'Lo sentimos, pero ha habido un problema al tratar de comunicarse con el servidor remoto:<br><br>' +
+                          '<span class="color-red">%s</span><br><br>' +
+                          'Intenta de nuevo. Si el problema persiste, por favor ponte en contacto ' +
+                          'con el staff de soporte del sitio web.'
+    },
     
     fileErrors: [
         'No especificado',

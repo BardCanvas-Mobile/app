@@ -121,6 +121,24 @@ var BClanguage = {
                                      + '<span class="color-red">%s</span><br><br>'
                                      + 'Please check that your device is connected to the internet and'
                                      + 'try again. If the problem persists, try after a few minutes.',
+    facebookLoginUnavailable:        'Sorry, but the website doesn\'t provide Facebook Login.',
+    
+    facebookLoginHelper: {
+        title:            'Using remote authentication',
+        info:             'In order to add the website to the app using your Facebook account, you first need to ' +
+                          'login to the website from your mobile browser using Facebook.<br><br>' +
+                          'Once the session token is received, you need to come back to the app so ' +
+                          'the website is added.',
+        preloaderCaption: 'Waiting for authentication.<br>Tap here to cancel.',
+        incomingError:    'Sorry, but there\'s been an error on the remote server:<br><br>' +
+                          '<span class="color-red">%s</span><br><br>' +
+                          'Please try again. If the problem persists, please contact the website\'s ' +
+                          'tech support staff.',
+        ajaxError:        'Sorry, but there\'s been an error while trying to communicate with the remote server:<br><br>' +
+                          '<span class="color-red">%s</span><br><br>' +
+                          'Please try again. If the problem persists, please contact the website\'s ' +
+                          'tech support staff.'
+    },
     
     fileErrors: [
         'Undefined',

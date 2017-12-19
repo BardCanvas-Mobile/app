@@ -6,6 +6,7 @@
   "usernameOptional":        "Usuario o alias (opcional)",
   "passwordOptional":        "Contraseña (opcional)",
   "addWebsiteButtonCaption": "Añadir ahora",
+  "loginWithFacebook":       "Iniciar con Facebook",
   
   "featuredWebsitesTitle": "Sitios destacados",
   "featuredSites": [

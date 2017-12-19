@@ -865,6 +865,8 @@ var BCapp = {
     
     cancelWebsiteAddition: function()
     {
+        $('#add_website_form').find('input[name=use_facebook_login]').val('false');
+        
         if( typeof window.tmpViewToReturnWhenCancellingWebsiteAddition === 'undefined' )
         {
             BCapp.showFirstWebsite();

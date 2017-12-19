@@ -39,6 +39,10 @@ var BCwebsiteManifestClass = function(source)
     
     this.loginAuthenticator = '';
     
+    this.hasFacebookLogin = false;
+    
+    this.facebookLoginChecker = '';
+    
     this.timezoneOffset = 0;
     
     this.userLevels = BClanguage.defaultUserLevels;
@@ -65,4 +69,7 @@ var BCwebsiteManifestClass = function(source)
     if(source.services)
         for(i in source.services)
             this.services[i] = new BCwebsiteServiceDetailsClass(source.services[i]);
+    
+    if( this.hasFacebookLogin && this.facebookLoginChecker.length === 0 )
+        this.hasFacebookLogin = false;
 };

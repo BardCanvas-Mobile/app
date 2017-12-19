@@ -10,7 +10,7 @@
                 <div class="content-block">
                     <img onclick="location.reload()" style="max-width: 75%"
                          src="media/bardcanvas_logo_850x200.png"><br>
-                    {{welcome}} {{@global.appVersion}}
+                    {{welcome}} v{{@global.appVersion}}
                 </div>
                 
                 <!-- Add website -->
@@ -65,9 +65,18 @@
                             </li>
                         </ul>
                         
+                        <input type="hidden" name="use_facebook_login" value="false">
+                        
                         <p class="buttons-row">
-                            <button type="submit" class="button" id="submit_website_addition">
+                            <button type="submit" class="button" id="submit_website_addition"
+                                    onclick="$('#add_website_form').find('input[name=use_facebook_login]').val('false')">
                                 {{addWebsiteButtonCaption}}
+                            </button>
+                            <button type="submit" class="button" id="use_facebook_login"
+                                    style="color: white; background-color: #4267B2;"
+                                    onclick="$('#add_website_form').find('input[name=use_facebook_login]').val('true')">
+                                <i class="fa fa-facebook-official"></i>
+                                {{loginWithFacebook}}
                             </button>
                         </p>
                         <p class="buttons-row" id="cancel_website_addition_button" style="display: none;">
@@ -93,7 +102,6 @@
                                 <div class="item-inner">
                                     <div class="item-title-row">
                                         <div class="item-title">{{title}}</div>
-                                        <div class="item-after"><i class="fa fa-search fa-lg"></i></div>
                                     </div>
                                     <div class="item-subtitle">
                                         <div class="chip">
