@@ -1,14 +1,14 @@
 
 <div class="page toolbar-fixed bg-black">
     
-    <div class="toolbar toolbar-bottom color-white bg-gray">
+    <div class="toolbar toolbar-bottom with-colored-labels color-white bg-gray">
         <div class="toolbar-inner">
             <a class="link color-white" disabled>
                 {{@global.language.options}}
             </a>
             
-            <a class="link" onclick="BCwebsitesRepository.deleteWebsite('{{websiteHandler}}')">
-                <span class="color-red">{{@global.language.actions.deleteWebsite}}</span>
+            <a class="link color-white bg-red" onclick="BCwebsitesRepository.deleteWebsite('{{websiteHandler}}')">
+                {{@global.language.actions.deleteWebsite}}
             </a>
         </div>
     </div>

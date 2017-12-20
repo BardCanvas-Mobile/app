@@ -192,7 +192,7 @@ var BCsearchHelper = {
             
             $page.find('.search-results').show();
             BCsearchHelper.render(data.data);
-            $page.find('.bc-feed-refresher').show();
+            // $page.find('.bc-feed-refresher').show();
             
             BCsearchHelper.__helperParams.until =
                 $page.find('.search-results .bc-feed-item:last').attr('data-publishing-date');

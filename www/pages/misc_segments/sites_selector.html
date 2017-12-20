@@ -14,13 +14,13 @@
         </div>
     </div>
     
-    <div class="toolbar toolbar-bottom color-white bg-gray">
+    <div class="toolbar toolbar-bottom with-colored-labels color-white bg-gray">
         <div class="toolbar-inner">
             <a class="link color-white" disabled>
                 {{@global.language.appConfiguration.caption}}
             </a>
             {{#if @global.isAndroid}}
-                <a class="link color-white" onclick="navigator.app.exitApp();">
+                <a class="link color-white bg-red" onclick="navigator.app.exitApp();">
                     {{@global.language.exit.caption}}
                 </a>
             {{/if}}

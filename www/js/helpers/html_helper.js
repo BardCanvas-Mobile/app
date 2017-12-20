@@ -339,7 +339,7 @@ var BChtmlHelper = {
                     BCapp.framework.params.materialPreloaderHtml
                 );
             
-            $pageContent.find('.bc-feed-refresher').show();
+            // $pageContent.find('.bc-feed-refresher').show();
             BCapp.framework.attachInfiniteScroll('#' + pageContentId);
             $pageContent.on('infinite', function() { BChtmlHelper.__feedPullOldItems($pageContent); });
             $pageContent.attr('infinite-scroll-attached', 'true');

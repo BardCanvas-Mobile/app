@@ -848,6 +848,8 @@ var BCapp = {
         var $activeNestedView = $(selector).find('.view.active');
         if( $activeNestedView.length === 0 )
         {
+            BCapp.currentNestedView = null;
+            console.log('%cCurrent service doesn\'t have nested views. Clearing current nested view.', 'color: magenta;');
             $page = $(BCapp.currentView.selector).find('.service-page');
             if( typeof $page.attr('data-initialized') === 'undefined' && triggerAutoLoad )
             {

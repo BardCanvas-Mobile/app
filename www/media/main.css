@@ -129,7 +129,10 @@ html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 /*noinspection CssUnknownProperty*/
 .list-block .item-text.no-clamp { -webkit-line-clamp: none; }
 
-/* F7 extensions */
+html.ios .toolbar.with-colored-labels .toolbar-inner   { padding-left: 0;   padding-right: 0;   }
+html.ios .toolbar.with-colored-labels .toolbar-inner a { padding-left: 8px; padding-right: 8px; }
+
+    /* F7 extensions */
 
 body[data-orientation="landscape"] .row .landscape-50 {
     width: 50%;
@@ -263,13 +266,15 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 .card.facebook .card-footer a      { color: #81848b; font-weight: 500; }
 .card.facebook .card-content-inner { padding: 15px 10px;  }
 
-.card.reddit .card-header             { font-size: 11px; min-height: 0; }
+.card.reddit .card-header             { font-size: 11px; min-height: 0;
+                                        padding-top: 8px; padding-left: 8px; padding-right: 8px; }
+.card.reddit .card-header .info       { width: calc(100% - 78px); }
 .card.reddit .card-header .title      { font-size: 14px; margin: 0.6em 0; line-height: normal; }
 .card.reddit .card-header .title a    { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
                                         overflow: hidden; text-overflow: ellipsis; }
+.card.reddit .card-header .card-image { margin-left: 10px; }
 .card.reddit .card-header .card-thumb { background: black center center no-repeat; background-size: cover;
-                                        display: inline-block; width: 78px; height: 78px; border-radius: 5px;
-                                        margin-left: 10px; }
+                                        display: inline-block; width: 78px; height: 78px; border-radius: 5px; }
 .card.reddit .card-content            { font-size: 12px; }
 
 .card *:last-child { margin-bottom: 0; }

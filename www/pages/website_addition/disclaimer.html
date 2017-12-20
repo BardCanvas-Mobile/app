@@ -7,13 +7,13 @@
         </div>
     </div>
     
-    <div class="toolbar toolbar-bottom">
+    <div class="toolbar toolbar-bottom with-colored-labels">
         <div class="toolbar-inner">
             {{#if cancelButton}}
-                <a href="#" class="back link color-red">{{cancelButton}}</a>
+                <a href="#" class="back link color-white bg-red">{{cancelButton}}</a>
             {{/if}}
             {{#if okButton}}
-                <a class="link" onclick="window.__tempWebsiteAdditionCallback()">{{okButton}}</a>
+                <a class="link color-white bg-green" onclick="window.__tempWebsiteAdditionCallback()">{{okButton}}</a>
             {{/if}}
         </div>
     </div>
