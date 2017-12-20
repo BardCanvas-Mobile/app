@@ -41,6 +41,8 @@ var BCfeedItemClass = function(source)
     
     this.excerpt = '';
     
+    this.publishing_date = '';
+    
     this.content = '';
     
     this.tags_list = [];

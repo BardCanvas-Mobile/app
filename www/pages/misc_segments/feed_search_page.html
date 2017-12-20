@@ -1,0 +1,72 @@
+
+<!-- Feed search page -->
+<template data-type="feed_search_page">
+    
+    <div class="page feed-search-page" id="{{pageId}}" data-page="{{pageId}}" style="display: none;">
+        <div class="page-content service-content" id="{{pageId}}-content">
+            <div class="inner-page-content">
+                
+                <div class="content-block empty-search-results" style="display: none;">
+                    <div class="content-block-inner">{{@global.language.noEntriesFound}}</div>
+                </div>
+                
+                <div class="content-block searching-progress aligncenter" style="display: none;">
+                    <i class="fa fa-spinner fa-pulse fa-2x"></i>
+                </div>
+                
+                <div class="list-block media-list search-results" style="display: none">
+                    <ul></ul>
+                </div>
+                
+                <div class="bc-feed-refresher infinite-scroll-preloader" align="center" style="display: none">
+                    <div class="preloader"></div>
+                </div>
+            </div><!-- /.inner-page-content -->
+        </div><!-- /.page-content -->
+    </div><!-- /.page -->
+    
+</template>
+
+<template data-type="feed_search_navbar">
+    
+    <div class="navbar-inner search-navbar-control" style="display: none;">
+        <form class="searchbar" onsubmit="BCsearchHelper.search(); return false;">
+            <a class="search-closer link icon-only" onclick="BCsearchHelper.close(this)">
+                <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                <i class="bc-android-icon fa fa-chevron-left"></i>
+            </a>
+            <div class="searchbar-input">
+                <input type="search" placeholder="{{searchPlaceholder}}">
+                <a class="searchbar-clear" onclick="BCsearchHelper.clear()"></a>
+            </div>
+            <a class="searchbar-submit link" onclick="BCsearchHelper.search()">
+                {{@global.language.actions.search}}
+            </a>
+        </form>
+    </div>
+    
+</template>
+
+<template data-type="feed_search_item">
+    
+    <li class="item bc-feed-item item-data-container" data-item-type="{{item.type}}"
+        data-item-id="{{item.id}}" data-publishing-date="{{item.publishing_date}}">
+        <div class="item-link item-content">
+            {{#if item.featured_image_thumbnail}}
+                <div class="item-media"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="80" height="80"
+                     style="background: url('{{item.featured_image_thumbnail}}') center center no-repeat; background-size: cover;"></div>
+            {{/if}}
+            <div class="item-inner">
+                <div class="item-title-row">
+                    <div class="item-title">{{item.title}}</div>
+                    <div class="item-after">{{item._mainCategoryCaption}}</div>
+                </div>
+                <div class="item-subtitle">
+                    {{item._altPublishedCaption}}
+                </div>
+                <div class="item-text">{{item.excerpt}}</div>
+            </div>
+        </div>
+    </li>
+    
+</template>

@@ -150,20 +150,16 @@ var BChtmlHelper = {
         window.tmpHelpersLoaded++;
         
         var sel = '.' + position + ' .target';
-        var $a  = $('<a class="link disabled search-trigger icon-only"></a>');
+        var $a  = $('<a class="link search-trigger icon-only"></a>');
         $a.data('containerId',  containerId);
+        $a.data('helper',       helper);
         $a.bind('click', function()
         {
             var $this       = $(this);
             var containerId = $this.data('containerId');
             var data        = window.tmpServiceFeeds[containerId];
-            var params      = data.params;
-            var website     = data.website;
-            var service     = data.service;
-            var view        = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
             
-            // console.log(view);
-            // console.log(data);
+            BCsearchHelper.create($this, containerId, helper, data);
         });
         $a.html(sprintf(
             '%s%s',
@@ -239,7 +235,7 @@ var BChtmlHelper = {
                         : $('<div class="temporary-container"></div>');
         for(var i in items)
         {
-            var item = BChtmlHelper.__prepareItem(new BCfeedItemClass(items[i]), website, service, manifest);
+            var item = BChtmlHelper.prepareItem(new BCfeedItemClass(items[i]), website, service, manifest);
             
             var itemAuthorUserName = item.author_user_name;
             var currentUserLevel   = 0;
@@ -301,13 +297,13 @@ var BChtmlHelper = {
         
         if( appendOrPrepend === 'append' )
         {
-            $collection.find('.card').each(function() {
+            $collection.find('.bc-feed-item').each(function() {
                 $container.find('.feed-contents').append( $(this) );
             });
         }
         else if( appendOrPrepend === 'prepend' )
         {
-            $collection.find('.card').each(function() {
+            $collection.find('.bc-feed-item').each(function() {
                 $container.find('.feed-contents').prepend( $(this) );
             });
         }
@@ -379,9 +375,8 @@ var BChtmlHelper = {
      * @param {BCwebsiteManifestClass}       manifest
      * 
      * @returns {BCfeedItemClass}
-     * @private
      */
-    __prepareItem: function(item, website, service, manifest)
+    prepareItem: function(item, website, service, manifest)
     {
         var convertedDate;
         var itemAuthorLevel = parseInt(item.author_level);
@@ -437,7 +432,7 @@ var BChtmlHelper = {
     
     renderFeedItemPage: function( $trigger )
     {
-        var $card          = $trigger.closest('.card');
+        var $card          = $trigger.closest('.bc-feed-item');
         var context        = $card.data('context');
         context.feedPageId = 'feed-item-' + BCtoolbox.wasuuup();
         
@@ -662,7 +657,7 @@ var BChtmlHelper = {
         $container.data('refreshing', true);
         console.log('> Pull to refresh triggered on #' + containerId, $container);
         
-        var $firstCard = $container.find('.feed-contents .card:first');
+        var $firstCard = $container.find('.feed-contents .bc-feed-item:first');
         console.log('> First card on screen: ', $firstCard);
         var firstCardPublishingDate = $firstCard.attr('data-publishing-date');
         
@@ -691,7 +686,7 @@ var BChtmlHelper = {
         $container.data('refreshing', true);
         console.log('> Infinite scroll triggered on #' + containerId, $container);
         
-        var $lastCard = $container.find('.feed-contents .card:last');
+        var $lastCard = $container.find('.feed-contents .bc-feed-item:last');
         console.log('> Last card on screen: ', $lastCard);
         var lastCardPublishingDate = $lastCard.attr('data-publishing-date');
         
@@ -806,7 +801,7 @@ var BChtmlHelper = {
                 return;
             }
             
-            var item    = BChtmlHelper.__prepareItem(new BCfeedItemClass(data.data), website, service, manifest);
+            var item    = BChtmlHelper.prepareItem(new BCfeedItemClass(data.data), website, service, manifest);
             var context = {
                 item:       item,
                 service:    service,

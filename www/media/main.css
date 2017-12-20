@@ -301,6 +301,22 @@ html.ios .bc-image-uploader .bc-image-item { border-radius: 5px; }
 .bc-bracketed:before { content: '[' }
 .bc-bracketed:after  { content: ']' }
 
+/*html.ios     .website-main-view.navbar-fixed .page.feed-search-page > .searchbar            { top: 0; }*/
+/*html.ios     .website-main-view.navbar-fixed .page.feed-search-page .list-block-search      { margin-top: 44px; }*/
+/*html.ios     .website-main-view.navbar-fixed .page.feed-search-page > .searchbar .link.back { margin-left: 10px; }*/
+/*html.android .website-main-view.navbar-fixed .page.feed-search-page > .searchbar            { top: 0; }*/
+/*html.android .website-main-view.navbar-fixed .page.feed-search-page .list-block-search      { margin-top: 50px; }*/
+/*html.android .website-main-view.navbar-fixed .page.feed-search-page > .searchbar .link.back { margin-left: 10px; }*/
+/*.feed-search-page .searchbar-not-found { margin-top: 70px; }*/
+
+html.ios .feed-search-page .inner-page-content                       { margin-top: 44px; }
+html.ios .feed-search-page .inner-page-content .search-results       { margin-top: 0; margin-bottom: 0; }
+html.ios .feed-search-page .inner-page-content .empty-search-results { margin-top: calc(44px + 35px); }
+html.ios .feed-search-page .inner-page-content .searching-progress   { margin-top: calc(44px + 35px); }
+html.ios .navbar-inner.search-navbar-control                         { padding: 0; }
+html.ios .navbar-inner.search-navbar-control .searchbar              { padding-left: 0; padding-right: 0; }
+html.ios .navbar-inner.search-navbar-control .searchbar-submit       { margin-left: 8px; margin-right: 8px; }
+
 /* Feed: single item page */
 
 html.ios     .single-page-service-view .feed-item-navbar { top: 40px; }

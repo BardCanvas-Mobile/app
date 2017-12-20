@@ -205,6 +205,20 @@ var BCapp = {
             $('#static_templates').append(html);
         });
         
+        $.get('pages/misc_segments/feed_search_page.html', function(html)
+        {
+            var $html = $('<div>' + html + '</div>');
+            
+            BCapp.__compiledTemplates['template[data-type="feed_search_page"]']
+                = Template7.compile( $html.find('template[data-type="feed_search_page"]').html() );
+            
+            BCapp.__compiledTemplates['template[data-type="feed_search_navbar"]']
+                = Template7.compile( $html.find('template[data-type="feed_search_navbar"]').html() );
+            
+            BCapp.__compiledTemplates['template[data-type="feed_search_item"]']
+                = Template7.compile( $html.find('template[data-type="feed_search_item"]').html() );
+        });
+        
         $.get('pages/website_addition/index.html', function(html)
         {
             BCapp.__compiledTemplates['pages/website_addition/index.html']
