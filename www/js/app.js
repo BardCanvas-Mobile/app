@@ -667,8 +667,16 @@ var BCapp = {
                 if( website.meta.user_level )
                     meta_user_level = website.meta.user_level;
             
-            if( service.options.showFloatingActionButton )
-            {
+            if( typeof service.options.showFloatingActionButton === 'undefined' )
+                service.options.showFloatingActionButton = false;
+            
+            if( service.options.showFloatingActionButton && website.userName === '' )
+                service.options.showFloatingActionButton = false;
+            
+            if(
+                service.options.showFloatingActionButton &&
+                typeof service.options.floatingActionButtonUserLevelsAllowed !== 'undefined'
+            ) {
                 if( service.options.floatingActionButtonUserLevelsAllowed.length > 0 )
                 {
                     service.options.showFloatingActionButton = false;

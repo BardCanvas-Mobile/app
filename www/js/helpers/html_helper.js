@@ -248,7 +248,7 @@ var BChtmlHelper = {
                 currentUserIsAdmin = currentUserLevel >= BCuserLevels.Editor;
             }
             
-            item._showCategoryLabel = true;
+            item._showCategoryLabel = typeof service.options.showsMultipleCategories !== 'undefined';
             if( service.options.showsMultipleCategories )
                 if( data.extras )
                     if( data.extras.hideCategoryInCards )
