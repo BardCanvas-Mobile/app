@@ -51,10 +51,9 @@ var BCapp = {
     
     imgCacheEnabled: true,
     
-    /**
-     * @var {BCglobalSettingsClass}
-     */
-    settings: null,
+    defaults: {
+        feedsRetrievingInterval: 3600 * 1000
+    },
     
     /**
      * @var {string} ios, android
@@ -110,7 +109,6 @@ var BCapp = {
     
     init: function()
     {
-        BCapp.settings = new BCglobalSettingsClass();
         BCapp.os = BCapp.framework.device.os;
         
         ImgCache.options.chromeQuota           = 50 * 1024 * 1024;
@@ -120,33 +118,36 @@ var BCapp = {
             function () { BCapp.imgCacheEnabled = false; }
         );
         
-        BCapp.__preloadSegments();
-        
-        BCapp.__adjustOrientation();
-        $(window).resize(function() { BCapp.__adjustOrientation(); });
-        
-        var $progress = $('.bc-loader-container .bc-progress-bar');
-        $progress.circleProgress();
-        
-        BCapp.__setLanguage();
-        $progress.circleProgress('value', 0.2);
-        
-        BCapp.__loadRequirements();
-        $progress.circleProgress('value', 0.4);
-        
-        BCeventHandlers.init();
-        $progress.circleProgress('value', 0.6);
-        
-        BCwebsitesRepository.loadWebsitesRegistry(function()
+        BCglobalSettings.init(function()
         {
-            $progress.circleProgress('value', 0.8);
-            BCapp.__initViews(function()
+            BCapp.__preloadSegments();
+            
+            BCapp.__adjustOrientation();
+            $(window).resize(function() { BCapp.__adjustOrientation(); });
+            
+            var $progress = $('.bc-loader-container .bc-progress-bar');
+            $progress.circleProgress();
+            
+            BCapp.__setLanguage();
+            $progress.circleProgress('value', 0.2);
+            
+            BCapp.__loadRequirements();
+            $progress.circleProgress('value', 0.4);
+            
+            BCeventHandlers.init();
+            $progress.circleProgress('value', 0.6);
+            
+            BCwebsitesRepository.loadWebsitesRegistry(function()
             {
-                $progress.circleProgress('value', 1);
+                $progress.circleProgress('value', 0.8);
+                BCapp.__initViews(function()
+                {
+                    $progress.circleProgress('value', 1);
+                });
             });
+            
+            setInterval(function() { BCapp.updateTimeAgoDates(); }, 30000);
         });
-        
-        setInterval(function() { BCapp.updateTimeAgoDates(); }, 30000);
     },
     
     updateTimeAgoDates: function()
@@ -222,6 +223,12 @@ var BCapp = {
         $.get('pages/website_addition/index.html', function(html)
         {
             BCapp.__compiledTemplates['pages/website_addition/index.html']
+                = Template7.compile(html);
+        });
+        
+        $.get('pages/configuration/index.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/configuration/index.html']
                 = Template7.compile(html);
         });
         
@@ -323,16 +330,20 @@ var BCapp = {
     
     __setLanguage: function()
     {
-        var browserLanguage = navigator.language;
-        if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
+        if( BCglobalSettings.language === '' )
+        {
+            var browserLanguage = navigator.language;
+            if( browserLanguage.length > 2 ) browserLanguage = browserLanguage.substring(0, 2);
+            
+            if( browserLanguage === 'es' ) BCglobalSettings.language = 'es_LA';
+            else                           BCglobalSettings.language = 'en_US';
+        }
         
-        if( browserLanguage === 'es' ) BCapp.settings.language = 'es_LA';
-        else                           BCapp.settings.language = 'en_US';
-        
-        moment.locale(browserLanguage);
+        moment.locale(BCglobalSettings.language);
         
         $('head').append(sprintf(
-            '<script type="text/javascript" src="js/language/%s.js"></script>', BCapp.settings.language
+            '<script type="text/javascript" src="js/language/%s.js"></script>',
+            BCglobalSettings.language
         ));
         
         Template7.global.language = BClanguage;
@@ -410,7 +421,6 @@ var BCapp = {
             { reload: true },
             function() {
                 var $form = $('#add_website_form');
-                $form[0].reset();
                 $form.ajaxForm({
                     target:       '#ajax_form_target',
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
@@ -509,7 +519,19 @@ var BCapp = {
     
     renderSiteSelector: function(callback)
     {
-        var context = { registeredSites: [] };
+        var context   = { registeredSites: BCapp.__buildRegisteredSitesForSelector() };
+        var template  = BCapp.getCompiledTemplate('#sidebar_sites_selector');
+        var finalHTML = template(context);
+        
+        $('#left-panel').html(finalHTML);
+        
+        if( typeof callback === 'function' ) callback();
+    },
+    
+    __buildRegisteredSitesForSelector: function()
+    {
+        var __return = [];
+        
         for( var i in BCwebsitesRepository.collection )
         {
             var website   = BCwebsitesRepository.collection[i];
@@ -519,25 +541,18 @@ var BCapp = {
             if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
             {
                 var manifest = BCmanifestsRepository.collection[website.manifestFileHandler];
-                context.registeredSites[context.registeredSites.length] = {
+                __return[__return.length] = {
+                    originalIndex:   i,
                     targetView:      '.' + websiteCN,
                     siteLink:        '#' + websiteCN,
                     siteIcon:        manifest.icon,
                     siteShortName:   manifest.shortName,
                     userDisplayName: website.userDisplayName
                 };
-                
-                console.log(sprintf('%s added to the selector menu', manifest.shortName));
             }
         }
         
-        // console.log(context);
-        var template  = BCapp.getCompiledTemplate('#sidebar_sites_selector');
-        var finalHTML = template(context);
-        
-        $('#left-panel').html(finalHTML);
-        
-        if( typeof callback === 'function' ) callback();
+        return __return;
     },
     
     __renderAllWebsiteViews: function(callback) 
@@ -564,7 +579,8 @@ var BCapp = {
         var languageFileName = sprintf('%s.%s.json', templateFileName, BClanguage.iso);
         $.getJSON(languageFileName, function(pageLanguage)
         {
-            params.context  = pageLanguage;
+            if( typeof params.context === 'undefined' ) params.context = {};
+            for(var i in pageLanguage) params.context[i]  = pageLanguage[i];
             params.template = BCapp.getCompiledTemplate(templateFileName);
             view.router.load(params);
             
@@ -853,10 +869,13 @@ var BCapp = {
             $page = $(BCapp.currentView.selector).find('.service-page');
             if( typeof $page.attr('data-initialized') === 'undefined' && triggerAutoLoad )
             {
-                console.log(
-                    '%c>>> Triggering service load on page [%s]', 'color: green;', $page.attr('data-page')
-                );
-                BCapp.triggerServiceLoad( $page.attr('data-page') );
+                if( typeof $page.attr('data-page') !== 'undefined' )
+                {
+                    console.log(
+                        '%c>>> Triggering service load on page [%s]', 'color: green;', $page.attr('data-page')
+                    );
+                    BCapp.triggerServiceLoad( $page.attr('data-page') );
+                }
             }
         }
         else
@@ -1101,6 +1120,7 @@ var BCapp = {
         console.log(sprintf('Fetching %s...', url));
         if( showIndicator ) BCtoolbox.showFullPageLoader();
         
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         $.get(url, params, function(html)
         {
             if( showIndicator ) BCtoolbox.hideFullPageLoader();
@@ -1201,6 +1221,7 @@ var BCapp = {
         console.log(sprintf('Fetching %s...', url));
         if( showIndicator ) BCtoolbox.showFullPageLoader();
         
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         $.getJSON(url, params, function(data)
         {
             if( showIndicator ) BCtoolbox.hideFullPageLoader();
@@ -1492,6 +1513,155 @@ var BCapp = {
             $popup.find('iframe').attr('src', 'about:blank');
             BCapp.framework.closeModal();
         }
+    },
+    
+    openConfigurationPage: function()
+    {
+        var params = {
+            reload:  true,
+            context: {
+                __sitesSelectorItems: BCapp.__buildRegisteredSitesForSelector()
+            }
+        };
+        
+        BCapp.renderPage(
+            'pages/configuration/index.html',
+            BCapp.mainView,
+            params,
+            function() { BCapp.__prepareConfigurationPage(); BCapp.showView('.view-main'); }
+        );
+    },
+    
+    /**
+     * @private
+     */
+    __prepareConfigurationPage: function()
+    {
+        var $page = $('.page[data-page="global-configuration"]');
+        var $group, $item;
+        
+        // Appearance: layout theme
+        $group = $page.find('li[data-setting="theme"]');
+        $group.find(sprintf('input[name="theme"][value="%s"]', BCglobalSettings.theme)).prop('checked', true);
+        $group.find('input[name="theme"]').bind('change', function()
+        {
+            var $this = $(this);
+            var name  = $this.attr('name');
+            var value = $this.val();
+            BCglobalSettings.set(name, value);
+        });
+        
+        // Appearance: language
+        $group = $page.find('li[data-setting="language"]');
+        $item  = $group.find(sprintf('select[name="language"] option[value="%s"]', BCglobalSettings.language));
+        $item.prop('selected', true);
+        $group.find(sprintf('.selected-item-label')).text($item.text());
+        $group.find('select[name="language"]').bind('change', function()
+        {
+            var value = $(this).find('option:selected').val();
+            BCglobalSettings.set('language', value);
+            
+            BCapp.framework.confirm(
+                BClanguage.languageSwitchingConfirmation.message,
+                BClanguage.languageSwitchingConfirmation.title,
+                function() { location.reload(); }
+            )
+        });
+        
+        // Media: images
+        $group = $page.find('.media-images');
+        
+        // Media: max image width
+        $item = $group.find(sprintf('select[name="maxImageWidth"] option[value="%s"]', BCglobalSettings.maxImageWidth));
+        $item.prop('selected', true);
+        $group.find(sprintf('li[data-setting="maxImageWidth"] .selected-item-label')).text($item.text());
+        $group.find('select[name="maxImageWidth"]').bind('change', function()
+        {
+            var value = $(this).find('option:selected').val();
+            BCglobalSettings.set('maxImageWidth', value);
+        });
+        
+        // Media: max JPEG quality
+        $item = $group.find('input[name="maxJPEGquality"]');
+        $item.val( BCglobalSettings.maxJPEGquality );
+        $item.bind('change', function()
+        {
+            var value = $(this).val();
+            BCglobalSettings.set('maxJPEGquality', value);
+        });
+        
+        // Media: videos
+        $group = $page.find('.media-videos');
+        
+        // Media: max video width
+        $item = $group.find(sprintf('select[name="maxVideoWidth"] option[value="%s"]', BCglobalSettings.maxVideoWidth));
+        $item.prop('selected', true);
+        $group.find(sprintf('li[data-setting="maxVideoWidth"] .selected-item-label')).text($item.text());
+        $group.find('select[name="maxVideoWidth"]').bind('change', function()
+        {
+            var value = $(this).find('option:selected').val();
+            BCglobalSettings.set('maxVideoWidth', value);
+        });
+        
+        // Media: max video bitrate
+        $item = $group.find(sprintf('select[name="maxVideoBitrate"] option[value="%s"]', BCglobalSettings.maxVideoBitrate));
+        $item.prop('selected', true);
+        $group.find(sprintf('li[data-setting="maxVideoBitrate"] .selected-item-label')).text($item.text());
+        $group.find('select[name="maxVideoBitrate"]').bind('change', function()
+        {
+            var value = $(this).find('option:selected').val();
+            BCglobalSettings.set('maxVideoBitrate', value);
+        });
+        
+        // Media: convert animated GIFs to videos
+        $item = $group.find('input[name="convertAnimatedGIFsToVideos"]');
+        $item.prop('checked', BCglobalSettings.convertAnimatedGIFsToVideos);
+        $group.find('input[name="convertAnimatedGIFsToVideos"]').bind('change', function()
+        {
+            var value = $(this).prop('checked');
+            BCglobalSettings.set('convertAnimatedGIFsToVideos', value);
+        });
+        
+        // Websites Sorter
+        if(BCwebsitesRepository.collection.length < 2 )
+        {
+            $page.find('.websites-selector').hide();
+        }
+        else
+        {
+            $page.find('.websites-selector').show();
+            BCapp.framework.sortableOpen('#websites-selector-sorter');
+            $('#websites-selector-sorter').on('sortable:sort', BCapp.__processWebsiteReordering);
+        }
+    },
+    
+    /**
+     * @private
+     */
+    __processWebsiteReordering: function()
+    {
+        var newOrder = [], index = 0, $sorter = $('#websites-selector-sorter');
+        $sorter.find('li').each(function()
+        {
+            newOrder[index] = $(this).attr('data-original-index');
+            index++;
+        });
+        
+        var newCollection = [];
+        for(var i in newOrder)
+            newCollection[newCollection.length] = BCwebsitesRepository.collection[newOrder[i]];
+        
+        BCwebsitesRepository.collection = newCollection;
+        console.log('Websites successfully reordered.');
+        BCapp.renderSiteSelector();
+        BCwebsitesRepository.saveWebsitesRegistry();
+        
+        index = 0;
+        $sorter.find('li').each(function()
+        {
+            $(this).attr('data-original-index', index);
+            index++;
+        });
     }
 };
 

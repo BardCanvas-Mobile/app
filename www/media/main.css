@@ -132,11 +132,13 @@ html.ios .toolbar-fixed .bc-nested-views-container { padding-bottom: 44px; }
 html.ios .toolbar.with-colored-labels .toolbar-inner   { padding-left: 0;   padding-right: 0;   }
 html.ios .toolbar.with-colored-labels .toolbar-inner a { padding-left: 8px; padding-right: 8px; }
 
-    /* F7 extensions */
+/* F7 extensions */
 
 body[data-orientation="landscape"] .row .landscape-50 {
     width: 50%;
 }
+
+.page[data-page="global-configuration"] .list-block li .item-text { height: auto; }
 
 /* Other fixes */
 
@@ -189,6 +191,8 @@ html.ios .floating-button { bottom: 15px; }
 
 .smart-select-popup  .list-block .item-media img ,
 .smart-select-picker .list-block .item-media img { height: 28px; }
+
+html.android .page[data-page="global-configuration"] .list-block .item-input { font-size: inherit; }
 
 /* Custom helpers */
 .bc-image-uploader .photos { display: inline; }

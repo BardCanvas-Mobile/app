@@ -235,7 +235,7 @@ var BCwebsitesRepository = {
                     BCwebsitesRepository.collection[BCwebsitesRepository.collection.length]
                         = BCwebsitesRepository.__website;
                     
-                    BCwebsitesRepository.__saveWebsitesRegistry(function()
+                    BCwebsitesRepository.saveWebsitesRegistry(function()
                     {
                         if( window.tmpReloadAppASAP )
                         {
@@ -334,10 +334,7 @@ var BCwebsitesRepository = {
         return -1;
     },
     
-    /**
-     * @private
-     */
-    __saveWebsitesRegistry: function(callback)
+    saveWebsitesRegistry: function(callback)
     {
         window.tmpWebsitesRegistryCallback = callback;
         
@@ -463,7 +460,7 @@ var BCwebsitesRepository = {
                 };
                 
                 // Update websites registry
-                BCwebsitesRepository.__saveWebsitesRegistry(function()
+                BCwebsitesRepository.saveWebsitesRegistry(function()
                 {
                     var timesShared = BCmanifestsRepository.countTimesShared(BCwebsitesRepository.__website.manifestFileHandler);
                     if( timesShared > 0 )

@@ -58,6 +58,7 @@ var BChtmlHelper = {
         console.log('Prepping provider fetchig for helper ', helper);
         console.log('Fetching provider data:', url);
         $bar.find(sel).html('<span class="preloader"></span>');
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         $.getJSON(url, params, function(data)
         {
             window.tmpHelpersLoaded++;
@@ -716,6 +717,7 @@ var BChtmlHelper = {
         
         params.since = since;
         params.until = until;
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         
         console.log(sprintf('Fetching %s...', url));
         console.log('Params: ', params);
@@ -779,6 +781,7 @@ var BChtmlHelper = {
             wasuuup:          BCtoolbox.wasuuup()
         };
         
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         console.log(sprintf('Fetching %s using %s...', url, JSON.stringify(params)));
         BCtoolbox.showFullPageLoader();
         $.getJSON(url, params, function(data)
@@ -1037,7 +1040,7 @@ var BChtmlHelper = {
             bcm_access_token: website.accessToken
         };
         BCtoolbox.showFullPageLoader();
-        console.log(url);
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         $.getJSON(url, params, function(data)
         {
             BCtoolbox.hideFullPageLoader();

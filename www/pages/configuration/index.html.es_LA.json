@@ -1,0 +1,135 @@
+{
+  "pageTitle": "Opciones de la app",
+  
+  "appearance": {
+    "title": "Interfaz",
+    "settings": {
+      "theme": {
+        "caption": "Tema de color",
+        "info":    "Nota: puede ser sobreescrito por algunos servicios.",
+        "options": [
+          {
+            "value":   "layout-default",
+            "caption": "Claro"
+          },
+          {
+            "value":   "layout-dark",
+            "caption": "Oscuro"
+          }
+        ]
+      },
+      "language": {
+        "caption": "Lenguaje de la app",
+        "info":    "Nota: no se traduce el contenido de los sitios web.",
+        "options": [
+          {
+            "value":   "en_US",
+            "caption": "English/United States"
+          },
+          {
+            "value":   "es_LA",
+            "caption": "Español/América Latina"
+          }
+        ]
+      }
+    }
+  },
+  
+  "media": {
+    "images": {
+      "label": "Recomposición de imágenes",
+      "info":  "Usa estos controles para especificar las dimensiones máximas y compresión de imágenes para ahorro de ancho de banda y espacio de almacenamiento.",
+      "maxImageWidth": {
+        "caption": "Ancho máximo",
+        "options": [
+          {
+            "value":   "",
+            "caption": "Original"
+          },
+          {
+            "value":   "480",
+            "caption": "480px"
+          },
+          {
+            "value":   "640",
+            "caption": "640px"
+          },
+          {
+            "value":   "720",
+            "caption": "720px"
+          },
+          {
+            "value":   "1280",
+            "caption": "1280px"
+          }
+        ]
+      },
+      "maxJPEGquality": {
+        "caption": "Calidad",
+        "min":     50,
+        "max":     90,
+        "step":    10,
+        "value":   90
+      }
+    },
+    "videos": {
+      "label":         "Recompresión de videos",
+      "info":          "Usa estos controles para redimensionar y recomprimir los videos en el servidor antes de descargarlos. <b>Nota:</b> algunos sitios web pueden carecer de esta característica.",
+      "maxVideoWidth": {
+        "caption": "Ancho máximo",
+        "options": [
+          {
+            "value":   "",
+            "caption": "Original"
+          },
+          {
+            "value":   "480",
+            "caption": "480px"
+          },
+          {
+            "value":   "640",
+            "caption": "640px"
+          },
+          {
+            "value":   "720",
+            "caption": "720px"
+          },
+          {
+            "value":   "1280",
+            "caption": "1280px"
+          }
+        ]
+      },
+      "maxVideoBitrate": {
+        "caption": "Calidad",
+        "options": [
+          {
+            "value":   "",
+            "caption": "Original (sin recomprimir)"
+          },
+          {
+            "value":   "256k",
+            "caption": "Baja (256kbps ~ 3mb/minuto)"
+          },
+          {
+            "value":   "512k",
+            "caption": "Media (512kbps ~ 5mb/minuto)"
+          },
+          {
+            "value":   "1024k",
+            "caption": "Alta (1024kbps ~ 9mb/minuto)"
+          }
+        ]
+      },
+      "convertAnimatedGIFsToVideos": {
+        "caption": "Convertir GIF animados",
+        "info":    "Activa esta opción para convertirlos a videos y comprimirlos con calidad media."
+      }
+    }
+  },
+  
+  "reorderWebsitesSelector": {
+    "caption": "Reordenar sitios web",
+    "info":    "Utiliza este control para cambiar el orden en el selector lateral de los sitios web instalados."
+  }
+}

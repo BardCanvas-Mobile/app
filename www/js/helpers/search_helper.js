@@ -159,6 +159,7 @@ var BCsearchHelper = {
     {
         BCsearchHelper.__running = true;
         
+        params.media_processor_args = BCglobalSettings.getArgsForRemoteMediaProcessor();
         $page.find('.empty-search-results').hide('scale', {direction: 'vertical'}, 'fast');
         console.log('Opening %s using %s...', url, JSON.stringify(params));
         $.getJSON(url, params, function(data)

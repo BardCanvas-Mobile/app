@@ -169,7 +169,7 @@ var BClanguage = {
     options:         'Options',
     
     appConfiguration: {
-        caption: 'Configuration'
+        caption: 'Options'
     },
     
     deleteWebsite: {
@@ -324,5 +324,17 @@ var BClanguage = {
     openWebsiteInBrowser: 'Open website in web browser',
     
     cannotDetectFileType: 'Sorry, but it is not possible detect the type of the file you\'ve selected. ' +
-                          'Please choose another.'
+                          'Please choose another.',
+    
+    cannotOpenSettingsFile:  'Unable to open the settings file:<br><br>'
+                             + '<span class="color-red">%s</span><br><br>'
+                             + 'Please try again. If the problem persists, please check your device storage.',
+    cannotWriteSettingsFile: 'Unable to save the settings file:<br><br>'
+                             + '<span class="color-red">%s</span><br><br>'
+                             + 'Please try again. If the problem persists, please check your device storage.',
+    
+    languageSwitchingConfirmation: {
+        title:   'Reload required',
+        message: 'The app needs to be reloaded in order to switch the language.<br><br>Would you like to do it now?'
+    }
 };

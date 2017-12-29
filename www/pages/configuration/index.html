@@ -1,0 +1,241 @@
+
+<div data-page="global-configuration" class="page navbar-fixed">
+    
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left">
+                <a class="link icon-only open-panel">
+                    <i class="bc-ios-icon icon f7-icons">bars</i>
+                    <i class="bc-android-icon fa fa-bars"></i>
+                </a>
+            </div>
+            <div class="center">
+                {{pageTitle}}
+            </div>
+            <div class="right"></div>
+        </div>
+    </div>
+    
+    <div class="page-content">
+        
+        <div class="appearance">
+            <div class="content-block-title">{{appearance.title}}</div>
+            <div class="list-block media-list">
+                <ul>
+                    <!-- Interface color theme -->
+                    {{#with appearance.settings.theme}}
+                    <li data-setting="theme">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{caption}}</div>
+                                    <div class="item-after">
+                                        <div class="item-input">
+                                            {{#options}}
+                                            <label>
+                                                <input type="radio" name="theme" value="{{value}}">
+                                                {{caption}}
+                                            </label>
+                                            {{/options}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-text">
+                                    {{info}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {{/with}}
+                    
+                    <!-- Language -->
+                    {{#with appearance.settings.language}}
+                    <li data-setting="language">
+                        <a class="item-link smart-select" data-open-in="page" data-back-on-select="true">
+                            <!-- select -->
+                            <select name="language">
+                                {{#options}}
+                                <option value="{{value}}">{{caption}}</option>
+                                {{/options}}
+                            </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{caption}}</div>
+                                        <div class="item-after selected-item-label"></div>
+                                    </div>
+                                    <div class="item-text">
+                                        {{info}}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{/with}}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="media-images">
+            {{#with media.images}}
+            <div class="content-block-title">{{label}}</div>
+            <div class="content-block" style="margin-bottom: 5px;">{{info}}</div>
+            <div class="list-block media-list" style="margin-top: 0;">
+                <ul>
+                    <!-- Max image width -->
+                    {{#with maxImageWidth}}
+                    <li data-setting="maxImageWidth">
+                        <a class="item-link smart-select" data-open-in="page" data-back-on-select="true">
+                            <!-- select -->
+                            <select name="maxImageWidth">
+                                {{#options}}
+                                <option value="{{value}}">{{caption}}</option>
+                                {{/options}}
+                            </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{caption}}</div>
+                                        <div class="item-after selected-item-label"></div>
+                                    </div>
+                                    <div class="item-text">
+                                        {{info}}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{/with}}
+                    
+                    <!-- JPEG Quality -->
+                    {{#with maxJPEGquality}}
+                    <li data-setting="maxJPEGquality">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{caption}}</div>
+                                    <div class="item-after">
+                                        <div class="item-input">
+                                            <div class="range-slider">
+                                                <input type="range" name="maxJPEGquality"
+                                                       min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {{/with}}
+                </ul>
+            </div>
+            {{/with}}
+        </div>
+        
+        <div class="media-videos">
+            {{#with media.videos}}
+            <div class="content-block-title">{{label}}</div>
+            <div class="content-block" style="margin-bottom: 5px;">{{info}}</div>
+            <div class="list-block media-list" style="margin-top: 0;">
+                <ul>
+                    <!-- Max video width -->
+                    {{#with maxVideoWidth}}
+                    <li data-setting="maxVideoWidth">
+                        <a class="item-link smart-select" data-open-in="page" data-back-on-select="true">
+                            <!-- select -->
+                            <select name="maxVideoWidth">
+                                {{#options}}
+                                <option value="{{value}}">{{caption}}</option>
+                                {{/options}}
+                            </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{caption}}</div>
+                                        <div class="item-after selected-item-label"></div>
+                                    </div>
+                                    <div class="item-text">
+                                        {{info}}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{/with}}
+                    
+                    <!-- Max video quality (bitrate) -->
+                    {{#with maxVideoBitrate}}
+                    <li data-setting="maxVideoBitrate">
+                        <a class="item-link smart-select" data-open-in="page" data-back-on-select="true">
+                            <!-- select -->
+                            <select name="maxVideoBitrate">
+                                {{#options}}
+                                <option value="{{value}}">{{caption}}</option>
+                                {{/options}}
+                            </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{{caption}}</div>
+                                        <div class="item-after selected-item-label"></div>
+                                    </div>
+                                    <div class="item-text">
+                                        {{info}}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{/with}}
+                    
+                    <!-- Convert GIFs to videos -->
+                    {{#with convertAnimatedGIFsToVideos}}
+                    <li data-setting="convertAnimatedGIFsToVideos">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{{caption}}</div>
+                                    <div class="item-after">
+                                        <div class="item-input">
+                                            <label class="label-switch">
+                                                <input type="checkbox" name="convertAnimatedGIFsToVideos">
+                                                <div class="checkbox"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-text">
+                                    {{info}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {{/with}}
+                </ul>
+            </div>
+            {{/with}}
+        </div>
+        
+        <div class="websites-selector">
+            <div class="content-block-title">{{reorderWebsitesSelector.caption}}</div>
+            <div class="content-block" style="margin-bottom: 5px;">{{reorderWebsitesSelector.info}}</div>
+            <div class="list-block sortable" id="websites-selector-sorter" style="margin-top: 0">
+                <ul>
+                    {{#__sitesSelectorItems}}
+                    <li data-original-index="{{originalIndex}}">
+                        <div class="item-content">
+                            <div class="item-media"><img src="{{siteIcon}}" height="32"></div>
+                            <div class="item-inner">
+                                {{siteShortName}}
+                                {{#if userDisplayName}} ~ {{userDisplayName}} {{/if}}
+                            </div>
+                        </div>
+                        <div class="sortable-handler"></div>
+                    </li>
+                    {{/__sitesSelectorItems}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+</div>
