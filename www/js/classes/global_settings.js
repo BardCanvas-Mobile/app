@@ -16,9 +16,6 @@ var BCglobalSettings =
     // ffmpeg -i original.mp4 -vf scale=720:-2 -b:a 128k -ac 2 -b:v  512k resampled-512k.mp4
     // ffmpeg -i original.mp4 -vf scale=720:-2 -b:a 128k -ac 2 -b:v 1024k resampled-1024k.mp4
     
-    convertAnimatedGIFsToVideos: false,
-    // ffmpeg -i animated1.gif -movflags faststart -pix_fmt yuv420p -vf "scale=480:-2" -b:v 384k video.mp4
-    
     init: function(callback)
     {
         window.tmplSettingsPostInitCallback = callback;
@@ -185,12 +182,11 @@ var BCglobalSettings =
     getArgsForRemoteMediaProcessor: function()
     {
         return sprintf(
-            'max_image_width:%s,max_jpeg_quality:%s,max_video_width:%s,max_video_bitrate:%s,convert_gifs_to_videos:%s',
+            'max_image_width:%s,max_jpeg_quality:%s,max_video_width:%s,max_video_bitrate:%s',
             BCglobalSettings.maxImageWidth,
             BCglobalSettings.maxJPEGquality,
             BCglobalSettings.maxVideoWidth,
-            BCglobalSettings.maxVideoBitrate,
-            BCglobalSettings.convertAnimatedGIFsToVideos.toString()
+            BCglobalSettings.maxVideoBitrate
         );
     }
 };

@@ -1613,15 +1613,6 @@ var BCapp = {
             BCglobalSettings.set('maxVideoBitrate', value);
         });
         
-        // Media: convert animated GIFs to videos
-        $item = $group.find('input[name="convertAnimatedGIFsToVideos"]');
-        $item.prop('checked', BCglobalSettings.convertAnimatedGIFsToVideos);
-        $group.find('input[name="convertAnimatedGIFsToVideos"]').bind('change', function()
-        {
-            var value = $(this).prop('checked');
-            BCglobalSettings.set('convertAnimatedGIFsToVideos', value);
-        });
-        
         // Websites Sorter
         if(BCwebsitesRepository.collection.length < 2 )
         {
