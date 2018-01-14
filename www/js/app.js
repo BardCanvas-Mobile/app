@@ -741,6 +741,18 @@ var BCapp = {
         var finalHTML = template(context);
         $('.views').append(finalHTML);
         
+        var $view = $('#' + websiteMainViewClassName);
+        $view.data('website', website);
+        $view.data('manifest', manifest);
+        for(var x in renderingServices)
+        {
+            var $servicePage = $view.find('#' + renderingServices[x].meta.tabTarget);
+            
+            $servicePage.data('service',  service);
+            $servicePage.data('website',  website);
+            $servicePage.data('manifest', manifest);
+        }
+        
         var params = {};
         switch( BCapp.os ) {
             case 'ios':
