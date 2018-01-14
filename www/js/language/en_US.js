@@ -336,5 +336,7 @@ var BClanguage = {
     languageSwitchingConfirmation: {
         title:   'Reload required',
         message: 'The app needs to be reloaded in order to switch the language.<br><br>Would you like to do it now?'
-    }
+    },
+    
+    today: 'Today'
 };

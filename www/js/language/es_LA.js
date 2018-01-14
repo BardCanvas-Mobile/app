@@ -341,5 +341,7 @@ var BClanguage = {
     languageSwitchingConfirmation: {
         title:   'Recarga necesaria',
         message: 'La app necesita recargarse para poder cambiar el lenguaje.<br><br>¿Deseas hacerlo ahora?'
-    }
+    },
+    
+    today: 'Hoy'
 };
