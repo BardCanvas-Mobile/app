@@ -20,7 +20,8 @@ var $$ = Dom7;
 // BlockUI defaults
 $.blockUI.defaults.css.border = '';
 $.blockUI.defaults.css.backgroundColor = 'transparent';
-$.blockUI.defaults.message = '<span class="preloader preloader-white bc-preloader-biggest"></span>';
+$.blockUI.defaults.message        = '<span class="preloader preloader-white bc-preloader-biggest"></span>';
+$.blockUI.defaults.messageSmaller = '<span class="preloader preloader-white bc-preloader-smaller"></span>';
 
 Template7.global = {
     appVersion: '0.0.1',
