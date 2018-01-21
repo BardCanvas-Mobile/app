@@ -342,5 +342,13 @@ var BClanguage = {
     
     cannotGetFeaturedSitesList: 'Cannot get the featured sites list from the BardCanvas website.<br><br>' +
                                 'Error: <span class="color-red">%s</span><br><br>' +
-                                'Please try reloading the app <a onclick="location.reload()">clicking here</a>.'
+                                'Please try reloading the app <a onclick="location.reload()">clicking here</a>.',
+    
+    chatMessages: {
+        messagePlaceholder: 'Type your message',
+        closeChat:          'Close chat',
+        archiveChat:        'Archive chat',
+        deleteChat:         'Delete chat',
+        blockUser:          'Block user'
+    }
 };

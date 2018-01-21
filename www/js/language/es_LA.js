@@ -347,5 +347,13 @@ var BClanguage = {
     
     cannotGetFeaturedSitesList: 'No se ha podido descargar la lista de sitios destacados del sitio web de BardCanvas.<br><br>' +
                                 'Error: <span class="color-red">%s</span><br><br>' +
-                                'Por favor trata recargando la app <a onclick="location.reload()">dando click aquí</a>.'
+                                'Por favor trata recargando la app <a onclick="location.reload()">dando click aquí</a>.',
+    
+    chatMessages: {
+        messagePlaceholder: 'Escribe tu mensaje',
+        closeChat:          'Cerrar chat',
+        archiveChat:        'Archivar chat',
+        deleteChat:         'Borrar chat',
+        blockUser:          'Bloquear usuario'
+    }
 };

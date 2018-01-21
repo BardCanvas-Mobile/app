@@ -264,6 +264,12 @@ var BCapp = {
             BCapp.__compiledTemplates['pages/misc_segments/form_composer_page.html']
                 = Template7.compile(html);
         });
+        
+        $.get('pages/misc_segments/chat_conversation_template.html', function(html)
+        {
+            BCapp.__compiledTemplates['pages/misc_segments/chat_conversation_template.html']
+                = Template7.compile(html);
+        });
     },
     
     __adjustOrientation: function()

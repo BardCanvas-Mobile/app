@@ -1,0 +1,74 @@
+
+<div class="page mchat-conversation navbar-fixed toolbar-fixed" id="{{conversationId}}" style="display: none;">
+    
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left">
+                <a class="link icon-only" onclick="BCmchatController.openChatUsersIndex('{{conversationId}}')">
+                    <i class="bc-ios-icon icon f7-icons">chevron_left</i>
+                    <i class="bc-android-icon fa fa-chevron-left"></i>
+                </a>
+            </div>
+            <div class="center">
+                <img class="bc-website-icon" src="{{userAvatar}}">
+                {{userDisplayName}}
+            </div>
+            <div class="right">
+                <a class="link icon-only open-popover" data-popover="#popover_links{{conversationId}}">
+                    <i class="bc-ios-icon icon f7-icons">gear</i>
+                    <i class="bc-android-icon fa fa-cog"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toolbar messagebar always-visible">
+        <div class="toolbar-inner">
+            <textarea placeholder="{{messages.messagePlaceholder}}"></textarea>
+            <a class="link icon-only attach-image" onclick="BCmchatController.getPhotoFromLibrary(this)">
+                <i class="bc-ios-icon icon f7-icons">images_fill</i>
+                <i class="bc-android-icon fa fa-picture-o"></i>
+            </a>
+            <a class="link icon-only submit">
+                <i class="bc-ios-icon icon f7-icons">paper_plane_fill</i>
+                <i class="bc-android-icon fa fa-paper-plane"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="page-content messages-content">
+        <div class="messages"></div>
+    </div>
+    
+    <div class="popover" id="popover_links{{conversationId}}">
+        <div class="popover-angle"></div>
+        <div class="popover-inner">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <a class="list-button item-link close-popover close"
+                           onclick="BCmchatController.closeChat('{{conversationId}}'); BCmchatController.openChatUsersIndex('{{conversationId}}');">
+                            {{messages.closeChat}}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-button item-link close-popover disabled archive">
+                            {{messages.archiveChat}}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-button item-link close-popover disabled delete color-red">
+                            {{messages.deleteChat}}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-button item-link close-popover disabled block color-orange">
+                            {{messages.blockUser}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</div>

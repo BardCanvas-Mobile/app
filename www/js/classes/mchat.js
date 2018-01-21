@@ -43,11 +43,15 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
     {
         var _this = this;
         var $root = $(this.config.chatRootSelector);
-        var html  = $root.find('.mchat-template').html();
-        
-        html = html.replace( /__conversationId__/g,  this.config.conversationId  );
-        html = html.replace( /__userDisplayName__/g, this.config.userDisplayName );
-        html = html.replace( /__userAvatar__/g,      this.config.userAvatar      );
+    
+        var template = BCapp.getCompiledTemplate('pages/misc_segments/chat_conversation_template.html');
+        var context  = {
+            conversationId: this.config.conversationId,
+            userDisplayName: this.config.userDisplayName,
+            userAvatar: this.config.userAvatar,
+            messages: BClanguage.chatMessages
+        };
+        var html     = template(context);
         $root.find('.chats-root .pages').append(html);
         
         var mchatsel = '#' + this.config.conversationId + ' .messages';
