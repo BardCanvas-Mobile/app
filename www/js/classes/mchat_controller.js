@@ -34,22 +34,22 @@ var BCmchatController = {
         );
     },
     
-    openChatUsersIndex: function(trigger)
+    openChatUsersIndex: function(conversationId)
     {
-        var $trigger     = $(trigger);
-        var rootSelector = '#' + $trigger.closest('.mchat-root').attr('id');
-        var $root        = $(rootSelector);
+        var $conversation = $('#' + conversationId);
+        var rootSelector  = '#' + $conversation.closest('.mchat-root').attr('id');
+        var $root         = $(rootSelector);
         
         $root.find('.view.chats-root').hide('slide', {direction: 'right'}, 100);
         $root.find('.view.users-list').show('slide', {direction: 'left'},  100);
     },
     
-    closeChat: function(trigger)
+    closeChat: function(conversationId)
     {
-        var $trigger  = $(trigger);
-        var $chatPage = $trigger.closest('.mchat-conversation');
-        var chatId    = $chatPage.attr('id');
-        var chat      = $chatPage.data('mchat');
+        var $conversation = $('#' + conversationId);
+        var $chatPage     = $conversation.closest('.mchat-conversation');
+        var chatId        = $chatPage.attr('id');
+        var chat          = $chatPage.data('mchat');
         if( chat )
         {
             if( chat.interval ) clearInterval(chat.interval);

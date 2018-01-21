@@ -45,9 +45,9 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
         var $root = $(this.config.chatRootSelector);
         var html  = $root.find('.mchat-template').html();
         
-        html = html.replace( '__conversationId__',  this.config.conversationId  );
-        html = html.replace( '__userDisplayName__', this.config.userDisplayName );
-        html = html.replace( '__userAvatar__',      this.config.userAvatar      );
+        html = html.replace( /__conversationId__/g,  this.config.conversationId  );
+        html = html.replace( /__userDisplayName__/g, this.config.userDisplayName );
+        html = html.replace( /__userAvatar__/g,      this.config.userAvatar      );
         $root.find('.chats-root .pages').append(html);
         
         var mchatsel = '#' + this.config.conversationId + ' .messages';
