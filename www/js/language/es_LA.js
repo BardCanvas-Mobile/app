@@ -343,5 +343,9 @@ var BClanguage = {
         message: 'La app necesita recargarse para poder cambiar el lenguaje.<br><br>¿Deseas hacerlo ahora?'
     },
     
-    today: 'Hoy'
+    today: 'Hoy',
+    
+    cannotGetFeaturedSitesList: 'No se ha podido descargar la lista de sitios destacados del sitio web de BardCanvas.<br><br>' +
+                                'Error: <span class="color-red">%s</span><br><br>' +
+                                'Por favor trata recargando la app <a onclick="location.reload()">dando click aquí</a>.'
 };

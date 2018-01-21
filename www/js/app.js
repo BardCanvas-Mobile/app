@@ -37,6 +37,8 @@ var BCapp = {
     name:    'BardCanvas Mobile',
     version: Template7.global.appVersion,
     
+    featuredSitesInfoURLprefix: 'https://bardcanvas.com/bcm_featured_sites',
+    
     userAgent: 'BardCanvas Mobile/' + Template7.global.appVersion
                + ' '
                + navigator.appCodeName + '/' + navigator.appVersion,
@@ -396,38 +398,28 @@ var BCapp = {
         {
             console.log('No websites registered. Showing addition form.');
             
-            BCapp.renderPage(
-                'pages/website_addition/index.html',
-                BCapp.addSiteView,
-                { reload: true },
-                function() {
-                    var $form = $('#add_website_form');
-                    $form[0].reset();
-                    $form.ajaxForm({
-                        target:       '#ajax_form_target',
-                        beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
-                    });
-                    window.tmpInitViewsPostRenderingAction();
-                    BCapp.showView('.view-add-site', null, false);
-                }
-            );
+            BCapp.renderWebsiteAdditionForm(function() {
+                var $form = $('#add_website_form');
+                $form[0].reset();
+                $form.ajaxForm({
+                    target:       '#ajax_form_target',
+                    beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
+                });
+                window.tmpInitViewsPostRenderingAction();
+                BCapp.showView('.view-add-site', null, false);
+            });
             
             return;
         }
         
         console.log(sprintf('%s websites registered. Prepping addition form.', BCwebsitesRepository.collection.length));
-        BCapp.renderPage(
-            'pages/website_addition/index.html',
-            BCapp.addSiteView,
-            { reload: true },
-            function() {
-                var $form = $('#add_website_form');
-                $form.ajaxForm({
-                    target:       '#ajax_form_target',
-                    beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
-                });
-            }
-        );
+        BCapp.renderWebsiteAdditionForm(function() {
+            var $form = $('#add_website_form');
+            $form.ajaxForm({
+                target:       '#ajax_form_target',
+                beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
+            });
+        });
         
         window.tmpWebsiteToShowInterval = null;
         window.tmpWebsite               = BCwebsitesRepository.collection[0];
@@ -573,6 +565,37 @@ var BCapp = {
         }
         
         if( typeof callback === 'function' ) callback();
+    },
+    
+    renderWebsiteAdditionForm: function(callback)
+    {
+        var template = 'pages/website_addition/index.html';
+        var view     = BCapp.addSiteView;
+        var params   = { reload: true, context: {showFeaturedSites: true, featuredSites: []} };
+            
+        var url = sprintf('%s/index-%s.json?wasuuup=%s',
+            BCapp.featuredSitesInfoURLprefix, BClanguage.iso, BCtoolbox.wasuuup()
+        );
+        console.log('%cFetching featured sites list from %s...', 'color: green', url);
+        $.getJSON(url, function(data)
+        {
+            console.log('%cFEatured sites list loaded.', 'color: green');
+            params.context.featuredSites = data.featuredSites;
+            
+            BCapp.renderPage(template, view, params, callback);
+        })
+        .fail(function($xhr, status, error)
+        {
+            console.log('%cFailed to load featured sites list!', 'color: maroon');
+            
+            params.context.showFeaturedSites             = false;
+            params.context.cannotGetFeaturedSitesMessage = sprintf(
+                BClanguage.cannotGetFeaturedSitesList,
+                error
+            );
+            
+            BCapp.renderPage(template, view, params, callback);
+        });
     },
     
     renderPage: function(templateFileName, view, params, callback)

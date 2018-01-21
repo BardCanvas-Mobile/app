@@ -338,5 +338,9 @@ var BClanguage = {
         message: 'The app needs to be reloaded in order to switch the language.<br><br>Would you like to do it now?'
     },
     
-    today: 'Today'
+    today: 'Today',
+    
+    cannotGetFeaturedSitesList: 'Cannot get the featured sites list from the BardCanvas website.<br><br>' +
+                                'Error: <span class="color-red">%s</span><br><br>' +
+                                'Please try reloading the app <a onclick="location.reload()">clicking here</a>.'
 };

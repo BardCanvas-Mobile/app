@@ -90,31 +90,42 @@
             </div>
             
             <div class="col-100 landscape-50">
-                <!-- Featured sites -->
-                <div class="content-block-title">{{featuredWebsitesTitle}}</div>
-                <div class="list-block media-list inset alignleft" id="bc-featured-sites-list">
-                    <ul>
-                        {{#featuredSites}}
-                        <li>
-                            <div class="item-content bc-pseudolink"
-                                 onclick="BCwebsitesRepository.showFeaturedSiteDetails('{{title}}', '{{screenshot}}', '{{url}}')">
-                                <div class="item-media"><img width="64" src="{{icon}}"></div>
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">{{title}}</div>
-                                    </div>
-                                    <div class="item-subtitle">
-                                        <div class="chip">
-                                            <div class="chip-label">{{language}}</div>
+                {{#if showFeaturedSites}}
+                    <!-- Featured sites -->
+                    <div class="content-block-title">{{featuredWebsitesTitle}}</div>
+                    <div class="list-block media-list inset alignleft" id="bc-featured-sites-list">
+                        <ul>
+                            {{#featuredSites}}
+                                {{#if enabled}}
+                                    <li>
+                                        <div class="item-content bc-pseudolink"
+                                             onclick="BCwebsitesRepository.showFeaturedSiteDetails('{{title}}', '{{screenshot}}', '{{url}}')">
+                                            <div class="item-media"><img width="64" src="{{icon}}"></div>
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">{{title}}</div>
+                                                </div>
+                                                <div class="item-subtitle">
+                                                    <div class="chip">
+                                                        <div class="chip-label">{{language}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-text">{{description}}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="item-text">{{description}}</div>
-                                </div>
-                            </div>
-                        </li>
-                        {{/featuredSites}}
-                    </ul>
-                </div>
+                                    </li>
+                                {{/if}}
+                            {{/featuredSites}}
+                        </ul>
+                    </div>
+                {{else}}
+                    <div class="content-block-title">{{featuredWebsitesTitle}}</div>
+                    <div class="content-block">
+                        <div class="content-block-inner framed_content state_highlight">
+                            {{cannotGetFeaturedSitesMessage}}
+                        </div>
+                    </div>
+                {{/if}}
             </div>
             
         </div>
