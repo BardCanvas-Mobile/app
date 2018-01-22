@@ -350,5 +350,29 @@ var BClanguage = {
         archiveChat:        'Archive chat',
         deleteChat:         'Delete chat',
         blockUser:          'Block user'
+    },
+    
+    chatPrompts: {
+        userBlock: 'Do you want to block this user?<br><br>' +
+                   'If you want to unblock them, you will have to do it from your' +
+                   'preferences editor on the website using a web browser.',
+        delete:    'Do you want to delete this conversation?<br><br>' +
+                   'Note: only your side of the conversation will be deleted.<br><br>' +
+                   'This action cannot be undone.',
+        archive:   'Do you want to archive this conversation?<br><br>' +
+                   'It will be moved to the archived conversations area.'
+    },
+    
+    chatActionErrors: {
+        title:            'Unable to execute action',
+        add_to_blocklist: 'Unable to add user to blocklist.<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Please try again. If the problem persists, please contact the website support staff.',
+        delete:           'Unable to delete the conversation.<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Please try again. If the problem persists, please contact the website support staff.',
+        archive:          'Unable to archive the conversation.<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Please try again. If the problem persists, please contact the website support staff.'
     }
 };

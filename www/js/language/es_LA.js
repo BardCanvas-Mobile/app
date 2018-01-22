@@ -355,5 +355,32 @@ var BClanguage = {
         archiveChat:        'Archivar chat',
         deleteChat:         'Borrar chat',
         blockUser:          'Bloquear usuario'
+    },
+    
+    chatPrompts: {
+        userBlock: '¿Deseas bloquear a esta persona?<br><br>' +
+                   'Si deseas desbloquearla, deberás hacerlo desde el editor de tus preferencias' +
+                   'en el sitio web usando un navegador.',
+        delete:    '¿Deseas eliminar esta conversación?<br><br>' +
+                   'Nota: sólo se eliminará tu lado de la misma.<br><br>' +
+                   'Esta acción no puede deshacerse.',
+        archive:   '¿Deseas archivar esta conversación?<br><br>' +
+                   'Se moverá al área de conversaciones archivadas.'
+    },
+    
+    chatActionErrors: {
+        title:            'Error al ejecutar acción',
+        add_to_blocklist: 'No se ha podido agregar al usuario a la lista de bloqueo:<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Por favor intenta de nuevo. Si el problema persiste, por favor ponte en contacto ' +
+                          'con el staff de soporte técnico del sitio web.',
+        delete:           'No se ha podido eliminar la conversación.<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Por favor intenta de nuevo. Si el problema persiste, por favor ponte en contacto ' +
+                          'con el staff de soporte técnico del sitio web.',
+        archive:          'No se ha podido archivar la conversación.<br><br>' +
+                          'Error: <span class="color-red">%s</span><br><br>' +
+                          'Por favor intenta de nuevo. Si el problema persiste, por favor ponte en contacto ' +
+                          'con el staff de soporte técnico del sitio web.'
     }
 };

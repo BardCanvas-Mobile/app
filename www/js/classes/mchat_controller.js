@@ -268,5 +268,92 @@ var BCmchatController = {
         };
         
         window.resolveLocalFileSystemURL(fileURI, success, fail);
+    },
+    
+    triggerClose: function(conversationId)
+    {
+        BCmchatController.closeChat(conversationId);
+        BCmchatController.openChatUsersIndex(conversationId);
+    },
+    
+    triggerUserBlock: function(conversationId)
+    {
+        BCapp.framework.confirm(BClanguage.chatPrompts.userBlock, function()
+        {
+            BCmchatController.__execRemoteAction('add_to_blocklist', conversationId);
+        });
+    },
+    
+    triggerDelete: function(conversationId)
+    {
+        BCapp.framework.confirm(BClanguage.chatPrompts.delete, function()
+        {
+            BCmchatController.__execRemoteAction('delete', conversationId);
+        });
+    },
+    
+    triggerArchive: function(conversationId)
+    {
+        BCapp.framework.confirm(BClanguage.chatPrompts.archive, function()
+        {
+            BCmchatController.__execRemoteAction('archive', conversationId);
+        });
+    },
+    
+    /**
+     * @param {string} action
+     * @param {string} conversationId
+     * @private
+     */
+    __execRemoteAction: function(action, conversationId)
+    {
+        var $chatPage    = $('#' + conversationId);
+        var chat         = $chatPage.data('mchat');
+        var $root        = $(chat.config.chatRootSelector);
+        var $servicePage = $root.closest('.service-container');
+        var service      = $servicePage.data('service');
+        var website      = $servicePage.data('website');
+        
+        var url    = chat.config.workerURL;
+        var params = {
+            action:        action,
+            other_user_id: chat.config.userId,
+            wasuuup:       BCtoolbox.wasuuup()
+        };
+        BCtoolbox.showFullPageLoader();
+        console.log('Fetching %s...', url);
+        chat.pause();
+        $.get(url, params, function(response)
+        {
+            if( response !== 'OK' )
+            {
+                console.log('Invalid response: %s', response);
+                BCtoolbox.hideFullPageLoader();
+                
+                BCapp.framework.alert(
+                    sprintf(BClanguage.chatActionErrors[action], response),
+                    BClanguage.chatActionErrors.title,
+                    function() { chat.resume(); }
+                );
+                
+                return;
+            }
+            
+            BCtoolbox.hideFullPageLoader();
+            console.log('Done.');
+            BCmchatController.triggerClose(conversationId);
+            BCmchatController.reloadChatUsersIndex(chat.config.chatRootSelector);
+        })
+        .fail(function($xhr, status, error)
+        {
+            console.log('AJAX error: %s', error);
+            BCtoolbox.hideFullPageLoader();
+            
+            BCapp.framework.alert(
+                sprintf(BClanguage.chatActionErrors[action], error),
+                BClanguage.chatActionErrors.title,
+                function() { chat.resume(); }
+            );
+        });
     }
 };

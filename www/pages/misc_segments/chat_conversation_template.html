@@ -47,25 +47,30 @@
                 <ul>
                     <li>
                         <a class="list-button item-link close-popover close"
-                           onclick="BCmchatController.closeChat('{{conversationId}}'); BCmchatController.openChatUsersIndex('{{conversationId}}');">
+                           onclick="BCmchatController.triggerClose('{{conversationId}}')">
                             {{messages.closeChat}}
                         </a>
                     </li>
                     <li>
-                        <a class="list-button item-link close-popover disabled archive">
+                        <a class="list-button item-link close-popover archive"
+                           onclick="BCmchatController.triggerArchive('{{conversationId}}')">
                             {{messages.archiveChat}}
                         </a>
                     </li>
                     <li>
-                        <a class="list-button item-link close-popover disabled delete color-red">
+                        <a class="list-button item-link close-popover delete color-red"
+                           onclick="BCmchatController.triggerDelete('{{conversationId}}')">
                             {{messages.deleteChat}}
                         </a>
                     </li>
+                    <!--
                     <li>
-                        <a class="list-button item-link close-popover disabled block color-orange">
+                        <a class="list-button item-link close-popover block color-orange"
+                           onclick="BCmchatController.triggerUserBlock('{{conversationId}}')">
                             {{messages.blockUser}}
                         </a>
                     </li>
+                    -->
                 </ul>
             </div>
         </div>

@@ -258,5 +258,17 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
         
     };
     
+    this.pause = function()
+    {
+        if( this.interval ) clearInterval(this.interval);
+        if( this.xhr ) this.xhr.abort();
+    };
+    
+    this.resume = function()
+    {
+        var _this     = this;
+        this.interval = setInterval(function() { _this.refresh(_this); }, this.heartbit);
+    };
+    
     this.__construct();
 };
