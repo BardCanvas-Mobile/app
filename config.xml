@@ -4,8 +4,8 @@
     <description>
         BardCanvas CMS client for mobile devices
     </description>
-    <author email="acaballero@lavasoftworks.com" href="http://www.lavasoftworks.com">
-        Alejandro Caballero / LAVA SoftWorks
+    <author email="info@lavasoftworks.com" href="http://www.lavasoftworks.com">
+        Luz Marquez/Alejandro Caballero, LAVA SoftWorks
     </author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
