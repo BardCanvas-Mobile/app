@@ -195,6 +195,7 @@ html.ios .floating-button { bottom: 15px; }
 html.android .page[data-page="global-configuration"] .list-block .item-input { font-size: inherit; }
 
 /* Custom helpers */
+
 .bc-image-uploader .photos { display: inline; }
 .bc-image-uploader .bc-image-item {
     display: inline-block; vertical-align: top; position: relative;
@@ -325,6 +326,11 @@ html.ios .feed-search-page .inner-page-content .searching-progress   { margin-to
 html.ios .navbar-inner.search-navbar-control                         { padding: 0; }
 html.ios .navbar-inner.search-navbar-control .searchbar              { padding-left: 0; padding-right: 0; }
 html.ios .navbar-inner.search-navbar-control .searchbar-submit       { margin-left: 8px; margin-right: 8px; }
+
+.navbar .page-selector .item { display: inline-block; white-space: nowrap; }
+body[data-width-class="300"] .navbar .page-selector .item {
+    max-width: 155px; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* Feed: single item page */
 
