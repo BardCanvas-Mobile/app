@@ -7,11 +7,11 @@ var BCglobalSettings =
     
     theme: 'layout-default',
     
-    maxImageWidth:     '1280', // 480, 640, 1280, 0 (maximum)
-    maxJPEGquality:    '60',
+    maxImageWidth:     '0', // 480, 640, 1280, 0 (maximum)
+    maxJPEGquality:    '90',
     
-    maxVideoWidth:     '720',    // 480, 640, 720, 1280, 0 (no limit)
-    maxVideoBitrate:   "512k", // 256k (3 mb/min), 512k (5 mb/min), 1024k (9 mb/min), nothing (no limit)
+    maxVideoWidth:     '0',    // 480, 640, 720, 1280, 0 (no limit)
+    maxVideoBitrate:   '', // 256k (3 mb/min), 512k (5 mb/min), 1024k (9 mb/min), nothing (no limit)
     // ffmpeg -i original.mp4 -vf scale=720:-2 -b:a 128k -ac 2 -b:v  256k resampled-256k.mp4
     // ffmpeg -i original.mp4 -vf scale=720:-2 -b:a 128k -ac 2 -b:v  512k resampled-512k.mp4
     // ffmpeg -i original.mp4 -vf scale=720:-2 -b:a 128k -ac 2 -b:v 1024k resampled-1024k.mp4
