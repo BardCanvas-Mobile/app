@@ -156,7 +156,7 @@ html.android .service-content .page.toolbar-fixed { padding-bottom: 48px; }
 html.ios     .view.tab.service-navbar-fixed { padding-top: 44px; }
 html.android .view.tab.service-navbar-fixed { padding-top: 56px; }
 
-html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 128px; }
+html.android .navbar-fixed.toolbar-fixed .page-content { padding-top: 56px; }
 html.android #left-panel .navbar-fixed.toolbar-fixed .page-content { padding-top: 56px; }
 html.android body[data-orientation="landscape"] .bc-nested-views-container { padding-bottom: 0 !important; }
 
