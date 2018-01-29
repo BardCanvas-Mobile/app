@@ -109,17 +109,17 @@ var BCglobalSettings =
         });
     },
     
-    set: function(key, value)
+    set: function(key, value, callback)
     {
         BCglobalSettings[key] = value;
         console.log('> Setting %s set to %s', key, value);
-        BCglobalSettings.__save();
+        BCglobalSettings.__save(callback);
         
         if( key === 'theme' )
             $('body').removeClass('layout-default layout-dark').addClass(value);
     },
     
-    __save: function()
+    __save: function(callback)
     {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
@@ -137,6 +137,8 @@ var BCglobalSettings =
                         writer.onwriteend = function()
                         {
                             console.log('User preferences file saved: ' + fileEntry.toURL());
+                            
+                            if( callback ) callback();
                         };
                         writer.onerror = function(e)
                         {
