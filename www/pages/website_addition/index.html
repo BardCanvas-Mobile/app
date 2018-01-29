@@ -11,6 +11,16 @@
                     <img onclick="location.reload()" style="max-width: 75%"
                          src="media/bardcanvas_logo_850x200.png"><br>
                     {{welcome}} <span class="version">v{{@global.appVersion}}</span>
+                    <div class="buttons-row">
+                        {{#languages}}
+                            {{#js_if "this.value == BCglobalSettings.language"}}
+                                <a class="button active disabled">{{caption}}</a>
+                            {{/js_if}}
+                            {{#js_if "this.value != BCglobalSettings.language"}}
+                                <a class="button" onclick="BCtoolbox.showFullPageLoader(); BCglobalSettings.set('language', '{{value}}', function() { location.reload(); })">{{caption}}</a>
+                            {{/js_if}}
+                        {{/languages}}
+                    </div>
                 </div>
                 
                 <!-- Add website -->

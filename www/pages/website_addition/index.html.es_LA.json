@@ -8,5 +8,16 @@
   "addWebsiteButtonCaption": "Añadir ahora",
   "loginWithFacebook":       "Iniciar con Facebook",
   
+  "languages": [
+    {
+      "value":   "en_US",
+      "caption": "English"
+    },
+    {
+      "value":   "es_LA",
+      "caption": "Español"
+    }
+  ],
+  
   "featuredWebsitesTitle": "Sitios destacados"
 }

@@ -7,6 +7,17 @@
   "passwordOptional":        "Password (optional)",
   "addWebsiteButtonCaption": "Add now",
   "loginWithFacebook":       "Login with Facebook",
+
+  "languages": [
+    {
+      "value":   "en_US",
+      "caption": "English"
+    },
+    {
+      "value":   "es_LA",
+      "caption": "Español"
+    }
+  ],
   
   "featuredWebsitesTitle": "Featured websites"
 }
