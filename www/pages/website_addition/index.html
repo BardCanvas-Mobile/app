@@ -99,18 +99,20 @@
                                 {{#if enabled}}
                                     <li>
                                         <div class="item-content bc-pseudolink"
-                                             onclick="BCwebsitesRepository.showFeaturedSiteDetails('{{title}}', '{{screenshot}}', '{{url}}')">
+                                             onclick="BCapp.showFeaturedSiteDetails(this)"
+                                             data-url="{{url}}"
+                                             data-screenshot="{{screenshot}}">
                                             <div class="item-media"><img width="64" src="{{icon}}"></div>
                                             <div class="item-inner">
                                                 <div class="item-title-row">
-                                                    <div class="item-title">{{title}}</div>
+                                                    <div class="item-title" data-field="title">{{title}}</div>
                                                 </div>
                                                 <div class="item-subtitle">
                                                     <div class="chip">
                                                         <div class="chip-label">{{language}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="item-text">{{description}}</div>
+                                                <div class="item-text" data-field="description">{{description}}</div>
                                             </div>
                                         </div>
                                     </li>

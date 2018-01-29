@@ -1699,6 +1699,48 @@ var BCapp = {
             $(this).attr('data-original-index', index);
             index++;
         });
+    },
+    
+    showFeaturedSiteDetails: function(trigger)
+    {
+        var $trigger    = $(trigger);
+        var screenShot  = $trigger.attr('data-screenshot');
+        var url         = $trigger.attr('data-url');
+        var title       = $trigger.find('*[data-field="title"]').text();
+        var description = $trigger.find('*[data-field="description"]').text();
+        
+        var buttons = [
+            [
+                {
+                    text:  title,
+                    label: true
+                },
+                {
+                    text:  sprintf('<span><img class="bc-full-width" src="%s"><br>%s</span>', screenShot, description),
+                    label: true
+                },
+                {
+                    text:    BClanguage.actions.select,
+                    onClick: function() {
+                        $('#website_addition_url_textbox').val(url);
+                        var $page = BCtoolbox.getCurrentPageContentArea();
+                        BCapp.framework.closeModal();
+                        $page.scrollTo(0, 'fast');
+                        // $('#add_website_form').submit();
+                    }
+                }
+            ],
+            [
+                {
+                    text:    BClanguage.actions.cancel,
+                    color:   'red',
+                    onClick: function() {
+                        BCapp.framework.closeModal();
+                    }
+                }
+            ]
+        ];
+        BCapp.framework.actions(buttons);
     }
 };
 
