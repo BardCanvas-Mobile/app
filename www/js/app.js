@@ -406,7 +406,6 @@ var BCapp = {
             
             BCapp.renderWebsiteAdditionForm(function() {
                 var $form = $('#add_website_form');
-                $form[0].reset();
                 $form.ajaxForm({
                     target:       '#ajax_form_target',
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
@@ -943,6 +942,9 @@ var BCapp = {
     
     showWebsiteAdditionView: function()
     {
+        var $form = $('#add_website_form');
+        $form[0].reset();
+        
         window.tmpViewToReturnWhenCancellingWebsiteAddition = BCapp.currentView;
         $('#cancel_website_addition_button').show();
         BCapp.showView('.view-add-site'); 
@@ -950,7 +952,9 @@ var BCapp = {
     
     cancelWebsiteAddition: function()
     {
-        $('#add_website_form').find('input[name=use_facebook_login]').val('false');
+        var $form = $('#add_website_form');
+        $form[0].reset();
+        $form.find('input[name=use_facebook_login]').val('false');
         
         if( typeof window.tmpViewToReturnWhenCancellingWebsiteAddition === 'undefined' )
         {
