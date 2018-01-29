@@ -128,7 +128,12 @@ var BCmanifestsRepository = {
         BCwebsitesRepository.__manifest = null;
         
         var url = BCwebsitesRepository.__website.URL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
-        $.getJSON(url, function(data)
+        $.ajax({
+            url:      url,
+            timeout:  5000,
+            dataType: 'json'
+        })
+        .done(function(data)
         {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
