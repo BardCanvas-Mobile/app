@@ -391,22 +391,21 @@ var BCapp = {
                 break;
         }
         
-        params.url        = '#add-site-view';
-        BCapp.addSiteView = BCapp.framework.addView('.view-add-site', params);
+        params.url         = '#add-site-view';
+        BCapp.addSiteView  = BCapp.framework.addView('.view-add-site', params);
         
-        params.main    = true;
-        params.url     = '#main-view';
-        BCapp.mainView = BCapp.framework.addView('.view-main', params);
+        params.main        = true;
+        params.url         = '#main-view';
+        BCapp.mainView     = BCapp.framework.addView('.view-main', params);
+        BCapp.currentView  = BCapp.mainView;
         
-        BCapp.currentView = BCapp.mainView;
-        
-        if( BCwebsitesRepository.collection.length == 0 )
+        if( BCwebsitesRepository.collection.length === 0 )
         {
             console.log('No websites registered. Showing addition form.');
             
-            BCapp.renderWebsiteAdditionForm(function() {
-                var $form = $('#add_website_form');
-                $form.ajaxForm({
+            BCapp.renderWebsiteAdditionForm(function()
+            {
+                $('#add_website_form').ajaxForm({
                     target:       '#ajax_form_target',
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                 });
@@ -418,9 +417,9 @@ var BCapp = {
         }
         
         console.log(sprintf('%s websites registered. Prepping addition form.', BCwebsitesRepository.collection.length));
-        BCapp.renderWebsiteAdditionForm(function() {
-            var $form = $('#add_website_form');
-            $form.ajaxForm({
+        BCapp.renderWebsiteAdditionForm(function()
+        {
+            $('#add_website_form').ajaxForm({
                 target:       '#ajax_form_target',
                 beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
             });
@@ -577,7 +576,7 @@ var BCapp = {
         var template = 'pages/website_addition/index.html';
         var view     = BCapp.addSiteView;
         var params   = { reload: true, context: {showFeaturedSites: true, featuredSites: []} };
-            
+        
         var url = sprintf('%s/index-%s.json?wasuuup=%s',
             BCapp.featuredSitesInfoURLprefix, BClanguage.iso, BCtoolbox.wasuuup()
         );
