@@ -5,8 +5,8 @@
 
 ## First run
 
-* On first run, the app shows the logo, a website addition form and a link
-  to the featured sites list.
+* On first run, the app shows the logo, a website addition form and links
+  to the featured sites.
 
 * The featured sites list must be downloaded form the BardCanvas main server
   every time it is accessed on the app.
@@ -103,7 +103,7 @@ Services are the pages that will be rendered on the website's view on BardCanvas
 1. User taps the app's icon.
 2. Is first run?  
    Yes: show the addition selector.  
-   No: open the wall.
+   No: open the first registered site.
 
 ## Views
 
@@ -130,29 +130,5 @@ Services are the pages that will be rendered on the website's view on BardCanvas
       Helper pages to show extra contents like polls, comments, clicked images,
       author/user profiles, etc. Created automatically.
 
-* **The wall**  
-  This is a compound view of the latest posts on all added websites.  
-  If the user has only one website, then this one will be shown.
-
 * **Preferences editor:**  
-  It has a tabs bar at the top, one for the engine and one for every
-  website added to the app.  
-  *Note: this page should have a split view!*
-
-## Navigation routes
-
-### First run
-
-> Main (preloading) view  
-> '--> Welcome page with site addition  
-> '--> Site index
-
-### App run with one site added
-
-> Main (preloading) view  
-> '--> Site index
-
-### App run with multiple sites added
-
-> Main (preloading) view  
-> '--> Compound site index
+  It has controls to customize the user experience and communication with the websites.

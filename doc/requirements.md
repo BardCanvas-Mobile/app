@@ -5,15 +5,16 @@
 
 ## Cordova/Phonegap plugins
 
-* cordova-plugin-splashscreen
-* cordova-plugin-network-information
-* cordova-plugin-inappbrowser
-* cordova-plugin-file-transfer
-* cordova-plugin-file
+* cordova-plugin-camera
+* cordova-plugin-compat
 * cordova-plugin-device
+* cordova-plugin-file
+* cordova-plugin-file-transfer
+* cordova-plugin-inappbrowser
+* cordova-plugin-network-information
 * cordova-plugin-statusbar
-* cordova-plugin-x-socialsharing
 * cordova-plugin-whitelist
+* cordova-plugin-x-socialsharing
 * phonegap-plugin-barcodescanner
 
 ## JS/CSS APIs
@@ -23,12 +24,16 @@ and present in the bower.json file.
 
 * CodeMirror
 * Font Awesome
-* Framework7:
+* Framework7 v1:
 	* Core package
 	* Icons pack
 	* Upscroller Plugin
 * jQuery
 * Moment JS
 * TinyMCE
-* Google's Material Design Icons Distributable package
 * sprintf
+* Malsup's jQuery blockUI and form plugins
+* Ariel Flesler's jQuery scrollTo plugin
+* Dave Furfero's jQuery-UI Touch Punch plugin
+* Rostyslav Bryzgunov's jQuery Circle Progress plugin
+* Christophe Benoit's Image Cache plugin
