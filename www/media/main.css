@@ -194,6 +194,8 @@ html.ios .floating-button { bottom: 15px; }
 
 html.android .page[data-page="global-configuration"] .list-block .item-input { font-size: inherit; }
 
+html.ios .layout-white .page { background-color: #efeff4; }
+
 /* Custom helpers */
 
 .bc-image-uploader .photos { display: inline; }
