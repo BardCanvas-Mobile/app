@@ -1719,13 +1719,23 @@ var BCapp = {
                     label: true
                 },
                 {
-                    text:    BClanguage.actions.select,
+                    text:    BClanguage.actions.addNow,
                     onClick: function() {
                         $('#website_addition_url_textbox').val(url);
                         var $page = BCtoolbox.getCurrentPageContentArea();
                         BCapp.framework.closeModal();
                         $page.scrollTo(0, 'fast');
-                        // $('#add_website_form').submit();
+                        $('#add_website_form').submit();
+                    }
+                },
+                {
+                    text:    BClanguage.actions.selectForLogin,
+                    onClick: function() {
+                        $('#website_addition_url_textbox').val(url);
+                        var $page = BCtoolbox.getCurrentPageContentArea();
+                        BCapp.framework.closeModal();
+                        $page.scrollTo(0, 'fast');
+                        $('#new_website_login_username').focus();
                     }
                 }
             ],
