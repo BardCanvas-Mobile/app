@@ -18,7 +18,21 @@ var BCwebsitesRepository = {
     
     loadWebsitesRegistry: function(callback)
     {
-        window.tmpLoadWebsitesRegistryCallback = callback;
+        window.tmpLoadWebsitesRegistryCallback = function()
+        {
+            // Remove sites whose manifests failed to load
+            var sanitizedCollection = [];
+            for(var i in BCwebsitesRepository.collection)
+            {
+                var website = BCwebsitesRepository.collection[i];
+                if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
+                    sanitizedCollection[sanitizedCollection.length] = website;
+            }
+            
+            BCwebsitesRepository.collection = sanitizedCollection;
+            
+            callback();
+        };
         
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {

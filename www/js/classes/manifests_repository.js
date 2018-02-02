@@ -13,9 +13,10 @@ var BCmanifestsRepository = {
      */
     loadAll: function(callback)
     {
-        window.tmpWebsiteManifestsToLoad   = BCwebsitesRepository.collection.length;
-        window.tmpWebsiteManifestsLoaded   = 0;
-        window.tmpLoadAllCAllback          = callback;
+        window.tmpWebsiteManifestsToLoad    = BCwebsitesRepository.collection.length;
+        window.tmpWebsiteManifestsLoaded    = 0;
+        window.tmpLoadAllCAllback           = callback;
+        window.tmpUpdatedManifestsByHandler = {};
         
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
         {
@@ -23,7 +24,7 @@ var BCmanifestsRepository = {
             
             for( var i in BCwebsitesRepository.collection )
             {
-                console.log(sprintf('Starting manifset loading loop for website index %s'), i);
+                console.log('Starting manifset loading loop for website index %s', i);
                 
                 var website = BCwebsitesRepository.collection[i];
                 if( typeof BCmanifestsRepository.collection[website.manifestFileHandler] !== 'undefined' )
@@ -49,21 +50,83 @@ var BCmanifestsRepository = {
                             {
                                 /** @var {BCwebsiteManifestClass} */
                                 var manifest = JSON.parse(this.result);
+                                if( manifest === null )
+                                {
+                                    console.log('Manifest is corrupted. Skipping.');
+                                    window.tmpWebsiteManifestsLoaded++;
+                                    
+                                    return;
+                                }
+                                
                                 var handler  = BCwebsitesRepository.convertSiteURLtoHandler(manifest.rootURL);
                                 console.log('Website handler for manifest: ', handler);
                                 
-                                BCmanifestsRepository.collection[handler] = manifest;
-                                console.log(sprintf(
-                                    'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
-                                ));
+                                if( typeof window.tmpUpdatedManifestsByHandler[handler] !== 'undefined')
+                                {
+                                    BCmanifestsRepository.collection[handler] = manifest;
+                                    console.log(sprintf(
+                                        'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
+                                    ));
+                                    
+                                    window.tmpWebsiteManifestsLoaded++;
+                                    
+                                    return;
+                                }
+                                
+                                window.tmpUpdatedManifestsByHandler[handler] = true;
+                                console.log('%cFetching remote manifest for %s...', 'color: crimson', handler);
+                                var url = manifest.rootURL + '/bardcanvas_mobile.json?wasuuup=' + BCtoolbox.wasuuup();
+                                $.ajax({
+                                    url:      url,
+                                    timeout:  5000,
+                                    dataType: 'json'
+                                })
+                                .done(function(newManifest)
+                                {
+                                    if( parseFloat(newManifest.version) !== parseFloat(manifest.version) )
+                                    {
+                                        manifest = newManifest;
+                                        console.log('%cManifest %s has changed!!! needs to be saved!!!', 'color: crimson', fileEntry.name);
+                                        
+                                        BCmanifestsRepository.updateManifest(manifest, fileEntry.name, function()
+                                        {
+                                            BCmanifestsRepository.collection[handler] = manifest;
+                                            console.log(sprintf(
+                                                'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
+                                            ));
+                                            
+                                            window.tmpWebsiteManifestsLoaded++;
+                                        });
+                                        
+                                        return;
+                                    }
+                                    
+                                    BCmanifestsRepository.collection[handler]    = manifest;
+                                    console.log(sprintf(
+                                        'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
+                                    ));
+                                    
+                                    window.tmpWebsiteManifestsLoaded++;
+                                })
+                                .fail(function($xhr, status, error)
+                                {
+                                    console.log('%cCannot update local manifest: %s', 'color: teal', error);
+                                    
+                                    BCmanifestsRepository.collection[handler] = manifest;
+                                    console.log(sprintf(
+                                        'Manifest for %s (%s) loaded. URL: %s', handler, manifest.shortName, fileEntry.toURL()
+                                    ));
+                                    
+                                    window.tmpWebsiteManifestsLoaded++;
+                                });
                             }
                             else
                             {
                                 console.log(sprintf('Manifest file %s is empty!', fileEntry.name));
                                 this.__bcmWebsite = null;
+                                
+                                window.tmpWebsiteManifestsLoaded++;
                             }
-                            
-                            window.tmpWebsiteManifestsLoaded++;
                         };
                         
                         reader.readAsText(file);
@@ -516,6 +579,70 @@ var BCmanifestsRepository = {
             BCapp.framework.alert(sprintf(
                 BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
             ));
+        });
+    },
+    
+    /**
+     * @param {object}   manifest
+     * @param {string}   filePath
+     * @param {function} callback
+     */
+    updateManifest: function( manifest, filePath, callback )
+    {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs)
+        {
+            console.log('%cFilesystem open: %s', 'color: crimson', fs.name);
+            
+            fs.root.getFile(filePath, { create: true, exclusive: false }, function (fileEntry)
+            {
+                fileEntry.createWriter(function(writer)
+                {
+                    writer.onwriteend = function()
+                    {
+                        console.log('%cLocal manifest file %s truncated successfully.', 'color: crimson', filePath);
+                        
+                        writer.onwriteend = function()
+                        {
+                            console.log('%cLocal manifest file updated as: %s', 'color: crimson', fileEntry.toURL());
+                            
+                            callback();
+                        };
+                        writer.onerror = function(e)
+                        {
+                            console.log('%sUnable to save manifest file %s: %s', 'color: crimson', filePath, e.toString());
+                            
+                            callback();
+                        };
+                        writer.write( new Blob([JSON.stringify(manifest)], {type: 'text/plain'}) );
+                    };
+                    writer.onerror = function(e)
+                    {
+                        console.log('%cUnable to truncate manifest file %s: %s', 'color: crimson', filePath, e.toString());
+    
+                        callback();
+                    };
+                    
+                    writer.truncate(0);
+                },
+                function(error)
+                {
+                    console.log('%cUnable to open manifest file %s: %s', 'color: crimson', filePath, BClanguage.fileErrors[error.code]);
+                    
+                    callback();
+                });
+            },
+            function(error)
+            {
+                console.log('%cUnable to open manifest file %s: %s', 'color: crimson', filePath, BClanguage.fileErrors[error.code]);
+                
+                callback();
+            });
+        },
+        function(error)
+        {
+            console.log('%cUnable to open filesystem API: %s', 'color: crimson', BClanguage.fileErrors[error.code]);
+            
+            callback();
         });
     },
     
