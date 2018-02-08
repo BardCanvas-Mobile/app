@@ -11,7 +11,7 @@
                     <img onclick="location.reload()" style="max-width: 75%"
                          src="media/bardcanvas_logo_850x200.png"><br>
                     {{welcome}} <span class="version">v{{@global.appVersion}}</span>
-                    <div class="buttons-row">
+                    <div id="website_addition_language_switcher" class="buttons-row">
                         {{#languages}}
                             {{#js_if "this.value == BCglobalSettings.language"}}
                                 <a class="button active disabled">{{caption}}</a>
