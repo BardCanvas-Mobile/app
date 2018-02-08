@@ -1,6 +1,22 @@
 
 var BCmchatController = {
     
+    /**
+     * Index by chat root selector
+     * 
+     * @type {int}[]
+     */
+    usersIndexAutoreloadIntervals: {},
+    
+    /**
+     * Index by chat root selector
+     * 
+     * @type {bool}[]
+     */
+    usersIndexAutoreloadWorkersRunning: {},
+    
+    usersIndexAutoreloadHeartbit: 15000,
+    
     openChat: function(trigger)
     {
         var $trigger     = $(trigger);
@@ -86,6 +102,14 @@ var BCmchatController = {
     
     reloadChatUsersIndex: function(chatRootSelector, callback)
     {
+        if( typeof BCmchatController.usersIndexAutoreloadWorkersRunning[chatRootSelector] === 'undefined' )
+            BCmchatController.usersIndexAutoreloadWorkersRunning[chatRootSelector] = false;
+        
+        if( BCmchatController.usersIndexAutoreloadWorkersRunning[chatRootSelector] )
+            return;
+    
+        BCmchatController.usersIndexAutoreloadWorkersRunning[chatRootSelector] = true;
+        
         var $target = $(chatRootSelector).find('.users-list .page-content');
         var url     = $(chatRootSelector).attr('data-conversations-list-script-url');
         var token   = $(chatRootSelector).attr('data-token');
@@ -98,8 +122,29 @@ var BCmchatController = {
         
         $target.load(url, params, function()
         {
-            if( typeof callback !== 'undefined') callback();
+            BCmchatController.usersIndexAutoreloadWorkersRunning[chatRootSelector] = false;
+            
+            var unreadCount = 0;
+            $(chatRootSelector).find('li[data-unread-count]').each(function()
+            {
+                var unreadHere = parseInt($(this).attr('data-unread-count'));
+                if( unreadHere > 0 ) unreadCount++;
+            });
+            
+            var $badge = $(chatRootSelector).closest('.website-main-view').find('.toolbar .tab-link[href*="mobile_chat"] .icon-container .badge');
+            if( $badge.length > 0 )
+            {
+                if( unreadCount === 0 ) $badge.hide();
+                else                    $badge.text(unreadCount).show();
+            }
+            
+            if( typeof callback === 'function') callback();
         });
+        
+        BCmchatController.usersIndexAutoreloadIntervals[chatRootSelector] = setInterval(
+            function() { BCmchatController.reloadChatUsersIndex(chatRootSelector, null); },
+            BCmchatController.usersIndexAutoreloadHeartbit
+        );
     },
     
     /**
@@ -273,6 +318,11 @@ var BCmchatController = {
     triggerClose: function(conversationId)
     {
         BCmchatController.closeChat(conversationId);
+        
+        var $conversation = $('#' + conversationId);
+        var rootSelector  = '#' + $conversation.closest('.mchat-root').attr('id');
+        
+        BCmchatController.reloadChatUsersIndex(rootSelector, null);
         BCmchatController.openChatUsersIndex(conversationId);
     },
     
