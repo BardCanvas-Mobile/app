@@ -4,7 +4,7 @@
     <div class="navbar">
         <div class="navbar-inner">
             <div class="left">
-                <a class="link icon-only" onclick="BCmchatController.openChatUsersIndex('{{conversationId}}')">
+                <a class="link icon-only" onclick="BCmchatController.triggerClose('{{conversationId}}')">
                     <i class="bc-ios-icon icon f7-icons">chevron_left</i>
                     <i class="bc-android-icon fa fa-chevron-left"></i>
                 </a>
@@ -45,12 +45,14 @@
         <div class="popover-inner">
             <div class="list-block">
                 <ul>
+                    <!--
                     <li>
                         <a class="list-button item-link close-popover close"
                            onclick="BCmchatController.triggerClose('{{conversationId}}')">
                             {{messages.closeChat}}
                         </a>
                     </li>
+                    -->
                     <li>
                         <a class="list-button item-link close-popover archive"
                            onclick="BCmchatController.triggerArchive('{{conversationId}}')">
@@ -71,6 +73,11 @@
                         </a>
                     </li>
                     -->
+                    <li>
+                        <a class="list-button item-link close-popover cancel">
+                            {{@global.language.actions.cancel}}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
