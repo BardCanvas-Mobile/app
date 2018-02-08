@@ -73,7 +73,8 @@ var BClanguage = {
         sendAcomment:   'Envía un comentario',
         comment:        'Comentar',
         addNow:         'Añadir ahora',
-        selectForLogin: 'Seleccionar para entrar'
+        selectForLogin: 'Seleccionar para entrar',
+        skip:           'Saltar'
     },
     
     userLevelCaption: 'Autor nivel %s (%s)',
