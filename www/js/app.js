@@ -51,6 +51,7 @@ var BCapp = {
     batteryIsLow: false,
     
     screenWidth: 0,
+    screenOrientation: '',
     
     imgCacheEnabled: true,
     
@@ -295,6 +296,7 @@ var BCapp = {
             .attr('data-orientation', orientation)
             .attr('data-width-class', widthClass);
         
+        BCapp.screenOrientation = orientation;
         BCapp.__toggleToolbars();
     },
     
@@ -349,6 +351,8 @@ var BCapp = {
         }
         
         moment.locale(BCglobalSettings.language);
+        
+        $('html').attr('data-language', BCglobalSettings.language);
         
         $('head').append(sprintf(
             '<script type="text/javascript" src="js/language/%s.js"></script>',
@@ -410,7 +414,8 @@ var BCapp = {
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                 });
                 window.tmpInitViewsPostRenderingAction();
-                BCapp.showView('.view-add-site', null, false);
+                BCapp.showTutorial();
+                // BCapp.showView('.view-add-site', null, false);
             });
             
             return;
@@ -1715,7 +1720,8 @@ var BCapp = {
                     label: true
                 },
                 {
-                    text:  sprintf('<span><img class="bc-full-width" src="%s"><br>%s</span>', screenShot, description),
+                    // text:  sprintf('<span><img class="bc-full-width" src="%s"><br>%s</span>', screenShot, description),
+                    text:  description,
                     label: true
                 },
                 {
@@ -1750,6 +1756,46 @@ var BCapp = {
             ]
         ];
         BCapp.framework.actions(buttons);
+    },
+    
+    showTutorial: function()
+    {
+        var $appLoader = $('#app_loader');
+        var $tutorial  = $('#app_tutorial');
+        
+        $tutorial.find('.tutorial-skip-button').show();
+        $('#tutorial_language_switcher').html( $('#website_addition_language_switcher').html() );
+        
+        var slides = $tutorial.find('.swiper-slide').length;
+        for(var slide = 1; slide <= slides; slide++)
+        {
+            var selector = sprintf('.swiper-slide.slide-%02.0f .content', slide);
+            $tutorial.find(selector).html(sprintf(
+                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$02.0f-v-%1$s.png">' +
+                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$02.0f-h-%1$s.png">',
+                BCapp.os,
+                BClanguage.iso,
+                slide
+            ));
+        }
+    
+        BCapp.showView('.view-main', null, false);
+        
+        $appLoader.fadeOut('fast');
+        $tutorial.fadeIn('fast');
+    },
+    
+    hideTutorial: function()
+    {
+        var callback = function()
+        {
+            if( BCwebsitesRepository.collection.length === 0 )
+                $('#cancel_website_addition_button').hide();
+            else
+                $('#cancel_website_addition_button').show();
+        };
+        
+        BCapp.showView('.view-add-site', callback, false);
     }
 };
 

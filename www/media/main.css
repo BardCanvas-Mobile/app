@@ -6,7 +6,7 @@
 .alignright  { text-align: right; }
 
 .bc-loader-container {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0; line-height: 100vh; text-align: center;
+    height: 100vh; line-height: 100vh; text-align: center;
 }
 
 .bc-loader-content {
@@ -144,6 +144,8 @@ body[data-orientation="landscape"] .row .landscape-50 {
 
 html.android .bc-ios-icon     { display: none; }
 html.ios     .bc-android-icon { display: none; }
+
+html.android #left-panel .navbar .left { padding-left: 8px; }
 
 .bc-input-icon             { font-size: 29px; }
 .f7-icons.f7-embedded-icon { font-size: 1em; width: 1.1em; }
@@ -409,3 +411,27 @@ html.android .feed-item-page .page-content                     { height: 100%; }
     background-size: 100px;
 }
 .bc-embedded-video img { width: auto; max-height: 200px; /*-webkit-filter: brightness(50%); filter: brightness(50%);*/ }
+
+/* Other */
+
+.tutorial-skip-button                { position: absolute; top: 0; right: 0; margin: 5px; display: none;
+                                       font-size: 25px; line-height: normal; z-index: 1; }
+#app_tutorial .swiper-slide          { width: 100vw; height: 100vh; line-height: 100vh; text-align: center; }
+#app_tutorial .swiper-slide .content { display: inline-block; line-height: normal; vertical-align: middle;
+                                       max-width: 100vw; max-height: 100vh; overflow: hidden; }
+
+#tutorial_language_switcher { position: absolute; min-width: 200px; margin: 10px; }
+
+#app_tutorial .swiper-slide          {
+    background: -webkit-linear-gradient(-45deg, #ffffff 0%,#e5e5e5 100%);
+    background: linear-gradient(135deg, #ffffff 0%,#e5e5e5 100%);
+}
+
+html.ios                           #app_tutorial .swiper-slide .content img.android   { display: none; }
+html.android                       #app_tutorial .swiper-slide .content img.ios       { display: none; }
+html[data-language="en_US"]        #app_tutorial .swiper-slide .content img.es_LA     { display: none; }
+html[data-language="es_LA"]        #app_tutorial .swiper-slide .content img.en_US     { display: none; }
+body[data-orientation="portrait"]  #app_tutorial .swiper-slide .content img.landscape { display: none; }
+body[data-orientation="landscape"] #app_tutorial .swiper-slide .content img.portrait  { display: none; }
+body[data-orientation="portrait"]  #app_tutorial .swiper-slide .content img.portrait  { height:  90vh; }
+body[data-orientation="landscape"] #app_tutorial .swiper-slide .content img.landscape { width:   90vw; }

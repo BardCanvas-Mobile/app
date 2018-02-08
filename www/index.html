@@ -47,9 +47,9 @@
     <div class="view view-main" id="view-main">
         <div class="pages">
             <div data-page="main" class="page">
-                <div class="page-content">
+                <div class="page-content" style="overflow:hidden;">
                     
-                    <div class="content-block">
+                    <div id="app_loader">
                         <div class="bc-loader-container">
                             <div class="bc-loader-content">
                                 <div class="bc-loader-progress-group">
@@ -62,6 +62,50 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div id="app_tutorial" class="swiper-container swiper-init" style="height: 100vh" data-pagination=".swiper-pagination">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide slide-01">
+                                <div id="tutorial_language_switcher" class="buttons-row"></div>
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-02">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-03">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-04">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-05">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-06">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-07">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-08">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-09">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-10">
+                                <div class="content"></div>
+                            </div>
+                            <div class="swiper-slide slide-11">
+                                <div class="content"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <a class="link icon-only tutorial-skip-button" onclick="BCapp.hideTutorial()">
+                            <i class="bc-ios-icon icon f7-icons">close_round</i>
+                            <i class="bc-android-icon fa fa-times-circle-o"></i>
+                        </a>
                     </div>
                     
                 </div>
