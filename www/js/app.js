@@ -24,7 +24,7 @@ $.blockUI.defaults.message        = '<span class="preloader preloader-white bc-p
 $.blockUI.defaults.messageSmaller = '<span class="preloader preloader-white bc-preloader-smaller"></span>';
 
 Template7.global = {
-    appVersion: '0.0.4',
+    appVersion: '0.0.5',
     isIOS:      f7.device.os === 'ios',
     isAndroid:  f7.device.os !== 'ios',
     os:         f7.device.os,

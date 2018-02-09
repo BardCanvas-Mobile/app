@@ -1,6 +1,15 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.0.5] - 2018-02-09
+
+- Added manifest updater on app init.
+- Improved the featured sites selector.
+- Hidden unused options button on the right sidebar.
+- Improved the chat functionality.
+- Tuned usage of back button on Android.
+- Added tutorial.
+
 ## [0.0.4] - 2018-01-31
 
 - Unhidden app version span on website addition form.
