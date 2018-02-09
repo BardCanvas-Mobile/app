@@ -94,5 +94,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-backbutton": {
+        "source": {
+            "type": "registry",
+            "id": "https://github.com/mohamed-salah/phonegap-backbutton-plugin.git"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

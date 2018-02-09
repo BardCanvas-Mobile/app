@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.lavasoftworks.bardcanvasmobile" version="0.0.4"
-        xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.lavasoftworks.bardcanvasmobile" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>BardCanvas</name>
     <description>
         BardCanvas CMS client for mobile devices
@@ -66,13 +65,13 @@
     <platform name="android">
         <access origin="cdvfile://*" />
     </platform>
-    <allow-navigation href="http://*"/>
-    <allow-navigation href="https://*"/>
-    <allow-navigation href="http://*/*"/>
-    <allow-navigation href="https://*/*"/>
-    <allow-navigation href="data:*"/>
-    <allow-navigation href="about:*"/>
-    <allow-navigation href="tel:*"/>
+    <allow-navigation href="http://*" />
+    <allow-navigation href="https://*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+    <allow-navigation href="about:*" />
+    <allow-navigation href="tel:*" />
     <allow-navigation href="gap:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -97,4 +96,5 @@
     <plugin name="cordova-plugin-network-information" spec="~1.3.3" />
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="cordova-plugin-inappbrowser" spec="~1.7.2" />
+    <plugin name="cordova-plugin-backbutton" spec="https://github.com/mohamed-salah/phonegap-backbutton-plugin.git" />
 </widget>
