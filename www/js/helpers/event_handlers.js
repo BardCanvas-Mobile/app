@@ -24,10 +24,32 @@ var BCeventHandlers =
             return;
         }
         
-        var view = BCapp.currentView;
+        if( $('.popup:visible').length > 0 )
+        {
+            BCapp.framework.closeModal();
+            
+            return;
+        }
+        
+        if( $('.popover:visible').length > 0 )
+        {
+            BCapp.framework.closeModal();
+            
+            return;
+        }
+        
+        if( $('.photo-browser:visible').length > 0 )
+        {
+            BCapp.photoBrowser.close();
+            
+            return;
+        }
+        
+        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
         var page = view.activePage;
         BCapp.framework.hidePreloader();
         
+        console.log('Back button pressed - current page name: ', page.name);
         if( page.name.indexOf('-index') < 0 )
         {
             view.router.back();
@@ -35,15 +57,23 @@ var BCeventHandlers =
             return;
         }
         
-        BCapp.framework.confirm(
-            BClanguage.exit.message,
-            BClanguage.exit.title,
-            function()
-            {
-                navigator.app.clearHistory();
-                navigator.app.exitApp();
-            }
-        );
+        navigator.Backbutton.goBack(function() {
+            console.log('SLEEPING APP - Going to previous app.')
+        }, function() {
+            navigator.Backbutton.goHome(function() {
+                console.log('SPEEPING APP - Going to device home.')
+            }, function() {
+                BCapp.framework.confirm(
+                    BClanguage.exit.message,
+                    BClanguage.exit.title,
+                    function()
+                    {
+                        navigator.app.clearHistory();
+                        navigator.app.exitApp();
+                    }
+                );
+            });
+        });
     },
     
     /**
