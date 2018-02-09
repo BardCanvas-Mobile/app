@@ -268,7 +268,7 @@ var BCtoolbox = {
         
         console.log(source);
         
-        var browser = BCapp.framework.photoBrowser({
+        BCapp.photoBrowser = BCapp.framework.photoBrowser({
             photos:       source,
             theme:        'dark',
             type:         'standalone',
@@ -276,7 +276,7 @@ var BCtoolbox = {
             ofText:       BClanguage.of
         });
         
-        browser.open();
+        BCapp.photoBrowser.open();
     },
     
     /**

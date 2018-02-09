@@ -111,6 +111,11 @@ var BCapp = {
      */
     __commonServiceErrorTemplateMarkup : '',
     
+    /**
+     * @type {PhotoBrowser}
+     */
+    photoBrowser: null,
+    
     init: function()
     {
         BCapp.os = BCapp.framework.device.os;
