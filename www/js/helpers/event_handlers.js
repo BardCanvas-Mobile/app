@@ -49,7 +49,29 @@ var BCeventHandlers =
         var page = view.activePage;
         BCapp.framework.hidePreloader();
         
-        console.log('Back button pressed - current page name: ', page.name);
+        if( typeof page.name === 'undefined' )
+        {
+            console.log('Back button pressed - undefined page name.');
+            if( page.name.indexOf('-index') < 0 )
+            {
+                view.router.back();
+                
+                return;
+            }
+        }
+        
+        if( page.name === '' )
+        {
+            console.log('Back button pressed - empty page name.');
+            if( page.name.indexOf('-index') < 0 )
+            {
+                view.router.back();
+                
+                return;
+            }
+        }
+        
+        console.log('Back button pressed - current page name: %s (not an index)', page.name);
         if( page.name.indexOf('-index') < 0 )
         {
             view.router.back();
