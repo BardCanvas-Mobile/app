@@ -1,6 +1,10 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.0.6] - 2018-02-11
+
+- Extended back button usage on Android.
+
 ## [0.0.5] - 2018-02-09
 
 - Added manifest updater on app init.
