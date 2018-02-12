@@ -17,6 +17,9 @@ var BCeventHandlers =
     {
         e.preventDefault();
         
+        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
+        console.log('Back button pressed. Current view: %s', view.selector);
+        
         if( $('#left-panel').is(':visible') || $('#right-panel').is(':visible') )
         {
             BCapp.framework.closePanel();
@@ -45,44 +48,42 @@ var BCeventHandlers =
             return;
         }
         
-        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
-        var page = view.activePage;
-        BCapp.framework.hidePreloader();
-        
-        if( typeof page.name === 'undefined' )
+        if( view.selector.indexOf('mobile_chat') >= 0 )
         {
-            console.log('Back button pressed - undefined page name.');
-            if( page.name.indexOf('-index') < 0 )
+            console.log('Back button pressed on a chat view.');
+            var $conversation = $(view.selector).find('.page.mchat-conversation:visible'); 
+            if( $conversation.length > 0 )
             {
-                view.router.back();
+                console.log('Back button: closing visible chat.');
+                $conversation.find('.chat-closing-trigger').click();
                 
                 return;
             }
         }
         
-        if( page.name === '' )
+        if( typeof view.activePage === 'undefined' )
         {
-            console.log('Back button pressed - empty page name.');
-            if( page.name.indexOf('-index') < 0 )
+            console.log('Back button: current page not defined - falling back to shell control.');
+        }
+        else
+        {
+            var pageName = view.activePage.name;
+            console.log('Back button: current page name: %s (not an index)', pageName);
+            if( pageName.indexOf('-index') < 0 )
             {
+                BCapp.framework.hidePreloader();
                 view.router.back();
                 
                 return;
             }
-        }
-        
-        console.log('Back button pressed - current page name: %s (not an index)', page.name);
-        if( page.name.indexOf('-index') < 0 )
-        {
-            view.router.back();
-            
-            return;
         }
         
         navigator.Backbutton.goBack(function() {
+            BCapp.framework.hidePreloader();
             console.log('SLEEPING APP - Going to previous app.')
         }, function() {
             navigator.Backbutton.goHome(function() {
+                BCapp.framework.hidePreloader();
                 console.log('SPEEPING APP - Going to device home.')
             }, function() {
                 BCapp.framework.confirm(
