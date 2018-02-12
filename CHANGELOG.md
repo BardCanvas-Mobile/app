@@ -1,6 +1,10 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.0.7] - 2018-02-12
+
+- Reworked back button functionality due to several issues in previous logic.
+
 ## [0.0.6] - 2018-02-11
 
 - Extended back button usage on Android.
