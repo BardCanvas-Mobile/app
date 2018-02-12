@@ -1,10 +1,11 @@
 
-<div class="page mchat-conversation navbar-fixed toolbar-fixed" id="{{conversationId}}" style="display: none;">
+<div class="page mchat-conversation navbar-fixed toolbar-fixed" id="{{conversationId}}" 
+     data-page="{{conversationId}}" style="display: none;">
     
     <div class="navbar">
         <div class="navbar-inner">
             <div class="left">
-                <a class="link icon-only" onclick="BCmchatController.triggerClose('{{conversationId}}')">
+                <a class="link icon-only chat-closing-trigger" onclick="BCmchatController.triggerClose('{{conversationId}}')">
                     <i class="bc-ios-icon icon f7-icons">chevron_left</i>
                     <i class="bc-android-icon fa fa-chevron-left"></i>
                 </a>
