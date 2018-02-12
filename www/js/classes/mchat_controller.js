@@ -173,6 +173,7 @@ var BCmchatController = {
             if( fname.indexOf('.') < 0 )
             {
                 BCapp.framework.alert(BClanguage.cannotDetectFileType);
+                console.log('Cannot detect extension of file: %s', fname);
                 
                 return;
             }
