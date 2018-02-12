@@ -10,6 +10,5 @@
 /bcmobile.zip
 /zip.sh
 /*.cmd
-/*.apk
-/*.ipa
 /(SRC)
+/(DIST)
