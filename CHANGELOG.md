@@ -1,6 +1,11 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.0.8] - 2018-02-13
+
+- Added support for deeper view levels to allow proper initialization of framework controls.
+- Changed tutorial slides to JPEG to reduce package size.
+
 ## [0.0.7] - 2018-02-12
 
 - Reworked back button functionality due to several issues in previous logic.
