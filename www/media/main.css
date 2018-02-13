@@ -422,10 +422,7 @@ html.android .feed-item-page .page-content                     { height: 100%; }
 
 #tutorial_language_switcher { position: absolute; min-width: 200px; margin: 10px; }
 
-#app_tutorial .swiper-slide          {
-    background: -webkit-linear-gradient(-45deg, #ffffff 0%,#e5e5e5 100%);
-    background: linear-gradient(135deg, #ffffff 0%,#e5e5e5 100%);
-}
+#app_tutorial .swiper-slide { background: white; }
 
 html.ios                           #app_tutorial .swiper-slide .content img.android   { display: none; }
 html.android                       #app_tutorial .swiper-slide .content img.ios       { display: none; }

@@ -1785,8 +1785,8 @@ var BCapp = {
         {
             var selector = sprintf('.swiper-slide.slide-%02.0f .content', slide);
             $tutorial.find(selector).html(sprintf(
-                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$02.0f-v-%1$s.png">' +
-                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$02.0f-h-%1$s.png">',
+                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$02.0f-v-%1$s.jpg">' +
+                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$02.0f-h-%1$s.jpg">',
                 BCapp.os,
                 BClanguage.iso,
                 slide
