@@ -1186,6 +1186,15 @@ var BCapp = {
             $container.html( template(context) );
             $container.closest('.service-page').attr('data-initialized', 'true');
             
+            var $innerView = $container.closest('.inner-service-view');
+            if( $innerView.length > 0 )
+            {
+                var tmpViewId = $innerView.attr('id');
+                var tmpView   = BCapp.framework.addView('#' + tmpViewId);
+                $innerView.data('view', tmpView);
+                console.log('Inner view #%s initialized', tmpViewId);
+            }
+            
             var pageId = '#' + $container.closest('.service-page').attr('id');
             BCapp.framework.initImagesLazyLoad( pageId );
             console.log( 'Lazy load triggered on ' + pageId );
