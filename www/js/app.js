@@ -419,6 +419,7 @@ var BCapp = {
                     beforeSubmit: BCwebsitesRepository.websiteAdditionSubmission
                 });
                 window.tmpInitViewsPostRenderingAction();
+                console.log('Opening tutorial.');
                 BCapp.showTutorial();
                 // BCapp.showView('.view-add-site', null, false);
             });
@@ -593,7 +594,7 @@ var BCapp = {
         console.log('%cFetching featured sites list from %s...', 'color: green', url);
         $.getJSON(url, function(data)
         {
-            console.log('%cFEatured sites list loaded.', 'color: green');
+            console.log('%cFeatured sites list loaded.', 'color: green');
             params.context.featuredSites = data.featuredSites;
             
             BCapp.renderPage(template, view, params, callback);
@@ -614,14 +615,18 @@ var BCapp = {
     
     renderPage: function(templateFileName, view, params, callback)
     {
+        console.log('Rendering %s...', templateFileName);
         var languageFileName = sprintf('%s.%s.json', templateFileName, BClanguage.iso);
         $.getJSON(languageFileName, function(pageLanguage)
         {
+            console.log('Language file %s loaded.', languageFileName);
+            
             if( typeof params.context === 'undefined' ) params.context = {};
             for(var i in pageLanguage) params.context[i]  = pageLanguage[i];
             params.template = BCapp.getCompiledTemplate(templateFileName);
             view.router.load(params);
             
+            console.log('Rendering done.');
             if( typeof callback === 'function' ) callback();
         });
     },
@@ -1781,18 +1786,21 @@ var BCapp = {
         $('#tutorial_language_switcher').html( $('#website_addition_language_switcher').html() );
         
         var slides = $tutorial.find('.swiper-slide').length;
+        console.log('Tutorial has %s slides.', slides);
         for(var slide = 1; slide <= slides; slide++)
         {
-            var selector = sprintf('.swiper-slide.slide-%02.0f .content', slide);
-            $tutorial.find(selector).html(sprintf(
-                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$02.0f-v-%1$s.jpg">' +
-                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$02.0f-h-%1$s.jpg">',
+            var slideNum = slide < 10 ? '0' + slide : slide;
+            var selector = sprintf('.swiper-slide.slide-%s .content', slideNum);
+            var $slide = $tutorial.find(selector);
+            $slide.html(sprintf(
+                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$s-v-%1$s.jpg">' +
+                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$s-h-%1$s.jpg">',
                 BCapp.os,
                 BClanguage.iso,
-                slide
+                slideNum
             ));
         }
-    
+        
         BCapp.showView('.view-main', null, false);
         
         $appLoader.fadeOut('fast');
