@@ -86,6 +86,12 @@ var BCmchatController = {
         var rootSelector = '#' + $trigger.closest('.mchat-root').attr('id');
         var $root        = $(rootSelector);
         
+        if( BCmchatController.usersIndexAutoreloadIntervals[rootSelector] )
+        {
+            console.log('%cClearing refresh interval for chat index %s', 'color: green', rootSelector);
+            clearInterval( BCmchatController.usersIndexAutoreloadIntervals[rootSelector] );
+        }
+        
         $root.find('.mchat-conversation').each(function()
         {
             var $this  = $(this);
@@ -141,10 +147,14 @@ var BCmchatController = {
             if( typeof callback === 'function') callback();
         });
         
-        BCmchatController.usersIndexAutoreloadIntervals[chatRootSelector] = setInterval(
-            function() { BCmchatController.reloadChatUsersIndex(chatRootSelector, null); },
-            BCmchatController.usersIndexAutoreloadHeartbit
-        );
+        if( typeof BCmchatController.usersIndexAutoreloadIntervals[chatRootSelector] === 'undefined' )
+        {
+            BCmchatController.usersIndexAutoreloadIntervals[chatRootSelector] = setInterval(
+                function() { BCmchatController.reloadChatUsersIndex(chatRootSelector, null); },
+                BCmchatController.usersIndexAutoreloadHeartbit
+            );
+            console.log('%cRefresh interval set for chat index %s', 'color: green', chatRootSelector);
+        }
     },
     
     /**
