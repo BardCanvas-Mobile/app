@@ -48,6 +48,13 @@ var BCeventHandlers =
             return;
         }
         
+        if( typeof view === 'undefined' )
+        {
+            BCeventHandlers.__goHome();
+            
+            return;
+        }
+        
         if( view.selector.indexOf('mobile_chat') >= 0 )
         {
             console.log('Back button pressed on a chat view.');
@@ -78,6 +85,11 @@ var BCeventHandlers =
             }
         }
         
+        BCeventHandlers.__goHome();
+    },
+    
+    __goHome: function()
+    {
         navigator.Backbutton.goBack(function() {
             BCapp.framework.hidePreloader();
             console.log('SLEEPING APP - Going to previous app.')

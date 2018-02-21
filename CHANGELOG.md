@@ -1,6 +1,13 @@
 
 # BardCanvas Mobile App Change Log
 
+## [Unreleased]
+
+- Recompressed tutorial files to gain extra package size reduction.
+- Added debugging info to chat.
+- Fixed chat users list autorefresh issue.
+- Added extra check for back button pressing on Android.
+
 ## [0.0.8] - 2018-02-13
 
 - Added support for deeper view levels to allow proper initialization of framework controls.
