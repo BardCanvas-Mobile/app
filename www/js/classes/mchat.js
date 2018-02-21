@@ -179,8 +179,32 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
         
         instance.working = true;
         
+        var $root        = $(instance.config.chatRootSelector);
+        var $servicePage = $root.closest('.service-container');
+    
+        /**
+         * @type {BCwebsiteServiceDetailsClass}
+         */
+        var service      = $servicePage.data('service');
+    
+        /**
+         * @type {BCwebsiteClass}
+         */
+        var website      = $servicePage.data('website');
+    
+        /**
+         * @type {BCwebsiteManifestClass}
+         */
+        var manifest     = $servicePage.data('manifest');
+        
         var dn = $('<span>' + instance.config.userDisplayName + '</span>').text();
-        console.log('%c>>> Refreshing chat with %s...', 'color: green', dn);
+        console.log(
+            '%c>>> Refreshing chat from %s with %s since %s...',
+            'color: green',
+            website.userName,
+            dn,
+            instance.lastMessageTimestamp
+        );
         
         var url    = instance.config.workerURL;
         var params = {
@@ -189,15 +213,9 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
             wasuuup:       BCtoolbox.wasuuup()
         };
         
-        var $root        = $(instance.config.chatRootSelector);
-        var $servicePage = $root.closest('.service-container');
-        var service      = $servicePage.data('service');
-        var website      = $servicePage.data('website');
-        var manifest     = $servicePage.data('manifest');
-        
         instance.xhr = $.getJSON(url, params, function(data)
         {
-            console.log('%c>>> Done.', 'color: green');
+            // console.log('%c>>> Done.', 'color: green');
             
             if( data.message !== 'OK' )
             {
@@ -215,6 +233,10 @@ var mchat = function(chatRootSelector, conversationId, userId, userDisplayName, 
             }
             
             var unreadCount = data.data.length;
+            
+            if( unreadCount > 0 )
+                console.log('%c>>> %s unread messages received: ', 'color: green', unreadCount, data.data);
+            
             for(var i in data.data)
             {
                 var message = data.data[i];
