@@ -326,8 +326,10 @@ var BClanguage = {
     
     openWebsiteInBrowser: 'Open website in web browser',
     
-    cannotDetectFileType: 'Sorry, but it is not possible detect the type of the file you\'ve selected. ' +
-                          'Please choose another.',
+    cannotDetectFileType: 'Sorry, but it is not possible detect the type of the file "%s"<br><br>' +
+                          'Error: %s<br><br>' +
+                          'This issue might be caused by the media gallery. Please try picking the file ' +
+                          'from its location (Phone, SD card, etc.) by browsing your phone folders.',
     
     cannotOpenSettingsFile:  'Unable to open the settings file:<br><br>'
                              + '<span class="color-red">%s</span><br><br>'

@@ -329,8 +329,10 @@ var BClanguage = {
     
     openWebsiteInBrowser: 'Abrir sitio web en navegador',
     
-    cannotDetectFileType: 'Disculpa, pero no se puede detectar el tipo de archivo que has seleccionado. ' +
-                          'Por favor selecciona otro.',
+    cannotDetectFileType: 'Disculpa, pero no se puede detectar el tipo de archivo "%s".<br><br>' +
+                          'Error: %s<br><br>' +
+                          'Este problema puede ser causado por la galería de medios. Por favor trata de nuevo ' +
+                          'seleccionando el archivo desde la carpeta (Teléfono, tarjeta SD, etc.) en la que se encuentra ubicado.',
     
     cannotOpenSettingsFile:  'No se ha podido abrir el archivo de preferencias:<br><br>'
                              + '<span class="color-red">%s</span><br><br>'
