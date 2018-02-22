@@ -1,12 +1,15 @@
 
 # BardCanvas Mobile App Change Log
 
-## [Unreleased]
+## [0.0.9] - 2018-02-21
 
 - Recompressed tutorial files to gain extra package size reduction.
 - Added debugging info to chat.
 - Fixed chat users list autorefresh issue.
 - Added extra check for back button pressing on Android.
+- Removed alpha transparency from iOS icons (they were shown with black background).
+- Fixed a bug that prevented the tutorial from being rendered on older Android devices.
+- Fixed issues that prevented picking media for uploads.
 
 ## [0.0.8] - 2018-02-13
 

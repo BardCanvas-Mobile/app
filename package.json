@@ -1,6 +1,6 @@
 {
     "name": "com.lavasoftworks.bardcanvasmobile",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "displayName": "BardCanvas",
     "cordova": {
         "platforms": [
