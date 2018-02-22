@@ -102,6 +102,9 @@ a.critical,  .pseudo_link.critical , .critical  { color: red;       text-shadow:
 
 /* F7 overrides */
 
+html.ios     .android-only { display: none; }
+html.android .ios-only     { display: none; }
+
 .content-block-inner    { margin-left: 0 !important; }
 a.open-panel            { color: inherit; }
 
