@@ -174,29 +174,75 @@ var BCmchatController = {
         
         var success = function( fileURI )
         {
-            if( fileURI.indexOf('file://') < 0 ) fileURI = 'file://' + fileURI;
-            console.log('Got file URI: ', fileURI);
-            
-            var fname   = fileURI.split('/').pop().replace(/[;"']/g, '');
-            if( fname.indexOf('?') > 0 ) fname = fname.substr(0, fname.indexOf('?'));
-            
-            if( fname.indexOf('.') < 0 )
-            {
-                BCapp.framework.alert(BClanguage.cannotDetectFileType);
-                console.log('Cannot detect extension of file: %s', fname);
+            window.resolveLocalFileSystemURL(fileURI,
+                /**
+                 * @param {FileEntry} fileEntry
+                 */
+                function(fileEntry)
+                {
+                    /**
+                     * @param {File} file
+                     */
+                    fileEntry.file(function(file)
+                    {
+                        console.log('Got file: ', JSON.stringify(fileEntry), JSON.stringify(file));
+    
+                        var fname = file.name.replace(/[;"']/g, '');
+                        if( fname.indexOf('?') > 0 ) fname = fname.substr(0, fname.indexOf('?'));
+    
+                        var ext = "";
+                        if( file.type !== null )
+                        {
+                            ext = file.type.split("/").pop().toLowerCase();
+                        }
+                        else
+                        {
+                            if( fname.indexOf('.') > 0 )
+                            {
+                                ext = fname.split('.').pop().toLowerCase();
+                            }
+                            else
+                            {
+                                BCapp.framework.alert(
+                                    sprintf(BClanguage.cannotDetectFileType, fileEntry.name, 'Cannot extract file extension')
+                                );
+                                console.log('Cannot detect extension of file: %s', fileEntry.name);
+                                
+                                return;
+                            }
+                        }
+                        
+                        var type    = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
+                        var thumb   = fileURI;
+                        var token   = website.accessToken === '' ? 'guest-' + BCtoolbox.wasuuup() : website.accessToken;
+                        var mime    = sprintf('%s/%s', type, ext);
+                        var tmpName = sprintf('%s-%s-%s.%s', token, BCtoolbox.wasuuup(), fname, ext);
+                        var specs   = sprintf('%s;%s;%s;%s', type, tmpName, mime, tmpName);
+                        
+                        BCmchatController.__uploadPhotoObject(
+                            fileURI, tmpName, thumb, specs, chat, website, service, manifest
+                        );
+                    },
+                    
+                    /**
+                     * @param {FileError} error
+                     */
+                    function(error)
+                    {
+                        BCapp.framework.alert(
+                            sprintf(BClanguage.cannotDetectFileType, fileEntry.name, BClanguage.fileErrors[error.code])
+                        );
+                    });
+                },
                 
-                return;
-            }
-            
-            var ext     = fname.split('.').pop().toLowerCase();
-            var type    = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
-            var thumb   = fileURI;
-            var token   = website.accessToken === '' ? 'guest-' + BCtoolbox.wasuuup() : website.accessToken;
-            var mime    = sprintf('%s/%s', type, ext);
-            var tmpName = sprintf('%s-%s-%s', token, BCtoolbox.wasuuup(), fname);
-            var specs   = sprintf('%s;%s;%s;%s', type, fname, mime, tmpName);
-            
-            BCmchatController.__uploadPhotoObject(fileURI, tmpName, thumb, specs, chat, website, service, manifest);
+                /**
+                 * @param {FileError} error
+                 */
+                function(error)
+                {
+                    BCapp.framework.alert( sprintf(BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]) );
+                }
+            );
         };
         
         var fail = function( error )
@@ -270,7 +316,7 @@ var BCmchatController = {
                 );
             };
             
-            var fname = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+            var fname = tmpName;
             var ext   = fname.split('.').pop().toLowerCase();
             var type  = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
             
