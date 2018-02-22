@@ -320,11 +320,13 @@ var BCmchatController = {
             var ext   = fname.split('.').pop().toLowerCase();
             var type  = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
             
-            var options      = new FileUploadOptions();
-            options.fileKey  = "image";
-            options.fileName = fname;
-            options.mimeType = sprintf('%s/%s', type, ext);
-            options.params   = {
+            var options         = new FileUploadOptions();
+            options.fileKey     = "image";
+            options.fileName    = fname;
+            options.mimeType    = sprintf('%s/%s', type, ext);
+            options.chunkedMode = false;
+            
+            options.params = {
                 target_name:      tmpName,
                 bcm_platform:     BCapp.os,
                 bcm_access_token: website.accessToken,

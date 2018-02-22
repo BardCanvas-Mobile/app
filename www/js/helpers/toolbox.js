@@ -461,10 +461,12 @@ var BCtoolbox = {
                 var ext   = fname.split('.').pop().toLowerCase();
                 var type  = ext.match(/jpg|jpeg|png|gif/) ? 'image' : 'video';
                 
-                var options      = new FileUploadOptions();
-                options.fileKey  = "file";
-                options.fileName = fname;
-                options.mimeType = sprintf('%s/%s', type, ext);
+                var options         = new FileUploadOptions();
+                options.fileKey     = "file";
+                options.fileName    = fname;
+                options.mimeType    = sprintf('%s/%s', type, ext);
+                options.chunkedMode = false;
+                
                 options.params   = {
                     target_name:      tmpName,
                     bcm_platform:     BCapp.os,
