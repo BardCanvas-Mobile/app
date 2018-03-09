@@ -66,9 +66,15 @@
                                         <i class="bc-ios-icon icon f7-icons">lock</i>
                                         <i class="bc-android-icon bc-input-icon fa fa-lock"></i>
                                     </div>
-                                    <div class="item-inner">
+                                    <div class="item-inner" style="display: flex;">
                                         <div class="item-input">
                                             <input type="password" name="password" placeholder="{{passwordOptional}}">
+                                        </div>
+                                        <div class="item-after">
+                                            <i class="bc-pseudolink toggle fa fa-eye fa-lg"
+                                               onclick="$(this).closest('.item-inner').find('input').attr('type', 'text');     $(this).closest('.item-inner').find('.toggle').toggle();"></i>
+                                            <i class="bc-pseudolink toggle fa fa-eye-slash fa-lg" style="display: none"
+                                               onclick="$(this).closest('.item-inner').find('input').attr('type', 'password'); $(this).closest('.item-inner').find('.toggle').toggle();"></i>
                                         </div>
                                     </div>
                                 </div>
