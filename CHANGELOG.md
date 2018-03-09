@@ -1,6 +1,12 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.1.0] - 2018-03-08
+
+- Added internal data container setter to Ajaxified HTML services.
+- Added "legend" field type to form composer.
+- Added password visibility helper button.
+
 ## [0.0.9] - 2018-02-21
 
 - Recompressed tutorial files to gain extra package size reduction.
