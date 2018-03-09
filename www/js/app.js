@@ -1191,6 +1191,14 @@ var BCapp = {
             $container.html( template(context) );
             $container.closest('.service-page').attr('data-initialized', 'true');
             
+            $itemDataContainer = $container.find('.item-data-container');
+            if( $itemDataContainer.length > 0 )
+            {
+                $itemDataContainer.data('website',  website);
+                $itemDataContainer.data('service',  service);
+                $itemDataContainer.data('manifest', manifest);
+            }
+            
             var $innerView = $container.closest('.inner-service-view');
             if( $innerView.length > 0 )
             {
