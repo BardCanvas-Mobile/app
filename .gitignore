@@ -12,3 +12,4 @@
 /*.cmd
 /(SRC)
 /(DIST)
+/prepare-ios.sh
