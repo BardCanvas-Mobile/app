@@ -75,7 +75,8 @@ var BClanguage = {
         addNow:         'Add now',
         selectForLogin: 'Select for logging in',
         skip:           'Skip',
-        reload:         'Reload'
+        reload:         'Reload',
+        showTutorial:   'Show tutorial'
     },
     
     reloadPrompt: {
