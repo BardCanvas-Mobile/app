@@ -74,7 +74,13 @@ var BClanguage = {
         comment:        'Comentar',
         addNow:         'Añadir ahora',
         selectForLogin: 'Seleccionar para entrar',
-        skip:           'Saltar'
+        skip:           'Saltar',
+        reload:         'Recargar'
+    },
+    
+    reloadPrompt: {
+        title:  'Recargar App',
+        prompt: '¿Deseas recargar BardCanvas ahora?<br><br>Nota: si tienes alguna forma o documento en edición, perderás los cambios.'
     },
     
     userLevelCaption: 'Autor nivel %s (%s)',

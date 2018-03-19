@@ -74,7 +74,13 @@ var BClanguage = {
         comment:        'Comment',
         addNow:         'Add now',
         selectForLogin: 'Select for logging in',
-        skip:           'Skip'
+        skip:           'Skip',
+        reload:         'Reload'
+    },
+    
+    reloadPrompt: {
+        title: 'Reload app',
+        prompt: 'Do you wish to reload BardCanvas now?<br><br>Note: if you have any form or document being edited, you will loose changes.'
     },
     
     userLevelCaption: 'Author level %s (%s)',

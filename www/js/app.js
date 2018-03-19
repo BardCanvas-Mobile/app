@@ -1826,6 +1826,15 @@ var BCapp = {
         };
         
         BCapp.showView('.view-add-site', callback, false);
+    },
+    
+    promptReload: function()
+    {
+        BCapp.framework.confirm(
+            BClanguage.reloadPrompt.prompt,
+            BClanguage.reloadPrompt.title,
+            function() { location.reload(); }
+        )
     }
 };
 
