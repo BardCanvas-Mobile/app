@@ -5,7 +5,7 @@
   "websiteURLplaceholder":   "Enter domain name",
   "usernameOptional":        "User name (optional)",
   "passwordOptional":        "Password (optional)",
-  "addWebsiteButtonCaption": "Add now",
+  "addWebsiteButtonCaption": "Login",
   "loginWithFacebook":       "Login with Facebook",
 
   "languages": [
