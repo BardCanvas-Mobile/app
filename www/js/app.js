@@ -1789,6 +1789,7 @@ var BCapp = {
     {
         var $appLoader = $('#app_loader');
         var $tutorial  = $('#app_tutorial');
+        var swiper     = $tutorial[0].swiper;
         
         $tutorial.find('.tutorial-skip-button').show();
         $('#tutorial_language_switcher').html( $('#website_addition_language_switcher').html() );
@@ -1801,8 +1802,8 @@ var BCapp = {
             var selector = sprintf('.swiper-slide.slide-%s .content', slideNum);
             var $slide = $tutorial.find(selector);
             $slide.html(sprintf(
-                '<img class="%1$s portrait  %2$s" src="pages/tutorial/%2$s/%3$s-v-%1$s.jpg">' +
-                '<img class="%1$s landscape %2$s" src="pages/tutorial/%2$s/%3$s-h-%1$s.jpg">',
+                '<img class="%1$s portrait  %2$s" src="media/spacer.png" style="background-image: url(\'pages/tutorial/%2$s/%3$s-v-%1$s.jpg\')">' +
+                '<img class="%1$s landscape %2$s" src="media/spacer.png" style="background-image: url(\'pages/tutorial/%2$s/%3$s-h-%1$s.jpg\'">',
                 BCapp.os,
                 BClanguage.iso,
                 slideNum
@@ -1813,6 +1814,7 @@ var BCapp = {
         
         $appLoader.fadeOut('fast');
         $tutorial.fadeIn('fast');
+        swiper.slideTo(0);
     },
     
     hideTutorial: function()

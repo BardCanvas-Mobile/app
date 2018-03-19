@@ -422,6 +422,8 @@ html.android .feed-item-page .page-content                     { height: 100%; }
 #app_tutorial .swiper-slide          { width: 100vw; height: 100vh; line-height: 100vh; text-align: center; }
 #app_tutorial .swiper-slide .content { display: inline-block; line-height: normal; vertical-align: middle;
                                        max-width: 100vw; max-height: 100vh; overflow: hidden; }
+#app_tutorial .swiper-slide img      { width: 100vw; height: 100vh; background: none center center no-repeat;
+                                       background-size: contain; }
 
 #tutorial_language_switcher { position: absolute; min-width: 200px; margin: 10px; }
 
