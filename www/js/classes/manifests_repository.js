@@ -467,7 +467,11 @@ var BCmanifestsRepository = {
             BCwebsitesRepository.__website.accessToken     = data.data.access_token;
             BCwebsitesRepository.__website.userDisplayName = data.data.display_name;
             
-            if( data.data.meta ) BCwebsitesRepository.__website.meta = data.data.meta;
+            if( data.data.meta )
+            {
+                BCwebsitesRepository.__website.meta     = data.data.meta;
+                BCwebsitesRepository.__website.userName = data.data.user_name;
+            }
             
             success();
         })
