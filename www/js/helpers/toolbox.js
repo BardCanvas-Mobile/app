@@ -470,6 +470,7 @@ var BCtoolbox = {
                 options.params   = {
                     target_name:      tmpName,
                     bcm_platform:     BCapp.os,
+                    bcm_version:      BCapp.version,
                     bcm_access_token: website.accessToken,
                     wasuuup:          BCtoolbox.wasuuup()
                 };

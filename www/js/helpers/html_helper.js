@@ -777,6 +777,7 @@ var BChtmlHelper = {
             id:               itemId,
             bcm_access_token: website.accessToken,
             bcm_platform:     BCapp.os,
+            bcm_version:      BCapp.version,
             tzoffset:         0 - (new Date().getTimezoneOffset() / 60),
             wasuuup:          BCtoolbox.wasuuup()
         };
@@ -1037,6 +1038,7 @@ var BChtmlHelper = {
         
         var params = {
             bcm_platform:     BCapp.os,
+            bcm_version:      BCapp.version,
             bcm_access_token: website.accessToken
         };
         BCtoolbox.showFullPageLoader();

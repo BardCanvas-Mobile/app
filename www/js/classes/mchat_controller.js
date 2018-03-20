@@ -123,6 +123,7 @@ var BCmchatController = {
         var params  = {
             bcm_access_token: token,
             bcm_platform:     BCapp.os,
+            bcm_version:      BCapp.version,
             wasuuup:          BCtoolbox.wasuuup()
         };
         
@@ -329,6 +330,7 @@ var BCmchatController = {
             options.params = {
                 target_name:      tmpName,
                 bcm_platform:     BCapp.os,
+                bcm_version:      BCapp.version,
                 bcm_access_token: website.accessToken,
                 send_message:     '@!image',
                 other_user_id:    chat.config.userId,

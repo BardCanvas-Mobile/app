@@ -1043,6 +1043,7 @@ var BCapp = {
         var url    = BCapp.forgeServiceURL(service, website);
         var params = {
             bcm_platform:     BCapp.os,
+            bcm_version:      BCapp.version,
             bcm_access_token: website.accessToken,
             wasuuup:          BCtoolbox.wasuuup()
         };
@@ -1074,6 +1075,7 @@ var BCapp = {
         var url    = BCapp.forgeServiceURL(service, website);
         var params = {
             bcm_platform:     BCapp.os,
+            bcm_version:      BCapp.version,
             bcm_access_token: website.accessToken,
             tzoffset:         0 - (new Date().getTimezoneOffset() / 60),
             since:            '',
@@ -1492,6 +1494,7 @@ var BCapp = {
         params.bcm_output_type   = 'HTML';
         params.bcm_access_token  = website.accessToken;
         params.bcm_platform      = BCapp.os;
+        params.bcm_version       = BCapp.version;
         params.wasuuup           = BCtoolbox.wasuuup();
         
         if( action.options.requires_confirmation )
