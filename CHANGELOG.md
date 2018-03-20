@@ -1,6 +1,15 @@
 
 # BardCanvas Mobile App Change Log
 
+## [0.1.1] - 2018-03-19
+
+- Website addition form language fixes.
+- Added reload button on the left menu.
+- Tuned tutorial to properly show on all display sizes.
+- Added tutorial link on website addition page.
+- Added fix to allow logging in with nicknames (using spaces and special characters).
+- Added version number to web service calls.
+
 ## [0.1.0] - 2018-03-08
 
 - Added internal data container setter to Ajaxified HTML services.
