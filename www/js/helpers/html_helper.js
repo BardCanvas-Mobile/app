@@ -880,13 +880,26 @@ var BChtmlHelper = {
             fields[fields.length] = field;
         }
         
-        for(i in params)
-            if( typeof fields[i] === 'undefined' )
+        for(var paramName in params)
+        {
+            var addField = true;
+            for(i in fields)
+            {
+                if( fields[i].name === paramName )
+                {
+                    addField = false;
+                    
+                    break;
+                }
+            }
+            
+            if( addField )
                 fields[fields.length] = {
-                    name: i,
+                    name: paramName,
                     type: 'hidden',
-                    value: params[i]
+                    value: params[paramName]
                 };
+        }
         
         var pageId = 'local-form-composer-page-' + BCtoolbox.wasuuup();
         
@@ -909,101 +922,46 @@ var BChtmlHelper = {
         
         // console.log(fields);
         // console.log(params);
-        var template, $page;
         
-        // Todo: remove this when 'page' works.
-        openAs = 'popup';
+        var template  = BCapp.getCompiledTemplate('pages/misc_segments/form_composer_popup.html');
+        var $page     = $(template(context));
+        BCtoolbox.ajaxifyForms($page);
+        BCapp.framework.popup($page, true);
         
-        if(openAs === 'popup')
-        {
-            template  = BCapp.getCompiledTemplate('pages/misc_segments/form_composer_popup.html');
-            $page     = $(template(context));
-            BCtoolbox.ajaxifyForms($page);
-            BCapp.framework.popup($page, true);
-            
-            $('.local-form-composer')
-                .on('popup:opened', function()
+        $('.local-form-composer')
+            .on('popup:opened', function()
+            {
+                console.log('Binding stuff on popped up form');
+                
+                var $form = $('#local_composed_form');
+                $form.data('website',  website);
+                $form.data('service',  service);
+                $form.data('manifest', manifest);
+                
+                $form.find('.expandible_textarea').expandingTextArea();
+                
+                $form.find('select[data-remotely-filled="true"]').each(function()
                 {
-                    console.log('Binding stuff on popped up form');
-                    
-                    var $form = $('#local_composed_form');
-                    $form.data('website',  website);
-                    $form.data('service',  service);
-                    $form.data('manifest', manifest);
-                    
-                    $form.find('.expandible_textarea').expandingTextArea();
-                    
-                    $form.find('select[data-remotely-filled="true"]').each(function()
-                    {
-                        BChtmlHelper.__fillRemoteSourcedSelect( $(this) );
-                    });
-                    
-                    $form.find('.tinymce').each(function()
-                    {
-                        var id       = $(this).attr('id');
-                        var defaults = BCtoolbox.getTinyMCEconfiguration(website);
-                        
-                        tinymce.init(defaults);
-                        tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
-                        var editor  = tinymce.get(id);
-                        
-                        console.log('TinyMCE editor #%s added.', id);
-                        console.log('Editor instance: ', editor);
-                    });
-                })
-                .on('popup:close', function()
-                {
-                    BChtmlHelper.__destroyTinyMCEeditors('#local_composed_form');
+                    BChtmlHelper.__fillRemoteSourcedSelect( $(this) );
                 });
-            
-            return;
-        }
-        
-        //
-        // openAs === 'page'
-        // TODO: make this work. Issue reported on https://github.com/framework7io/Framework7/issues/1985
-        //
-        
-        template = BCapp.getCompiledTemplate('pages/misc_segments/form_composer_page.html');
-        var view = BCapp.currentNestedView ? BCapp.currentNestedView : BCapp.currentView;
-        console.log( 'Rendering paged form on view: ', view.selector );
-        var html = $('<div>' + template(context) + '</div>').html();
-        
-        BCapp.framework.onPageBeforeAnimation(pageId, function(page)
-        {
-            console.log('Binding stuff on ', page.name);
-            var $page = $(sprintf('.page[data-page="%s"]', page.name));
-            var $form = $page.find('form');
-            
-            $form.data('website',  website);
-            $form.data('service',  service);
-            $form.data('manifest', manifest);
-            BCtoolbox.ajaxifyForms($page);
-            
-            $page.find('.expandible_textarea').expandingTextArea();
-            
-            $page.find('select[data-remotely-filled="true"]').each(function()
+                
+                $form.find('.tinymce').each(function()
+                {
+                    var id       = $(this).attr('id');
+                    var defaults = BCtoolbox.getTinyMCEconfiguration(website);
+                    
+                    tinymce.init(defaults);
+                    tinymce.EditorManager.execCommand('mceAddEditor', true, id, defaults);
+                    var editor  = tinymce.get(id);
+                    
+                    console.log('TinyMCE editor #%s added.', id);
+                    console.log('Editor instance: ', editor);
+                });
+            })
+            .on('popup:close', function()
             {
-                BChtmlHelper.__fillRemoteSourcedSelect( $(this) );
+                BChtmlHelper.__destroyTinyMCEeditors('#local_composed_form');
             });
-            
-            $page.find('.tinymce').each(function()
-            {
-                var id       = $(this).attr('id');
-                var defaults = BCtoolbox.getTinyMCEconfiguration(website);
-                tinymce.init(defaults);
-                tinymce.EditorManager.execCommand('mceAddEditor', true, id);
-                console.log('TinyMCE editor #%s added.', id);
-            });
-        });
-        
-        BCapp.framework.onPageBeforeRemove(pageId, function(page)
-        {
-            console.log('Destroying TinyMCE editors on ', page.name);
-            BChtmlHelper.__destroyTinyMCEeditors(sprintf('.page[data-page="%s"]', page.name));
-        });
-        
-        view.router.loadContent(html);
     },
     
     __destroyTinyMCEeditors: function( formId )
