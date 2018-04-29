@@ -1,6 +1,12 @@
 
 # BardCanvas Mobile App Change Log
 
+## [1.0.0] - 2018-04-29
+
+- Removed Cordova StatusBar plugin.
+- Misc improvements and cleanup.
+- Switched to production version.
+
 ## [0.1.1] - 2018-03-19
 
 - Website addition form language fixes.
