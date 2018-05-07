@@ -72,7 +72,7 @@ var BCtoolbox = {
     
     isValidURL: function(url)
     {
-        var regexQuery = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
+        var regexQuery = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,64}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
         var reg        = new RegExp(regexQuery, "i");
         
         return reg.test(url);
