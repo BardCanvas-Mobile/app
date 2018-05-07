@@ -1,6 +1,11 @@
 
 # BardCanvas Mobile App Change Log
 
+## [1.0.1] - 2018-05-07
+
+- Fixed URL checker to allow big TLDs from websites.
+- Fixed language glitches in tutorial slides.
+
 ## [1.0.0] - 2018-04-29
 
 - Removed Cordova StatusBar plugin.
