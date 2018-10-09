@@ -100,7 +100,7 @@ var BCglobalSettings =
                 ));
             });
         },
-        function(errror)
+        function(error)
         {
             BCapp.framework.addNotification(sprintf(
                 'Cannot call filesystem API. Error: %s',

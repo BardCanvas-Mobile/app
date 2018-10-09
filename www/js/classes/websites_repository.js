@@ -117,7 +117,7 @@ var BCwebsitesRepository = {
                 ));
             });
         },
-        function(errror)
+        function(error)
         {
             BCapp.framework.alert(sprintf(
                 BClanguage.errorCallingLFSAPI, BClanguage.fileErrors[error.code]
