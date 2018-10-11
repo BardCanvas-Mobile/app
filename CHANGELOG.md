@@ -1,13 +1,12 @@
 
 # BardCanvas Mobile App Change Log
 
-## [1.1.1] - Unreleased
+## [1.1.1] - 2018-10-12
 
 - Added support for iPhone X.
-  **Note:** In-app browser doesn't fit well on top!
 - Multiple plugin upgrades on Android.
 
-## [1.1.0] - 2018-10-09
+## [1.1.0] - Not released or documented
 
 - Fixed error variables passed to I/O error handlers.
 - Android: upgraded target platform SDK to version 26 (Oreo)

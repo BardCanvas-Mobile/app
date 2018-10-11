@@ -38,6 +38,19 @@ and is saved as:
 All images and media files from data packages are cached using **TEMPORARY** storage
 with the [ImgCache plugin](https://github.com/chrisben/imgcache.js/).
 
+## Important fix for iPhone
+
+The In-App Browser plugin for Cordova doesn't fit properly on the viewport due to a hardcoded height
+of the status bar on the `CVDinAppBrowser.m` file.
+
+When making a full rebuild, the next line must be changed at the top of the file:
+
+    #define    STATUSBAR_HEIGHT 20
+
+to:
+
+    #define    STATUSBAR_HEIGHT 0
+
 ## Website manifest
 
 It is a JSON file placed at the document root (or the subdirectory where the BardCanvas instance is installed) and named `bardcanvas_mobile.json`. Contains all website underlying data, E.G.:
