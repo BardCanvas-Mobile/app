@@ -437,3 +437,15 @@ body[data-orientation="portrait"]  #app_tutorial .swiper-slide .content img.land
 body[data-orientation="landscape"] #app_tutorial .swiper-slide .content img.portrait  { display: none; }
 body[data-orientation="portrait"]  #app_tutorial .swiper-slide .content img.portrait  { height:  90vh; }
 body[data-orientation="landscape"] #app_tutorial .swiper-slide .content img.landscape { width:   90vw; }
+
+/* ios, non iPhone-X patches */
+
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="portrait"] #left-panel  .page          { padding-top: 20px !important; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="portrait"] #left-panel  .page .navbar  { top: 20px !important; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="portrait"] #right-panel .page          { padding-top: 20px !important; }
+
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="landscape"]                            { padding-top: 0; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="landscape"] .statusbar-overlay         { display: none; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="landscape"] #left-panel  .page         { padding-top: 0 !important; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="landscape"] #left-panel  .page .navbar { top: 0 !important; }
+html.with-statusbar-overlay:not(.is-iphone-x) body[data-orientation="landscape"] #right-panel .page         { padding-top: 0 !important; }

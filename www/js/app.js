@@ -27,6 +27,7 @@ Template7.global = {
     appVersion: '1.1.1',
     isIOS:      f7.device.os === 'ios',
     isAndroid:  f7.device.os !== 'ios',
+    isIphoneX:  false,
     os:         f7.device.os,
     language:   null
 };
@@ -119,6 +120,7 @@ var BCapp = {
     init: function()
     {
         BCapp.os = BCapp.framework.device.os;
+        BCapp.__checkIfIsIphoneX();
         
         ImgCache.options.chromeQuota           = 50 * 1024 * 1024;
         ImgCache.options.cordovaFilesystemRoot = cordova.file.cacheDirectory;
@@ -157,6 +159,34 @@ var BCapp = {
             
             setInterval(function() { BCapp.updateTimeAgoDates(); }, 30000);
         });
+    },
+    
+    __checkIfIsIphoneX: function()
+    {
+        if( BCapp.os !== 'ios') return;
+        
+        if( device.model.toLowerCase().match(/iphone1[0-9]/i) )
+        {
+            Template7.global.isIphoneX = true;
+            $('html').toggleClass('is-iphone-x', true);
+            $('head').append('<link rel="stylesheet" type="text/css" href="media/iphone-x.css">');
+            
+            return;
+        }
+        
+        var dims = screen.width + 'x' + screen.height;
+        
+        var dimsMatch
+            =  dims === '375x812' || dims === '812x375' // iPHone X, Xs
+            || dims === '414x896' || dims === '896x414' // iPhone Xr, Xs Max
+        ;
+        
+        if( dimsMatch )
+        {
+            Template7.global.isIphoneX = true;
+            $('html').toggleClass('is-iphone-x', true);
+            $('head').append('<link rel="stylesheet" type="text/css" href="media/iphone-x.css">');
+        }
     },
     
     updateTimeAgoDates: function()

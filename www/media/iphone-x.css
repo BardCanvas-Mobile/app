@@ -1,0 +1,42 @@
+
+/* iPhone X patches */
+
+html.with-statusbar-overlay body[data-orientation="portrait"]                            { padding-top: 44px; }
+html.with-statusbar-overlay body[data-orientation="portrait"] .statusbar-overlay         { height: 44px; }
+html.with-statusbar-overlay body[data-orientation="portrait"] #left-panel  .page         { padding-top: 44px !important; }
+html.with-statusbar-overlay body[data-orientation="portrait"] #left-panel  .page .navbar { top: 44px !important; }
+html.with-statusbar-overlay body[data-orientation="portrait"] #right-panel .page         { padding-top: 44px !important; }
+
+html.with-statusbar-overlay body[data-orientation="landscape"]                            { padding-top: 0; }
+html.with-statusbar-overlay body[data-orientation="landscape"] .statusbar-overlay         { display: none; }
+html.with-statusbar-overlay body[data-orientation="landscape"] #left-panel  .page         { padding-top: 0 !important; }
+html.with-statusbar-overlay body[data-orientation="landscape"] #left-panel  .page .navbar { top: 0 !important; }
+html.with-statusbar-overlay body[data-orientation="landscape"] #right-panel .page         { padding-top: 0 !important; }
+
+html.with-statusbar-overlay body[data-orientation="portrait"] .photo-browser {
+    height: calc(100% - 44px);
+    top: 44px;
+}
+html.with-statusbar-overlay body[data-orientation="landscape"] .photo-browser {
+    height: 100%;
+    top: 0;
+}
+
+html.with-statusbar-overlay body[data-orientation="portrait"] .popup  .page          { padding-top: 44px !important; }
+html.with-statusbar-overlay body[data-orientation="portrait"] .popup  .page .navbar  { top: 44px !important; }
+html.with-statusbar-overlay body[data-orientation="portrait"] .popup {
+    top: 44px;
+    height: calc(100% - 44px);
+}
+html.with-statusbar-overlay body[data-orientation="landscape"] .popup  .page         { padding-top: 0 !important; }
+html.with-statusbar-overlay body[data-orientation="landscape"] .popup  .page .navbar { top: 0 !important; }
+html.with-statusbar-overlay body[data-orientation="landscape"] .popup {
+    top: 0;
+    height: 100%;
+}
+
+html.with-statusbar-overlay body[data-orientation="portrait"] .notifications {
+    padding-top: 44px;
+    -webkit-transform: translate3d(0, -44px, 0);
+    transform: translate3d(0, -44px, 0);
+}
