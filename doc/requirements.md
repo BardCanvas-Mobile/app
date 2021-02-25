@@ -3,6 +3,11 @@
 
 # BardCanvas Mobile App Requirements
 
+## Phonegap CLI
+
+* Phonegap version 7.1.1. It breaks above that.  
+  Use `npm -g install phonegap@7.1.1`
+
 ## Cordova/Phonegap plugins
 
 * cordova-plugin-camera
