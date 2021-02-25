@@ -433,10 +433,10 @@ var BCmanifestsRepository = {
     /**
      * @param {function} success
      * @param {function} fail
-     * 
+     * @param {string}   tfaCode
      * @private
      */
-    __validateWebsiteLogin: function(success, fail)
+    __validateWebsiteLogin: function(success, fail, tfaCode)
     {
         BCapp.framework.showPreloader(BClanguage.validatingCredentials);
         BCtoolbox.showNetworkActivityIndicator();
@@ -449,11 +449,37 @@ var BCmanifestsRepository = {
             password: CryptoJS.MD5(BCwebsitesRepository.__website.password).toString(),
             device:   BCapp.userAgent
         };
+        if( typeof tfaCode !== 'undefined' ) params.tfa_code = tfaCode;
+        
         console.log('Authenticating with ' + url);
         $.getJSON(url, params, function(data)
         {
             BCapp.framework.hidePreloader();
             BCtoolbox.hideNetworkActivityIndicator();
+            
+            if( data.message === '@ASK_FOR_2FA' )
+            {
+                console.log('2FA code input requested');
+                
+                var okClicked = function(value)
+                {
+                    console.log('Code introduced: ' + value);
+                    BCmanifestsRepository.__validateWebsiteLogin(success, fail, value);
+                }
+                
+                var cancelClicked = function()
+                {
+                    console.log('2FA code input cancelled');
+                    if( typeof fail === 'function' ) fail();
+                }
+                
+                var pText  = BClanguage.tfaPromptText;
+                var pTitle = BClanguage.tfaPromptTitle;
+                
+                BCapp.framework.prompt(pText, pTitle, okClicked, cancelClicked);
+                
+                return;
+            }
             
             if( data.message !== 'OK' )
             {

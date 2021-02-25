@@ -24,13 +24,15 @@ $.blockUI.defaults.message        = '<span class="preloader preloader-white bc-p
 $.blockUI.defaults.messageSmaller = '<span class="preloader preloader-white bc-preloader-smaller"></span>';
 
 Template7.global = {
-    appVersion: '1.1.1',
+    appVersion: '1.1.2',
     isIOS:      f7.device.os === 'ios',
     isAndroid:  f7.device.os !== 'ios',
     isIphoneX:  false,
     os:         f7.device.os,
     language:   null
 };
+
+console.log('%cCurrent version: %s', 'green', Template7.global.appVersion);
 
 var BCapp = {
     

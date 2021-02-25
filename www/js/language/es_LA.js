@@ -94,6 +94,9 @@ var BClanguage = {
     pleaseProvideAURL:   'Provee el dominio o la URL de un sitio web a añadir o selecciona uno de la lista de sitios destacados.',
     websiteURLisInvalid: 'La URL del sitio web es inválida. Chécala e intenta de nuevo.',
     
+    tfaPromptTitle: '2FA requerido para entrar',
+    tfaPromptText:  'Por favor abre tu app de autenticación e introduce un código numérico:',
+    
     passwordMissing:                 'Por favor especifica la contraseña para accesar a la cuenta especificada.',
     websiteAlreadyAdded:             'Ya has registrado esta combinación de sitio web y nombre de usuario.',
     errorCallingLFSAPI:              'Error al abrir almacenamiento del sistema:<br><br>'

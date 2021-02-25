@@ -94,6 +94,9 @@ var BClanguage = {
     pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
     websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.',
     
+    tfaPromptTitle: '2FA required to login',
+    tfaPromptText:  'Please open your authenticator app and type or paste a code below:',
+    
     passwordMissing:                 'Please type the password to access the specified user account.',
     websiteAlreadyAdded:             'You already have this website/user name combination in the registry.',
     errorCallingLFSAPI:              'Error opening storage system:<br><br>'
