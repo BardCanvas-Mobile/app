@@ -432,6 +432,8 @@ var BCwebsitesRepository = {
                     else
                         $('#cancel_website_addition_button').hide();
                     
+                    $('#add_website_form')[0].reset();
+                    BCapp.hideLoginCredentialsForm();
                     BCapp.renderSiteSelector();
                     
                     BCapp.showView('.view-add-site', function() { BCapp.framework.hideIndicator(); });

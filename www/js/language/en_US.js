@@ -92,6 +92,7 @@ var BClanguage = {
     ownedAndOperatedBy: 'Owned and operated by %s',
     
     pleaseProvideAURL:   'Please provide a domain or URL to add or select one from the featured websites list.',
+    pleaseProvideAURL2:  'Please provide a domain or URL you want to login to or select one from the featured websites list.',
     websiteURLisInvalid: 'The URL you provided is invalid. Please check it and try again.',
     
     tfaPromptTitle: '2FA required to login',

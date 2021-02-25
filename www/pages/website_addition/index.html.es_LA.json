@@ -3,10 +3,16 @@
   
   "addWebsite":              "Añadir sitio web",
   "websiteURLplaceholder":   "Introducir dominio",
-  "usernameOptional":        "Usuario o alias (opcional)",
-  "passwordOptional":        "Contraseña (opcional)",
+  "usernameOptional":        "Usuario o alias",
+  "passwordOptional":        "Contraseña",
   "addWebsiteButtonCaption": "Ingresar",
   "loginWithFacebook":       "Ingresar con Facebook",
+  
+  "addNowButtonCaption":     "Añadir ahora",
+  "enterLoginCredentials1":  "Introducir credenciales...",
+  "enterLoginCredentials2":  "Introduce las credenciales de acceso a tu cuenta en el sitio web:",
+  "cancelCredsInput":        "Cancelar",
+  "cancelWebsiteAddition":   "Cancelar adición de sitio web",
   
   "languages": [
     {

@@ -987,6 +987,7 @@ var BCapp = {
         
         window.tmpViewToReturnWhenCancellingWebsiteAddition = BCapp.currentView;
         $('#cancel_website_addition_button').show();
+        BCapp.hideLoginCredentialsForm();
         BCapp.showView('.view-add-site'); 
     },
     
@@ -1383,8 +1384,8 @@ var BCapp = {
         
         var containerId = $container.attr('id');
         var data        = window.tmpServiceFeeds[containerId];
-        var params      = data.params;
-        var website     = data.website;
+        // var params      = data.params;
+        // var website     = data.website;
         var service     = data.service;
         var options     = service.options;
         var helpers     = type === 'navbar' ? options.navbarHelpers : options.toolbarHelpers;
@@ -1432,7 +1433,7 @@ var BCapp = {
         console.log(sprintf('Current nested view set to %s', BCapp.currentNestedView.selector));
     },
     
-    openURLinPopup: function(URL, name, specs, replace)
+    openURLinPopup: function(URL, name)
     {
         if( device.platform === 'browser' )
         {
@@ -1764,7 +1765,7 @@ var BCapp = {
     showFeaturedSiteDetails: function(trigger)
     {
         var $trigger    = $(trigger);
-        var screenShot  = $trigger.attr('data-screenshot');
+        // var screenShot  = $trigger.attr('data-screenshot');
         var url         = $trigger.attr('data-url');
         var title       = $trigger.find('*[data-field="title"]').text();
         var description = $trigger.find('*[data-field="description"]').text();
@@ -1797,6 +1798,7 @@ var BCapp = {
                         var $page = BCtoolbox.getCurrentPageContentArea();
                         BCapp.framework.closeModal();
                         $page.scrollTo(0, 'fast');
+                        BCapp.showLoginCredentialsForm();
                         $('#new_website_login_username').focus();
                     }
                 }
@@ -1854,6 +1856,9 @@ var BCapp = {
                 $('#cancel_website_addition_button').hide();
             else
                 $('#cancel_website_addition_button').show();
+            
+            $('#add_website_form')[0].reset();
+            BCapp.hideLoginCredentialsForm();
         };
         
         BCapp.showView('.view-add-site', callback, false);
@@ -1866,6 +1871,31 @@ var BCapp = {
             BClanguage.reloadPrompt.title,
             function() { location.reload(); }
         )
+    },
+    
+    
+    
+    showLoginCredentialsForm: function()
+    {
+        var url = $('#website_addition_url_textbox').val().trim();
+        if( url === '' )
+        {
+            BCapp.framework.alert(BClanguage.pleaseProvideAURL2);
+            return;
+        }
+        
+        $('#standard_login_submit').hide();
+        $('#login_credentials_input_trigger').hide();
+        $('#login_credentials_input').show('slide', {direction: 'up'}, 'fast');
+        
+    },
+    
+    hideLoginCredentialsForm: function()
+    {
+        $('#login_credentials_input').hide('slide', {direction: 'up'}, 'fast', function() {
+            $('#standard_login_submit').show();
+            $('#login_credentials_input_trigger').show();
+        });
     }
 };
 

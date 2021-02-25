@@ -92,6 +92,7 @@ var BClanguage = {
     ownedAndOperatedBy: 'Propiedad y operación por %s',
     
     pleaseProvideAURL:   'Provee el dominio o la URL de un sitio web a añadir o selecciona uno de la lista de sitios destacados.',
+    pleaseProvideAURL2:  'Provee el dominio o la URL del sitio web al que deseas entrar o selecciona uno de la lista de sitios destacados.',
     websiteURLisInvalid: 'La URL del sitio web es inválida. Chécala e intenta de nuevo.',
     
     tfaPromptTitle: '2FA requerido para entrar',

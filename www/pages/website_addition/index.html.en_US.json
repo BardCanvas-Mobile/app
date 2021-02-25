@@ -3,11 +3,17 @@
   
   "addWebsite":              "Add a website",
   "websiteURLplaceholder":   "Enter domain name",
-  "usernameOptional":        "User name (optional)",
-  "passwordOptional":        "Password (optional)",
+  "usernameOptional":        "User name",
+  "passwordOptional":        "Password",
   "addWebsiteButtonCaption": "Login",
   "loginWithFacebook":       "Login with Facebook",
-
+  
+  "addNowButtonCaption":     "Add now",
+  "enterLoginCredentials1":  "Enter login credentials...",
+  "enterLoginCredentials2":  "Enter the access credentials to your account on the website:",
+  "cancelCredsInput":        "Cancel",
+  "cancelWebsiteAddition":   "Cancel website addition",
+  
   "languages": [
     {
       "value":   "en_US",
