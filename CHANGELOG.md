@@ -1,6 +1,10 @@
 
 # BardCanvas Mobile App Change Log
 
+## [1.1.2] - 2021-02-21
+
+- Added support for 2FA allowed websites.
+
 ## [1.1.1] - 2018-10-12
 
 - Added support for iPhone X.
